@@ -154,9 +154,12 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         setPositions(positionsArray);
         setTrades(tradesArray);
         
-        // Add initial data point to PnL history if it's fresh data
+        // Set initial PnL ref for milestone tracking
         const portfolio = parseFloat(initialStats.portfolio_value || '0');
         const collateral = parseFloat(initialStats.collateral || '0');
+        lastPnlRef.current = portfolio - collateral;
+        
+        // Add initial data point to PnL history
         const newDataPoint = {
           timestamp: Date.now(),
           accountValue: portfolio,
@@ -217,9 +220,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
               const stats = message.stats as UserStats;
               setUserStats(stats);
               
-              // Add data point to PnL history (throttled to once per minute)
+              // Add data point to PnL history (throttled to 10 seconds for real-time feel)
               const now = Date.now();
-              if (now - lastUpdateRef.current >= 60000) {
+              if (now - lastUpdateRef.current >= 10000) {
                 const portfolio = parseFloat(stats.portfolio_value || '0');
                 const collateral = parseFloat(stats.collateral || '0');
                 setPnlHistory(prev => [...prev, {
@@ -236,9 +239,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
               const stats = message.stats as UserStats;
               setUserStats(stats);
               
-              // Add data point to PnL history (throttled to once per minute)
+              // Add data point to PnL history (throttled to 10 seconds for real-time feel)
               const now = Date.now();
-              if (now - lastUpdateRef.current >= 60000) {
+              if (now - lastUpdateRef.current >= 10000) {
                 const portfolio = parseFloat(stats.portfolio_value || '0');
                 const collateral = parseFloat(stats.collateral || '0');
                 const currentPnl = portfolio - collateral;

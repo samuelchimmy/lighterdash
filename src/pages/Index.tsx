@@ -60,15 +60,6 @@ const Index = () => {
               {!scannedAddress && (
                 <>
                   <Button
-                    onClick={() => navigate('/community?tab=leaderboard')}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <Trophy className="w-4 h-4" />
-                    <span className="hidden md:inline">Leaderboard</span>
-                  </Button>
-                  <Button
                     onClick={() => navigate('/community?tab=signals')}
                     variant="outline"
                     size="sm"

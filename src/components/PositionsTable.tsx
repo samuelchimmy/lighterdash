@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -52,16 +53,19 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                 <TableRow key={index} className="border-border hover:bg-secondary/50">
                   <TableCell className="font-medium text-foreground">{position.symbol}</TableCell>
                   <TableCell>
-                    <span className={`flex items-center gap-1 ${sideColor}`}>
+                    <Badge 
+                      variant={side === 'LONG' ? 'default' : side === 'SHORT' ? 'destructive' : 'secondary'}
+                      className="gap-1"
+                    >
                       {side === 'LONG' ? (
-                        <TrendingUp className="w-4 h-4" />
+                        <TrendingUp className="w-3 h-3" />
                       ) : side === 'SHORT' ? (
-                        <TrendingDown className="w-4 h-4" />
+                        <TrendingDown className="w-3 h-3" />
                       ) : (
-                        <Minus className="w-4 h-4" />
+                        <Minus className="w-3 h-3" />
                       )}
                       {side}
-                    </span>
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-foreground">{formatNumber(Math.abs(size), 4)}</TableCell>
                   <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.avg_entry_price || '0'))}</TableCell>

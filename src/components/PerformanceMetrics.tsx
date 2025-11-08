@@ -1,4 +1,5 @@
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatPercentage } from '@/lib/lighter-api';
 import type { LighterTrade, Position } from '@/types/lighter';
 import { TrendingUp, Target, Award, PieChart } from 'lucide-react';
@@ -96,10 +97,18 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
             </p>
           </div>
 
-          <div className="bg-secondary/50 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-primary" />
-              <p className="text-xs text-muted-foreground">Win Rate</p>
+          <div className="bg-secondary/50 rounded-lg p-4 border border-border/50">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4 text-primary" />
+                <p className="text-xs text-muted-foreground">Win Rate</p>
+              </div>
+              {metrics.winRate >= 70 && (
+                <Badge className="text-xs bg-primary text-primary-foreground">Excellent</Badge>
+              )}
+              {metrics.winRate >= 50 && metrics.winRate < 70 && (
+                <Badge variant="secondary" className="text-xs">Good</Badge>
+              )}
             </div>
             <p className="text-2xl font-bold text-foreground">
               {metrics.winRate.toFixed(1)}%
@@ -136,17 +145,24 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
             {metrics.performanceByAsset.slice(0, 5).map((asset) => {
               const position = positions.find(p => p.market_id === asset.market_id);
               return (
-                <div key={asset.market_id} className="bg-secondary/30 rounded-lg p-4">
+                <div key={asset.market_id} className="bg-secondary/30 rounded-lg p-4 border border-border/50">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-foreground">
-                      {position?.symbol || `Market ${asset.market_id}`}
-                    </span>
-                    <span className={`font-bold ${asset.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-foreground">
+                        {position?.symbol || `Market ${asset.market_id}`}
+                      </span>
+                      <Badge variant="outline" className="text-xs">
+                        {asset.count} trades
+                      </Badge>
+                    </div>
+                    <Badge 
+                      variant={asset.pnl >= 0 ? 'default' : 'destructive'}
+                      className="font-bold"
+                    >
                       {formatCurrencySmart(asset.pnl)}
-                    </span>
+                    </Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>{asset.count} trades</span>
                     <span>Fees: {formatCurrencySmart(asset.fees)}</span>
                   </div>
                 </div>

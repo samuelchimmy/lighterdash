@@ -38,21 +38,21 @@ export const DonationModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md overflow-hidden p-0">
+      <DialogContent className="max-w-[90vw] sm:max-w-md overflow-hidden p-0">
         {/* Gradient Header */}
-        <div className="relative bg-gradient-to-br from-primary via-primary-glow to-purple-600 p-8 text-center">
+        <div className="relative bg-gradient-to-br from-primary via-primary-glow to-purple-600 p-4 sm:p-8 text-center">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30" />
           
           <div className="relative">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm mb-4 animate-in zoom-in-50 duration-500">
-              <Heart className="w-10 h-10 text-white fill-white animate-pulse" />
+            <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-sm mb-3 sm:mb-4 animate-in zoom-in-50 duration-500">
+              <Heart className="w-8 h-8 sm:w-10 sm:h-10 text-white fill-white animate-pulse" />
             </div>
             
             <DialogHeader>
-              <DialogTitle className="text-3xl font-bold text-white mb-2">
+              <DialogTitle className="text-2xl sm:text-3xl font-bold text-white mb-2">
                 Support LighterDash
               </DialogTitle>
-              <DialogDescription className="text-white/90 text-base">
+              <DialogDescription className="text-white/90 text-sm sm:text-base">
                 Help us keep the lights on and build more amazing features!
               </DialogDescription>
             </DialogHeader>
@@ -60,7 +60,7 @@ export const DonationModal = () => {
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
               LighterDash is a community-built project created with <span className="text-purple-400">💜</span> by{' '}

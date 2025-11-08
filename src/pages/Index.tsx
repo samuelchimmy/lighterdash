@@ -58,14 +58,24 @@ const Index = () => {
                 <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
               )}
               {!scannedAddress && (
-                <Button
-                  onClick={() => navigate('/analytics')}
-                  variant="outline"
-                  className="gap-2"
-                >
-                  <BarChart3 className="w-4 h-4" />
-                  Lighter Analytics
-                </Button>
+                <>
+                  <Button
+                    onClick={() => navigate('/community')}
+                    variant="outline"
+                    className="gap-2"
+                  >
+                    <Zap className="w-4 h-4" />
+                    Community Hub
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/analytics')}
+                    variant="outline"
+                    className="gap-2"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    Lighter Analytics
+                  </Button>
+                </>
               )}
             </div>
           </div>

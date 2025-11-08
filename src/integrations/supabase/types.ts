@@ -56,6 +56,174 @@ export type Database = {
         }
         Relationships: []
       }
+      backtest_results: {
+        Row: {
+          created_at: string
+          end_date: string
+          id: string
+          max_drawdown: number | null
+          name: string
+          results_data: Json | null
+          sharpe_ratio: number | null
+          start_date: string
+          strategy_config: Json
+          total_return: number | null
+          total_trades: number | null
+          user_id: string
+          win_rate: number | null
+        }
+        Insert: {
+          created_at?: string
+          end_date: string
+          id?: string
+          max_drawdown?: number | null
+          name: string
+          results_data?: Json | null
+          sharpe_ratio?: number | null
+          start_date: string
+          strategy_config: Json
+          total_return?: number | null
+          total_trades?: number | null
+          user_id: string
+          win_rate?: number | null
+        }
+        Update: {
+          created_at?: string
+          end_date?: string
+          id?: string
+          max_drawdown?: number | null
+          name?: string
+          results_data?: Json | null
+          sharpe_ratio?: number | null
+          start_date?: string
+          strategy_config?: Json
+          total_return?: number | null
+          total_trades?: number | null
+          user_id?: string
+          win_rate?: number | null
+        }
+        Relationships: []
+      }
+      copy_trading_signals: {
+        Row: {
+          avg_trade_size: number | null
+          created_at: string
+          id: string
+          is_public: boolean | null
+          provider_name: string | null
+          provider_wallet: string
+          total_followers: number | null
+          total_pnl: number | null
+          updated_at: string
+          win_rate: number | null
+        }
+        Insert: {
+          avg_trade_size?: number | null
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          provider_name?: string | null
+          provider_wallet: string
+          total_followers?: number | null
+          total_pnl?: number | null
+          updated_at?: string
+          win_rate?: number | null
+        }
+        Update: {
+          avg_trade_size?: number | null
+          created_at?: string
+          id?: string
+          is_public?: boolean | null
+          provider_name?: string | null
+          provider_wallet?: string
+          total_followers?: number | null
+          total_pnl?: number | null
+          updated_at?: string
+          win_rate?: number | null
+        }
+        Relationships: []
+      }
+      leaderboard_entries: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          is_public: boolean | null
+          last_updated: string
+          rank: number | null
+          total_pnl: number
+          total_trades: number | null
+          total_volume: number | null
+          wallet_address: string
+          win_rate: number | null
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_public?: boolean | null
+          last_updated?: string
+          rank?: number | null
+          total_pnl?: number
+          total_trades?: number | null
+          total_volume?: number | null
+          wallet_address: string
+          win_rate?: number | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_public?: boolean | null
+          last_updated?: string
+          rank?: number | null
+          total_pnl?: number
+          total_trades?: number | null
+          total_volume?: number | null
+          wallet_address?: string
+          win_rate?: number | null
+        }
+        Relationships: []
+      }
+      trade_comments: {
+        Row: {
+          comment: string
+          created_at: string
+          id: string
+          likes: number | null
+          market_id: number
+          parent_comment_id: string | null
+          trade_id: string
+          updated_at: string
+          user_id: string
+          wallet_address: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string
+          id?: string
+          likes?: number | null
+          market_id: number
+          parent_comment_id?: string | null
+          trade_id: string
+          updated_at?: string
+          user_id: string
+          wallet_address: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string
+          id?: string
+          likes?: number | null
+          market_id?: number
+          parent_comment_id?: string | null
+          trade_id?: string
+          updated_at?: string
+          user_id?: string
+          wallet_address?: string
+        }
+        Relationships: []
+      }
       trade_notes: {
         Row: {
           created_at: string | null
@@ -89,6 +257,33 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
           wallet_address?: string
+        }
+        Relationships: []
+      }
+      wallet_comparisons: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+          wallet_addresses: string[]
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+          wallet_addresses: string[]
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+          wallet_addresses?: string[]
         }
         Relationships: []
       }

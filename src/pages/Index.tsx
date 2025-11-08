@@ -49,7 +49,7 @@ const Index = () => {
                 <div className="absolute inset-0 glow-primary rounded-lg" />
                 <BarChart3 className="w-8 h-8 text-primary relative" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">
+              <h1 className="text-xl md:text-2xl font-semibold text-foreground">
                 LighterDash
               </h1>
             </div>
@@ -90,18 +90,10 @@ const Index = () => {
           <div className="max-w-4xl mx-auto">
             {/* Hero Section */}
             <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <div className="inline-block mb-4">
-                <div className="relative">
-                  <div className="absolute inset-0 gradient-primary blur-xl opacity-50" />
-                  <div className="relative bg-card border border-border rounded-2xl p-6">
-                    <BarChart3 className="w-16 h-16 text-primary mx-auto" />
-                  </div>
-                </div>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
                 Track Your Lighter Trading
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                 Community-built analytics dashboard for Lighter. View real-time trading statistics,
                 track your performance, and analyze your trading data.
               </p>
@@ -118,8 +110,8 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Wallet className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Wallet Tracker</h3>
-                <p className="text-muted-foreground text-sm">
+                <h3 className="text-base md:text-lg font-medium text-foreground mb-2">Wallet Tracker</h3>
+                <p className="text-muted-foreground text-xs md:text-sm">
                   Track any Lighter wallet&apos;s positions, trades, PnL, and performance metrics in real-time.
                 </p>
               </div>
@@ -128,8 +120,8 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <BarChart3 className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Market Analytics</h3>
-                <p className="text-muted-foreground text-sm">
+                <h3 className="text-base md:text-lg font-medium text-foreground mb-2">Market Analytics</h3>
+                <p className="text-muted-foreground text-xs md:text-sm">
                   View live order books, recent trades, funding rates, and comprehensive market statistics.
                 </p>
               </div>
@@ -138,8 +130,8 @@ const Index = () => {
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Zap className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Real-Time Updates</h3>
-                <p className="text-muted-foreground text-sm">
+                <h3 className="text-base md:text-lg font-medium text-foreground mb-2">Real-Time Updates</h3>
+                <p className="text-muted-foreground text-xs md:text-sm">
                   WebSocket-powered live data streams for instant market and account updates.
                 </p>
               </div>
@@ -157,7 +149,7 @@ const Index = () => {
                 </div>
 
                 <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6 flex items-center gap-3 group-hover:text-primary transition-colors duration-300">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 group-hover:scale-110 transition-transform duration-300">
                       <BarChart3 className="w-6 h-6 text-primary" />
                     </div>
@@ -202,7 +194,7 @@ const Index = () => {
                 </div>
 
                 <div className="relative z-10">
-                  <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-3 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6 flex items-center gap-3 group-hover:text-primary transition-colors duration-300">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 group-hover:scale-110 transition-transform duration-300">
                       <Zap className="w-6 h-6 text-primary" />
                     </div>
@@ -270,7 +262,7 @@ const Index = () => {
               Donate to keep us running:
             </p>
             <div className="flex items-center gap-2">
-              <code className="text-sm font-mono text-purple-500 glow-purple">
+              <code className="text-xs md:text-sm font-mono text-purple-500 glow-purple break-all">
                 {donationAddress}
               </code>
               <button

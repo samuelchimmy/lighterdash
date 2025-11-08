@@ -98,26 +98,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         // Phase 1: Fetch account index
         const index = await lighterApi.getAccountIndex(walletAddress);
         
-        // Test for points endpoints (only on first load)
-        if (index) {
-          const pointsResults = await lighterApi.checkPointsEndpoints(index);
-          const foundEndpoint = pointsResults.find(r => r.found);
-          
-          if (foundEndpoint) {
-            console.log("✅ Found points endpoint!", foundEndpoint);
-            toast({
-              title: "Points System Detected!",
-              description: `Found at: ${foundEndpoint.endpoint}`,
-            });
-          } else {
-            console.log("❌ No points endpoints found. Tested:", pointsResults.map(r => `${r.endpoint} (${r.status})`));
-            toast({
-              title: "No Points System Found",
-              description: "Lighter doesn't appear to have a public points API",
-              variant: "destructive",
-            });
-          }
-        }
+        // Points system check removed
         
         if (!index) {
           toast({
@@ -401,8 +382,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
       
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-foreground">Wallet Dashboard</h2>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <h2 className="text-xl md:text-2xl font-semibold text-foreground">Wallet Dashboard</h2>
         <div className="flex gap-2">
           <ExportMenu
             positions={positions}
@@ -411,7 +392,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             walletAddress={walletAddress}
           />
           {!user && (
-            <Button onClick={() => setShowAuthForm(true)} variant="outline">
+            <Button onClick={() => setShowAuthForm(true)} variant="outline" size="sm" className="text-xs md:text-sm px-2 md:px-4">
               Sign In for Journal
             </Button>
           )}

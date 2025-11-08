@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
+import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { BarChart3, Zap } from 'lucide-react';
 
 const Index = () => {
   const [scannedAddress, setScannedAddress] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('disconnected');
+  const [lastUpdate, setLastUpdate] = useState<Date>();
+
+  const handleConnectionChange = (status: 'connected' | 'disconnected' | 'reconnecting') => {
+    setConnectionStatus(status);
+    if (status === 'connected') {
+      setLastUpdate(new Date());
+    }
+  };
 
   const handleScan = async (address: string) => {
     setIsScanning(true);
@@ -31,9 +41,14 @@ const Index = () => {
                 LighterDash
               </h1>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Zap className="w-4 h-4 text-primary" />
-              <span>Real-time Analytics</span>
+            <div className="flex items-center gap-3">
+              {scannedAddress && (
+                <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
+              )}
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Zap className="w-4 h-4 text-primary" />
+                <span>Real-time Analytics</span>
+              </div>
             </div>
           </div>
         </div>
@@ -108,7 +123,7 @@ const Index = () => {
             >
               ← Scan another wallet
             </button>
-            <Dashboard walletAddress={scannedAddress} />
+            <Dashboard walletAddress={scannedAddress} onConnectionStatusChange={handleConnectionChange} />
           </div>
         )}
       </main>

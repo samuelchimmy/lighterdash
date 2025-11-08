@@ -6,6 +6,7 @@ import { PositionsTable } from './PositionsTable';
 import { TradesHistory } from './TradesHistory';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { PnlChart } from './PnlChart';
+import { PortfolioChart } from './PortfolioChart';
 import { 
   SummaryCardSkeleton, 
   AccountStatsSkeleton, 
@@ -19,9 +20,10 @@ import { Loader2 } from 'lucide-react';
 
 interface DashboardProps {
   walletAddress: string;
+  onConnectionStatusChange?: (status: 'connected' | 'disconnected' | 'reconnecting') => void;
 }
 
-export const Dashboard = ({ walletAddress }: DashboardProps) => {
+export const Dashboard = ({ walletAddress, onConnectionStatusChange }: DashboardProps) => {
   const [accountIndex, setAccountIndex] = useState<number | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
@@ -125,6 +127,8 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
           if (!isMounted) return;
           console.log('WebSocket connected');
           
+          onConnectionStatusChange?.('connected');
+          
           // Subscribe to channels (no auth required for public data)
           lighterApi.subscribeToChannel(ws!, `user_stats/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all_positions/${index}`);
@@ -226,6 +230,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
 
         ws.onerror = (error) => {
           console.error('WebSocket error:', error);
+          onConnectionStatusChange?.('disconnected');
           toast({
             title: "Connection error",
             description: "Failed to connect to real-time data feed",
@@ -236,6 +241,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
 
         ws.onclose = () => {
           console.log('WebSocket disconnected');
+          onConnectionStatusChange?.('disconnected');
         };
 
       } catch (error) {
@@ -300,7 +306,10 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
         }}
       />
 
-      <PositionsTable positions={positions} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <PositionsTable positions={positions} />
+        <PortfolioChart positions={positions} />
+      </div>
 
       <PerformanceMetrics trades={trades} positions={positions} />
 

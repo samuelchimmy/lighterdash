@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
+import { ScanningLoader } from '@/components/ScanningLoader';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Zap, Wallet, Copy, Check, GitCompare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -31,11 +32,11 @@ const Index = () => {
 
   const handleScan = async (address: string) => {
     setIsScanning(true);
-    // Simulate a brief delay for UX
+    // Simulate a realistic delay for scanning and data fetching (1.5-2 seconds)
     setTimeout(() => {
       setScannedAddress(address);
       setIsScanning(false);
-    }, 500);
+    }, 1800);
   };
 
   return (
@@ -86,7 +87,9 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        {!scannedAddress ? (
+        {isScanning ? (
+          <ScanningLoader />
+        ) : !scannedAddress ? (
           <div className="max-w-4xl mx-auto">
             {/* Hero Section */}
             <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">

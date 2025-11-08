@@ -26,7 +26,7 @@ import { AssetPerformance } from './AssetPerformance';
 import { StreakAnalysis } from './StreakAnalysis';
 import { TimeBasedPerformance } from './TimeBasedPerformance';
 import { SuccessAnimation, useSuccessAnimation } from './SuccessAnimation';
-import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
+
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -37,7 +37,7 @@ import {
 } from './LoadingSkeleton';
 import type { UserStats, Position, LighterTrade, PnlDataPoint } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface DashboardProps {
   walletAddress: string;
@@ -129,15 +129,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     }
   };
 
-  // Keyboard shortcuts
-  useKeyboardShortcuts([
-    {
-      key: 'r',
-      ctrl: true,
-      description: 'Refresh data',
-      action: refreshWalletData,
-    },
-  ]);
+// Keyboard shortcuts disabled: auto-updating via WebSocket
 
   // Save PnL history to localStorage whenever it changes
   useEffect(() => {
@@ -277,9 +269,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
               const stats = message.stats as UserStats;
               setUserStats(stats);
               
-              // Add data point to PnL history (throttled to 10 seconds for real-time feel)
+              // Add data point to PnL history (throttled to 3 seconds for real-time feel)
               const now = Date.now();
-              if (now - lastUpdateRef.current >= 10000) {
+              if (now - lastUpdateRef.current >= 3000) {
                 const portfolio = parseFloat(stats.portfolio_value || '0');
                 const collateral = parseFloat(stats.collateral || '0');
                 setPnlHistory(prev => [...prev, {
@@ -296,9 +288,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
               const stats = message.stats as UserStats;
               setUserStats(stats);
               
-              // Add data point to PnL history (throttled to 10 seconds for real-time feel)
+              // Add data point to PnL history (throttled to 3 seconds for real-time feel)
               const now = Date.now();
-              if (now - lastUpdateRef.current >= 10000) {
+              if (now - lastUpdateRef.current >= 3000) {
                 const portfolio = parseFloat(stats.portfolio_value || '0');
                 const collateral = parseFloat(stats.collateral || '0');
                 const currentPnl = portfolio - collateral;
@@ -478,15 +470,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <h2 className="text-xl md:text-2xl font-semibold text-foreground">Wallet Dashboard</h2>
-          <Button 
-            onClick={refreshWalletData} 
-            variant="ghost" 
-            size="icon"
-            className="h-8 w-8"
-            title="Refresh wallet data"
-          >
-            <RefreshCw className="h-4 w-4" />
-          </Button>
         </div>
         <div className="flex gap-2">
           <ExportMenu

@@ -1,14 +1,12 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MultiWalletComparison } from "@/components/MultiWalletComparison";
-import { FloatingParticles } from "@/components/FloatingParticles";
 import { ArrowLeft } from "lucide-react";
 
 export default function CommunityHub() {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
-      <FloatingParticles />
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="flex items-center justify-between mb-6">
           <Button

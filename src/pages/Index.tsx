@@ -3,7 +3,7 @@ import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { Button } from '@/components/ui/button';
-import { BarChart3, Zap, Wallet } from 'lucide-react';
+import { BarChart3, Zap, Wallet, Copy, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
@@ -12,6 +12,15 @@ const Index = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('disconnected');
   const [lastUpdate, setLastUpdate] = useState<Date>();
+  const [copied, setCopied] = useState(false);
+
+  const donationAddress = '0xfa2B8eD012f756E22E780B772d604af4575d5fcf';
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(donationAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleConnectionChange = (status: 'connected' | 'disconnected' | 'reconnecting') => {
     setConnectionStatus(status);
@@ -151,7 +160,37 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t border-border mt-20">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-6 space-y-3">
+          <p className="text-center text-sm text-muted-foreground">
+            Built with love by{' '}
+            <a
+              href="https://x.com/MetisCharter"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary-glow transition-colors font-medium"
+            >
+              Jadeofwallstreet
+            </a>
+          </p>
+          <div className="flex items-center justify-center gap-2">
+            <p className="text-center text-sm text-muted-foreground">
+              Donate to keep us running:
+            </p>
+            <div className="flex items-center gap-2 bg-secondary border border-border rounded-md px-3 py-1.5">
+              <code className="text-xs text-foreground font-mono">{donationAddress}</code>
+              <button
+                onClick={copyToClipboard}
+                className="p-1 hover:bg-accent rounded transition-colors"
+                title="Copy address"
+              >
+                {copied ? (
+                  <Check className="w-4 h-4 text-success" />
+                ) : (
+                  <Copy className="w-4 h-4 text-muted-foreground" />
+                )}
+              </button>
+            </div>
+          </div>
           <p className="text-center text-sm text-muted-foreground">
             Community-built analytics for Lighter • Not affiliated with Lighter
           </p>

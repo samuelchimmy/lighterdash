@@ -55,6 +55,8 @@ export function PlatformVolume() {
   const volumeStats = useMemo(() => {
     const marketList = Object.values(markets);
     
+    console.log("📊 PlatformVolume calculating stats from markets:", Object.keys(markets), "total:", marketList.length);
+    
     // Calculate 24h total volume
     const total24h = marketList.reduce((sum, m) => 
       sum + (m.daily_quote_token_volume || 0), 0

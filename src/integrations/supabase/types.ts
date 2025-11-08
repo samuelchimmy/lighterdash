@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alert_preferences: {
+        Row: {
+          created_at: string | null
+          high_margin_threshold: number | null
+          id: string
+          low_margin_threshold: number | null
+          notify_on_large_pnl: boolean | null
+          notify_on_liquidation: boolean | null
+          notify_on_low_margin: boolean | null
+          pnl_change_threshold: number | null
+          updated_at: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          high_margin_threshold?: number | null
+          id?: string
+          low_margin_threshold?: number | null
+          notify_on_large_pnl?: boolean | null
+          notify_on_liquidation?: boolean | null
+          notify_on_low_margin?: boolean | null
+          pnl_change_threshold?: number | null
+          updated_at?: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          high_margin_threshold?: number | null
+          id?: string
+          low_margin_threshold?: number | null
+          notify_on_large_pnl?: boolean | null
+          notify_on_liquidation?: boolean | null
+          notify_on_low_margin?: boolean | null
+          pnl_change_threshold?: number | null
+          updated_at?: string | null
+          user_id?: string
+          wallet_address?: string
+        }
+        Relationships: []
+      }
+      trade_notes: {
+        Row: {
+          created_at: string | null
+          id: string
+          market_id: number
+          note: string | null
+          tags: string[] | null
+          trade_id: string
+          updated_at: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          market_id: number
+          note?: string | null
+          tags?: string[] | null
+          trade_id: string
+          updated_at?: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          market_id?: number
+          note?: string | null
+          tags?: string[] | null
+          trade_id?: string
+          updated_at?: string | null
+          user_id?: string
+          wallet_address?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

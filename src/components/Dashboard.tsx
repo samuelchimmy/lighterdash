@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { lighterApi } from '@/lib/lighter-api';
+import { supabase } from '@/integrations/supabase/client';
 import { SummaryCard } from './SummaryCard';
 import { AccountStats } from './AccountStats';
 import { PositionsTable } from './PositionsTable';
@@ -7,6 +8,12 @@ import { TradesHistory } from './TradesHistory';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { PnlChart } from './PnlChart';
 import { PortfolioChart } from './PortfolioChart';
+import { ExportMenu } from './ExportMenu';
+import { AlertMonitor } from './AlertMonitor';
+import { ComparisonCard } from './ComparisonCard';
+import { TradingJournal } from './TradingJournal';
+import { AuthForm } from './AuthForm';
+import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
   AccountStatsSkeleton, 
@@ -24,6 +31,8 @@ interface DashboardProps {
 }
 
 export const Dashboard = ({ walletAddress, onConnectionStatusChange }: DashboardProps) => {
+  const [user, setUser] = useState<any>(null);
+  const [showAuthForm, setShowAuthForm] = useState(false);
   const [accountIndex, setAccountIndex] = useState<number | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
@@ -48,6 +57,19 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       localStorage.setItem(`pnl-history-${walletAddress}`, JSON.stringify(pnlHistory));
     }
   }, [pnlHistory, walletAddress]);
+
+  // Check auth status
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     let ws: WebSocket | null = null;
@@ -284,8 +306,49 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   const totalPnl = portfolio > 0 || collateral > 0 ? (portfolio - collateral) : unrealizedFromPositions;
   const accountValue = portfolio;
 
+  const calculateWinRate = () => {
+    if (positions.length === 0) return 0;
+    const profitablePositions = positions.filter(p => parseFloat(p.unrealized_pnl || '0') > 0);
+    return (profitablePositions.length / positions.length) * 100;
+  };
+
+
+  if (showAuthForm && !user) {
+    return (
+      <div className="space-y-6">
+        <SummaryCard
+          totalPnl={totalPnl}
+          walletAddress={walletAddress}
+          accountValue={accountValue}
+        />
+        <div className="flex items-center justify-center py-8">
+          <AuthForm onSuccess={() => setShowAuthForm(false)} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
+      
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+        <div className="flex gap-2">
+          <ExportMenu
+            positions={positions}
+            trades={trades}
+            stats={userStats}
+            walletAddress={walletAddress}
+          />
+          {!user && (
+            <Button onClick={() => setShowAuthForm(true)} variant="outline">
+              Sign In for Journal
+            </Button>
+          )}
+        </div>
+      </div>
+
       <SummaryCard
         totalPnl={totalPnl}
         walletAddress={walletAddress}
@@ -306,9 +369,26 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         }}
       />
 
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PositionsTable positions={positions} />
         <PortfolioChart positions={positions} />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <ComparisonCard
+          winRate={calculateWinRate()}
+          leverage={parseFloat(userStats?.leverage || '0')}
+          totalPnL={totalPnl}
+          totalTrades={trades.length}
+        />
+        {user && (
+          <TradingJournal
+            trades={trades}
+            walletAddress={walletAddress}
+            userId={user.id}
+          />
+        )}
       </div>
 
       <PerformanceMetrics trades={trades} positions={positions} />

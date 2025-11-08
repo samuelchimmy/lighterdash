@@ -30,8 +30,27 @@ export function MarketStats() {
       try {
         const data = JSON.parse(event.data);
         
+        console.log("📊 MarketStats message:", data.type, data.channel);
+        
+        // Handle both single market updates and batch updates
         if (data.type === "update/market_stats" && data.market_stats) {
-          console.log("📊 Market stats update:", data.market_stats);
+          console.log("📊 Single market update:", data.market_stats);
+          setMarkets(prev => ({
+            ...prev,
+            [data.market_stats.market_id]: data.market_stats
+          }));
+          setIsLoading(false);
+        } else if (data.type === "subscribed/market_stats" && data.market_stats) {
+          // Handle initial subscription response
+          console.log("📊 Subscribed to market stats:", data.market_stats);
+          setMarkets(prev => ({
+            ...prev,
+            [data.market_stats.market_id]: data.market_stats
+          }));
+          setIsLoading(false);
+        } else if (data.channel === "market_stats:all" && data.market_stats) {
+          // Alternative channel format
+          console.log("📊 Market stats from channel:", data.market_stats);
           setMarkets(prev => ({
             ...prev,
             [data.market_stats.market_id]: data.market_stats

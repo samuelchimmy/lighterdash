@@ -17,6 +17,7 @@ import { TradeAnalysisView } from './TradeAnalysisView';
 import { PatternRecognition } from './PatternRecognition';
 import { FundingHistory } from './FundingHistory';
 import { LiquidationMonitor } from './LiquidationMonitor';
+import { EmptyWalletState } from './EmptyWalletState';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -343,6 +344,12 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     return (profitablePositions.length / positions.length) * 100;
   };
 
+  // Check if wallet has any real activity
+  const hasActivity = positions.length > 0 || trades.length > 0 || portfolio > 0.01;
+
+  if (!isHydrated || !hasActivity) {
+    return <EmptyWalletState />;
+  }
 
   if (showAuthForm && !user) {
     return (

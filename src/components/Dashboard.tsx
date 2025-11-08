@@ -280,7 +280,17 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
 
       <AccountStats stats={userStats} />
 
-      <PnlChart data={pnlHistory} />
+      <PnlChart 
+        data={pnlHistory} 
+        onClearHistory={() => {
+          setPnlHistory([]);
+          localStorage.removeItem(`pnl-history-${walletAddress}`);
+          toast({
+            title: "History cleared",
+            description: "PnL chart history has been reset",
+          });
+        }}
+      />
 
       <PositionsTable positions={positions} />
 

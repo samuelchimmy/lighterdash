@@ -85,9 +85,16 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
               setUserStats(message.stats as UserStats);
               return;
             }
+            if ((type === 'update/account_all' || channel?.startsWith('account_all:')) && message.positions) {
+              const positionsArray = Object.values(message.positions || {});
+              const filtered = (positionsArray as Position[]).filter((p: any) => parseFloat(p?.position || '0') !== 0);
+              setPositions(filtered as Position[]);
+              return;
+            }
             if (channel?.startsWith('account_all_positions:') && message.positions) {
               const positionsArray = Object.values(message.positions || {});
-              setPositions(positionsArray as Position[]);
+              const filtered = (positionsArray as Position[]).filter((p: any) => parseFloat(p?.position || '0') !== 0);
+              setPositions(filtered as Position[]);
               return;
             }
           } catch (error) {
@@ -141,10 +148,11 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
     );
   }
 
-  const totalPnl = userStats 
-    ? (parseFloat(userStats.portfolio_value || '0') - parseFloat(userStats.collateral || '0'))
-    : 0;
-  const accountValue = userStats ? parseFloat(userStats.portfolio_value || '0') : 0;
+  const portfolio = parseFloat(userStats?.portfolio_value || '0');
+  const collateral = parseFloat(userStats?.collateral || '0');
+  const unrealizedFromPositions = positions.reduce((sum, p) => sum + parseFloat((p as any)?.unrealized_pnl || '0'), 0);
+  const totalPnl = portfolio > 0 || collateral > 0 ? (portfolio - collateral) : unrealizedFromPositions;
+  const accountValue = portfolio;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">

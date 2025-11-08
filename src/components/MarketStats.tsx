@@ -24,44 +24,45 @@ export function MarketStats() {
       try {
         const data = JSON.parse(event.data);
         
-        console.log("📊 MarketStats message:", data.type, data.channel);
+        console.log("📊 MarketStats RAW message:", JSON.stringify(data, null, 2));
         
         // Handle both single market updates and batch updates
-        if (data.type === "update/market_stats" && data.market_stats) {
-          console.log("📊 Single market update:", {
-            market_id: data.market_stats.market_id,
-            mark_price: data.market_stats.mark_price,
-            index_price: data.market_stats.index_price
-          });
-          setMarkets(prev => ({
-            ...prev,
-            [data.market_stats.market_id]: data.market_stats
-          }));
-          setIsLoading(false);
-        } else if (data.type === "subscribed/market_stats" && data.market_stats) {
+        if (data.type === "update/market_stats") {
+          if (data.market_stats) {
+            console.log("📊 Single market update:", {
+              market_id: data.market_stats.market_id,
+              mark_price: data.market_stats.mark_price,
+              index_price: data.market_stats.index_price
+            });
+            setMarkets(prev => ({
+              ...prev,
+              [data.market_stats.market_id]: data.market_stats
+            }));
+            setIsLoading(false);
+          } else if (data.markets) {
+            // Handle batch market stats
+            console.log("📊 Batch market updates:", Object.keys(data.markets).length);
+            const marketObj: Record<number, MarketStatsType> = {};
+            Object.values(data.markets).forEach((market: any) => {
+              marketObj[market.market_id] = market;
+            });
+            setMarkets(marketObj);
+            setIsLoading(false);
+          }
+        } else if (data.type === "subscribed/market_stats") {
           // Handle initial subscription response
-          console.log("📊 Subscribed to market stats:", data.market_stats);
-          setMarkets(prev => ({
-            ...prev,
-            [data.market_stats.market_id]: data.market_stats
-          }));
-          setIsLoading(false);
-        } else if (data.channel === "market_stats:all" && data.market_stats) {
-          // Alternative channel format
-          console.log("📊 Market stats from channel:", data.market_stats);
-          setMarkets(prev => ({
-            ...prev,
-            [data.market_stats.market_id]: data.market_stats
-          }));
-          setIsLoading(false);
+          if (data.market_stats) {
+            console.log("📊 Subscribed to market stats:", data.market_stats.market_id);
+            setMarkets(prev => ({
+              ...prev,
+              [data.market_stats.market_id]: data.market_stats
+            }));
+            setIsLoading(false);
+          }
         }
       } catch (error) {
         console.error("Error parsing market stats:", error);
       }
-    };
-
-    ws.onerror = (error) => {
-      console.error("MarketStats WebSocket error:", error);
     };
 
     ws.onclose = () => {

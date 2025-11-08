@@ -99,6 +99,19 @@ export function MarketStats() {
 
   const marketList = Object.values(markets).sort((a, b) => a.market_id - b.market_id);
 
+  // Calculate top gainers, losers, and open interest
+  const topGainers = [...marketList]
+    .sort((a, b) => (b.daily_price_change ?? 0) - (a.daily_price_change ?? 0))
+    .slice(0, 3);
+  
+  const topLosers = [...marketList]
+    .sort((a, b) => (a.daily_price_change ?? 0) - (b.daily_price_change ?? 0))
+    .slice(0, 3);
+  
+  const topOpenInterest = [...marketList]
+    .sort((a, b) => parseFloat(b.open_interest || '0') - parseFloat(a.open_interest || '0'))
+    .slice(0, 3);
+
   return (
     <Card>
       <CardHeader>
@@ -107,9 +120,73 @@ export function MarketStats() {
           Market Overview
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {marketList.map((market) => {
+      <CardContent className="space-y-6">
+        {/* Top Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Top Open Interest */}
+          <div className="p-4 rounded-lg border bg-card/50">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Open Interest (24h)</h3>
+            <div className="space-y-2">
+              {topOpenInterest.map((market) => {
+                const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+                return (
+                  <div key={market.market_id} className="flex items-center justify-between">
+                    <span className="font-medium">{symbol}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {formatCurrencySmart(parseFloat(market.open_interest))}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Top Gainers */}
+          <div className="p-4 rounded-lg border bg-card/50">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Gainers (24h)</h3>
+            <div className="space-y-2">
+              {topGainers.map((market) => {
+                const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+                const change = market.daily_price_change ?? 0;
+                return (
+                  <div key={market.market_id} className="flex items-center justify-between">
+                    <span className="font-medium">{symbol}</span>
+                    <Badge variant="default" className="flex items-center gap-1">
+                      <TrendingUp className="h-3 w-3" />
+                      {formatPercentage(change)}
+                    </Badge>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Top Losers */}
+          <div className="p-4 rounded-lg border bg-card/50">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Losers (24h)</h3>
+            <div className="space-y-2">
+              {topLosers.map((market) => {
+                const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+                const change = market.daily_price_change ?? 0;
+                return (
+                  <div key={market.market_id} className="flex items-center justify-between">
+                    <span className="font-medium">{symbol}</span>
+                    <Badge variant="destructive" className="flex items-center gap-1">
+                      <TrendingDown className="h-3 w-3" />
+                      {formatPercentage(change)}
+                    </Badge>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* All Markets Grid */}
+        <div>
+          <h3 className="text-sm font-semibold text-muted-foreground mb-3">All Markets</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {marketList.map((market) => {
             const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
             const priceChange = market.daily_price_change ?? 0;
             const fundingRate = parseFloat(market.current_funding_rate || '0') * 100;
@@ -166,6 +243,7 @@ export function MarketStats() {
               </div>
             );
           })}
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -1,6 +1,7 @@
 import { MarketStats } from "@/components/MarketStats";
 import { OrderBookDepth } from "@/components/OrderBookDepth";
 import { LiveTradeFeed } from "@/components/LiveTradeFeed";
+import { PlatformVolume } from "@/components/PlatformVolume";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, ArrowLeft } from "lucide-react";
@@ -54,6 +55,9 @@ const LighterAnalytics = () => {
               directly from Lighter's WebSocket API for instant updates.
             </p>
           </div>
+
+          {/* Platform Volume Overview */}
+          <PlatformVolume />
 
           {/* Market Stats Overview */}
           <MarketStats />

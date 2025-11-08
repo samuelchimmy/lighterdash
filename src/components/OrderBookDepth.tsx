@@ -21,6 +21,16 @@ const MARKET_SYMBOLS: Record<number, string> = {
   2: "SOL-USD",
   3: "ARB-USD",
   4: "OP-USD",
+  5: "DOGE-USD",
+  6: "AVAX-USD",
+  7: "LINK-USD",
+  8: "AAVE-USD",
+  9: "UNI-USD",
+  10: "MATIC-USD",
+  11: "ATOM-USD",
+  12: "HYPE-USD",
+  13: "ZORA-USD",
+  14: "SCR-USD",
 };
 
 export function OrderBookDepth() {

@@ -451,6 +451,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             description: "PnL chart history has been reset",
           });
         }}
+        onRefresh={() => {
+          window.location.reload();
+        }}
       />
 
 

@@ -55,7 +55,51 @@ export const lighterApi = {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ type: 'subscribe', channel }));
     }
-  }
+  },
+
+  async checkPointsEndpoints(accountIndex: number): Promise<{
+    endpoint: string;
+    status: number;
+    data?: any;
+    found: boolean;
+  }[]> {
+    const potentialEndpoints = [
+      `/api/v1/points/${accountIndex}`,
+      `/api/v1/rewards/${accountIndex}`,
+      `/api/v1/leaderboard`,
+      `/api/v1/user_points/${accountIndex}`,
+      `/api/v1/achievements/${accountIndex}`,
+      `/api/v1/account/${accountIndex}/points`,
+      `/api/v1/account/${accountIndex}/rewards`,
+    ];
+
+    const results = await Promise.all(
+      potentialEndpoints.map(async (endpoint) => {
+        try {
+          const response = await fetch(`${BASE_URL}${endpoint}`);
+          const data = response.ok ? await response.json() : null;
+          
+          console.log(`Tested ${endpoint}: ${response.status}`, data);
+          
+          return {
+            endpoint,
+            status: response.status,
+            data,
+            found: response.ok && data !== null,
+          };
+        } catch (error) {
+          console.error(`Error testing ${endpoint}:`, error);
+          return {
+            endpoint,
+            status: 0,
+            found: false,
+          };
+        }
+      })
+    );
+
+    return results;
+  },
 };
 
 export const validateEthereumAddress = (address: string): boolean => {

@@ -84,6 +84,27 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         // Phase 1: Fetch account index
         const index = await lighterApi.getAccountIndex(walletAddress);
         
+        // Test for points endpoints (only on first load)
+        if (index) {
+          const pointsResults = await lighterApi.checkPointsEndpoints(index);
+          const foundEndpoint = pointsResults.find(r => r.found);
+          
+          if (foundEndpoint) {
+            console.log("✅ Found points endpoint!", foundEndpoint);
+            toast({
+              title: "Points System Detected!",
+              description: `Found at: ${foundEndpoint.endpoint}`,
+            });
+          } else {
+            console.log("❌ No points endpoints found. Tested:", pointsResults.map(r => `${r.endpoint} (${r.status})`));
+            toast({
+              title: "No Points System Found",
+              description: "Lighter doesn't appear to have a public points API",
+              variant: "destructive",
+            });
+          }
+        }
+        
         if (!index) {
           toast({
             title: "Account not found",

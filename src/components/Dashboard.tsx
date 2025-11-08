@@ -64,11 +64,15 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
             const message = JSON.parse(event.data);
             console.log('WebSocket message:', message);
 
-            // Handle different message types
-            if (message.type === 'user_stats') {
-              setUserStats(message.data);
-            } else if (message.type === 'positions') {
-              setPositions(message.data);
+            // Handle different message types based on Lighter's WebSocket format
+            if (message.type === 'update/user_stats' && message.stats) {
+              console.log('User stats update:', message.stats);
+              setUserStats(message.stats);
+            } else if (message.type === 'update/account_all_positions' && message.positions) {
+              console.log('Positions update:', message.positions);
+              // Convert positions object to array
+              const positionsArray = Object.values(message.positions).flat();
+              setPositions(positionsArray as Position[]);
             }
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);

@@ -18,6 +18,13 @@ import { PatternRecognition } from './PatternRecognition';
 import { FundingHistory } from './FundingHistory';
 import { LiquidationMonitor } from './LiquidationMonitor';
 import { EmptyWalletState } from './EmptyWalletState';
+import { OpenOrdersTable } from './OpenOrdersTable';
+import { TransactionHistory } from './TransactionHistory';
+import { PoolShares } from './PoolShares';
+import { BestWorstTrades } from './BestWorstTrades';
+import { AssetPerformance } from './AssetPerformance';
+import { StreakAnalysis } from './StreakAnalysis';
+import { TimeBasedPerformance } from './TimeBasedPerformance';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -43,6 +50,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   const [positions, setPositions] = useState<Position[]>([]);
   const [trades, setTrades] = useState<LighterTrade[]>([]);
   const [fundingHistories, setFundingHistories] = useState<Record<string, any[]>>({});
+  const [orders, setOrders] = useState<Record<string, any[]> | any[]>({});
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [poolShares, setPoolShares] = useState<any[]>([]);
   const [pnlHistory, setPnlHistory] = useState<PnlDataPoint[]>(() => {
     // Load PnL history from localStorage on mount
     try {
@@ -183,6 +193,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
           lighterApi.subscribeToChannel(ws!, `account_all_positions/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all_trades/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all_orders/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_tx/${index}`);
           
           toast({
             title: "Live updates active",
@@ -251,9 +263,12 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             if (type === 'update/account_all' && message.positions) {
               setPositions(prev => mergePositions(prev, message.positions));
               
-              // Also update funding histories
+              // Also update funding histories, pool shares, and other data
               if (message.funding_histories) {
                 setFundingHistories(message.funding_histories);
+              }
+              if (message.shares) {
+                setPoolShares(message.shares);
               }
               return;
             }
@@ -275,6 +290,22 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             if (channel?.startsWith('account_all_trades:') && message.trades) {
               const incomingTrades = normalizeTrades(message.trades);
               setTrades(prev => dedupeAndPrepend(prev, incomingTrades));
+              return;
+            }
+
+            // Handle orders updates
+            if ((type === 'update/account_all_orders' || channel?.startsWith('account_all_orders:')) && message.orders) {
+              setOrders(message.orders);
+              return;
+            }
+
+            // Handle transaction updates
+            if ((type === 'update/account_tx' || channel?.startsWith('account_tx:')) && message.txs) {
+              setTransactions(prev => {
+                const existingHashes = new Set(prev.map(t => t.hash));
+                const newTxs = message.txs.filter((t: any) => !existingHashes.has(t.hash));
+                return [...newTxs, ...prev].slice(0, 100); // Keep last 100 txs
+              });
               return;
             }
           } catch (error) {
@@ -427,20 +458,36 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
 
       <FundingHistory fundingHistories={fundingHistories} />
 
-      {/* Pattern Recognition */}
-      {trades.length > 0 && (
-        <PatternRecognition 
-          trades={trades}
-          positions={positions}
-        />
-      )}
+      {/* Open Orders */}
+      <OpenOrdersTable orders={orders} />
 
-      {/* Trade Analysis */}
+      {/* Pool Shares */}
+      {poolShares.length > 0 && <PoolShares shares={poolShares} />}
+
+      {/* Advanced Analytics */}
       {trades.length > 0 && (
-        <TradeAnalysisView 
-          trades={trades}
-          accountIndex={accountIndex ?? undefined}
-        />
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <BestWorstTrades trades={trades} accountId={accountIndex ?? undefined} />
+            <StreakAnalysis trades={trades} accountId={accountIndex ?? undefined} />
+          </div>
+
+          <AssetPerformance trades={trades} accountId={accountIndex ?? undefined} />
+
+          <TimeBasedPerformance trades={trades} accountId={accountIndex ?? undefined} />
+
+          {/* Pattern Recognition */}
+          <PatternRecognition 
+            trades={trades}
+            positions={positions}
+          />
+
+          {/* Trade Analysis */}
+          <TradeAnalysisView 
+            trades={trades}
+            accountIndex={accountIndex ?? undefined}
+          />
+        </>
       )}
 
       {/* Trading Journal */}
@@ -453,6 +500,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       )}
 
       <TradesHistory trades={trades} />
+
+      {/* Transaction History */}
+      <TransactionHistory transactions={transactions} />
     </div>
   );
 };

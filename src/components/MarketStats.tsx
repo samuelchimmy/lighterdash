@@ -6,14 +6,7 @@ import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage } fro
 import { MarketStats as MarketStatsType } from "@/types/lighter";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
 
-const MARKET_SYMBOLS: Record<number, string> = {
-  0: "ETH-USD",
-  1: "BTC-USD",
-  7: "XRP-USD",
-  24: "HYPE-USD",
-  25: "BNB-USD",
-  29: "ENA-USD",
-};
+import { resolveMarketSymbol } from "@/lib/markets";
 
 export function MarketStats() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
@@ -117,7 +110,7 @@ export function MarketStats() {
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {marketList.map((market) => {
-            const symbol = MARKET_SYMBOLS[market.market_id] || `Market ${market.market_id}`;
+            const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
             const priceChange = market.daily_price_change ?? 0;
             const fundingRate = parseFloat(market.current_funding_rate || '0') * 100;
             const isPriceUp = priceChange >= 0;

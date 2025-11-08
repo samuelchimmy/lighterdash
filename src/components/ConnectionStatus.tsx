@@ -10,10 +10,9 @@ import { Wifi, WifiOff, RefreshCw } from 'lucide-react';
 interface ConnectionStatusProps {
   status: 'connected' | 'disconnected' | 'reconnecting';
   lastUpdate?: Date;
-  onReconnect?: () => void;
 }
 
-export const ConnectionStatus = ({ status, lastUpdate, onReconnect }: ConnectionStatusProps) => {
+export const ConnectionStatus = ({ status, lastUpdate }: ConnectionStatusProps) => {
   const getStatusConfig = () => {
     switch (status) {
       case 'connected':
@@ -42,24 +41,13 @@ export const ConnectionStatus = ({ status, lastUpdate, onReconnect }: Connection
 
   const config = getStatusConfig();
 
-  const handleClick = () => {
-    if (status === 'disconnected' && onReconnect) {
-      onReconnect();
-    }
-  };
-
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge 
             variant={config.variant} 
-            className={`gap-1.5 hover-glow-badge transition-all ${
-              status === 'disconnected' && onReconnect 
-                ? 'cursor-pointer hover:scale-105 active:scale-95' 
-                : 'cursor-help'
-            }`}
-            onClick={handleClick}
+            className="gap-1.5 hover-glow-badge cursor-help"
           >
             {config.icon}
             {config.text}
@@ -74,11 +62,6 @@ export const ConnectionStatus = ({ status, lastUpdate, onReconnect }: Connection
             {lastUpdate && (
               <p className="text-xs text-muted-foreground">
                 Last update: {lastUpdate.toLocaleTimeString()}
-              </p>
-            )}
-            {status === 'disconnected' && onReconnect && (
-              <p className="text-xs text-primary font-medium mt-2">
-                Click to reconnect
               </p>
             )}
           </div>

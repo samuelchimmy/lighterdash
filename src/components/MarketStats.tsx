@@ -44,7 +44,11 @@ export function MarketStats() {
         
         // Handle both single market updates and batch updates
         if (data.type === "update/market_stats" && data.market_stats) {
-          console.log("📊 Single market update:", data.market_stats);
+          console.log("📊 Single market update:", {
+            market_id: data.market_stats.market_id,
+            mark_price: data.market_stats.mark_price,
+            index_price: data.market_stats.index_price
+          });
           setMarkets(prev => ({
             ...prev,
             [data.market_stats.market_id]: data.market_stats

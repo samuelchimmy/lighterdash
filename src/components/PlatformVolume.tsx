@@ -23,6 +23,7 @@ export function PlatformVolume() {
         const data = JSON.parse(event.data);
         
         if (data.type === "update/market_stats" && data.market_stats) {
+          console.log("📊 PlatformVolume received market:", data.market_stats.market_id);
           setMarkets(prev => ({
             ...prev,
             [data.market_stats.market_id]: data.market_stats

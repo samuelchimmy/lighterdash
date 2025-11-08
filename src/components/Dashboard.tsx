@@ -14,6 +14,7 @@ import { ComparisonCard } from './ComparisonCard';
 import { TradingJournal } from './TradingJournal';
 import { AuthForm } from './AuthForm';
 import { TradeAnalysisView } from './TradeAnalysisView';
+import { PatternRecognition } from './PatternRecognition';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -385,6 +386,14 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         />
         <PerformanceMetrics trades={trades} positions={positions} />
       </div>
+
+      {/* Pattern Recognition */}
+      {trades.length > 0 && (
+        <PatternRecognition 
+          trades={trades}
+          positions={positions}
+        />
+      )}
 
       {/* Trade Analysis */}
       {trades.length > 0 && (

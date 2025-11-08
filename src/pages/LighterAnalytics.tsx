@@ -1,27 +1,41 @@
 import { MarketStats } from "@/components/MarketStats";
 import { OrderBookDepth } from "@/components/OrderBookDepth";
 import { LiveTradeFeed } from "@/components/LiveTradeFeed";
-import { BarChart3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { BarChart3, ArrowLeft } from "lucide-react";
 
 const LighterAnalytics = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="absolute inset-0 glow-primary rounded-lg" />
-              <BarChart3 className="w-8 h-8 text-primary relative" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="absolute inset-0 glow-primary rounded-lg" />
+                <BarChart3 className="w-8 h-8 text-primary relative" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">
+                  Lighter Analytics
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Real-time market data and analytics
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">
-                Lighter Analytics
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Real-time market data and analytics
-              </p>
-            </div>
+            <Button
+              variant="outline"
+              onClick={() => navigate("/")}
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Button>
           </div>
         </div>
       </header>

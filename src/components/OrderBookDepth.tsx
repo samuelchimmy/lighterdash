@@ -109,18 +109,18 @@ export function OrderBookDepth() {
         </div>
 
         {/* Order Book Ladder */}
-        <div className="space-y-2">
+        <div className="space-y-2 min-h-[500px]">
           {/* Asks (Sell Orders) */}
-          <div className="space-y-1">
+          <div className="space-y-1 h-[200px] overflow-hidden">
             <p className="text-xs font-semibold text-red-500 mb-2">ASKS (Sell Orders)</p>
             {orderBook.asks.slice(0, 10).reverse().map((ask, idx) => {
               const size = parseFloat(ask.size);
               const percent = (size / maxSize) * 100;
               
               return (
-                <div key={idx} className="relative h-6 flex items-center">
+                <div key={idx} className="relative h-6 flex items-center transition-none">
                   <div 
-                    className="absolute right-0 h-full bg-red-500/10"
+                    className="absolute right-0 h-full bg-red-500/10 transition-all duration-200"
                     style={{ width: `${percent}%` }}
                   />
                   <div className="relative z-10 flex justify-between w-full px-2 text-xs">
@@ -133,23 +133,23 @@ export function OrderBookDepth() {
           </div>
 
           {/* Mid Price Line */}
-          <div className="flex items-center justify-center py-2 border-y border-border">
+          <div className="flex items-center justify-center py-2 border-y border-border h-10">
             <span className="text-sm font-semibold text-primary">
               {formatCurrency(midPrice)}
             </span>
           </div>
 
           {/* Bids (Buy Orders) */}
-          <div className="space-y-1">
+          <div className="space-y-1 h-[200px] overflow-hidden">
             <p className="text-xs font-semibold text-green-500 mb-2">BIDS (Buy Orders)</p>
             {orderBook.bids.slice(0, 10).map((bid, idx) => {
               const size = parseFloat(bid.size);
               const percent = (size / maxSize) * 100;
               
               return (
-                <div key={idx} className="relative h-6 flex items-center">
+                <div key={idx} className="relative h-6 flex items-center transition-none">
                   <div 
-                    className="absolute left-0 h-full bg-green-500/10"
+                    className="absolute left-0 h-full bg-green-500/10 transition-all duration-200"
                     style={{ width: `${percent}%` }}
                   />
                   <div className="relative z-10 flex justify-between w-full px-2 text-xs">

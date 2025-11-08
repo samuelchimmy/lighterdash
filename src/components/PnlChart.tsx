@@ -37,25 +37,9 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
         break;
     }
 
-    const filtered = data
-      .filter(point => {
-        // Ensure timestamp is in milliseconds
-        const timestamp = point.timestamp > 10000000000 ? point.timestamp : point.timestamp * 1000;
-        return timestamp >= cutoffTime;
-      })
+    return data
+      .filter(point => point.timestamp >= cutoffTime)
       .sort((a, b) => a.timestamp - b.timestamp);
-
-    console.log('PnlChart filter debug:', { 
-      timeRange, 
-      cutoffTime, 
-      now, 
-      totalData: data.length, 
-      filteredData: filtered.length,
-      oldestTimestamp: data[0]?.timestamp,
-      newestTimestamp: data[data.length - 1]?.timestamp
-    });
-
-    return filtered;
   }, [data, timeRange]);
 
   const chartMetrics = useMemo(() => {

@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { lighterApi } from '@/lib/lighter-api';
 import { supabase } from '@/integrations/supabase/client';
 import { achievementTracker } from '@/lib/achievement-tracker';
-import { useWebSocketReconnect } from '@/hooks/use-websocket-reconnect';
 import { SummaryCard } from './SummaryCard';
 import { AccountStats } from './AccountStats';
 import { PositionsTable } from './PositionsTable';
@@ -43,10 +42,7 @@ import { Loader2, RefreshCw } from 'lucide-react';
 
 interface DashboardProps {
   walletAddress: string;
-  onConnectionStatusChange?: (
-    status: 'connected' | 'disconnected' | 'reconnecting',
-    reconnect?: () => void
-  ) => void;
+  onConnectionStatusChange?: (status: 'connected' | 'disconnected' | 'reconnecting') => void;
 }
 
 export const Dashboard = ({ walletAddress, onConnectionStatusChange }: DashboardProps) => {
@@ -75,187 +71,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   const lastPnlRef = useRef<number>(0);
   const { toast } = useToast();
   const { animation, celebrate, reset } = useSuccessAnimation();
-
-  // WebSocket message handler
-  const handleWebSocketMessage = useCallback(async (message: any) => {
-    const channel: string | undefined = message.channel;
-    const type: string | undefined = message.type;
-
-    // Import merge helpers
-    const { mergePositions, dedupeAndPrepend, normalizeTrades } = await import('@/lib/lighter-api');
-
-    // Handle user_stats updates
-    if (type === 'update/user_stats' && message.stats) {
-      const stats = message.stats;
-      setUserStats(stats);
-      
-      // Add data point to PnL history (throttled to 10 seconds)
-      const now = Date.now();
-      if (now - lastUpdateRef.current >= 10000) {
-        const portfolio = parseFloat(stats.portfolio_value || '0');
-        const collateral = parseFloat(stats.collateral || '0');
-        const currentPnl = portfolio - collateral;
-        
-        setPnlHistory(prev => [...prev, {
-          timestamp: now,
-          accountValue: portfolio,
-          pnl: currentPnl,
-          collateral: collateral,
-        }]);
-        lastUpdateRef.current = now;
-        
-        // Check achievements
-        const achievement = achievementTracker.updatePnL(currentPnl);
-        if (achievement) {
-          celebrate(achievement.type, achievement.description);
-        }
-        
-        // Celebrate profitable milestones
-        if (lastPnlRef.current < 0 && currentPnl > 0) {
-          celebrate('profit', 'You\'re back in profit! 🎉');
-        } else if (lastPnlRef.current < 100 && currentPnl >= 100) {
-          celebrate('milestone', 'Reached $100 profit milestone!');
-        } else if (lastPnlRef.current < 500 && currentPnl >= 500) {
-          celebrate('milestone', 'Reached $500 profit milestone!');
-        } else if (lastPnlRef.current < 1000 && currentPnl >= 1000) {
-          celebrate('achievement', 'Reached $1,000 profit milestone! 🏆');
-        }
-        lastPnlRef.current = currentPnl;
-      }
-      return;
-    }
-    if (channel?.startsWith('user_stats:') && message.stats) {
-      const stats = message.stats;
-      setUserStats(stats);
-      
-      // Add data point to PnL history (throttled to 10 seconds)
-      const now = Date.now();
-      if (now - lastUpdateRef.current >= 10000) {
-        const portfolio = parseFloat(stats.portfolio_value || '0');
-        const collateral = parseFloat(stats.collateral || '0');
-        const currentPnl = portfolio - collateral;
-        
-        setPnlHistory(prev => [...prev, {
-          timestamp: now,
-          accountValue: portfolio,
-          pnl: currentPnl,
-          collateral: collateral,
-        }]);
-        lastUpdateRef.current = now;
-        
-        // Check achievements
-        const achievement = achievementTracker.updatePnL(currentPnl);
-        if (achievement) {
-          celebrate(achievement.type, achievement.description);
-        }
-        
-        // Celebrate profitable milestones
-        if (lastPnlRef.current < 0 && currentPnl > 0) {
-          celebrate('profit', 'You\'re back in profit! 🎉');
-        } else if (lastPnlRef.current < 100 && currentPnl >= 100) {
-          celebrate('milestone', 'Reached $100 profit milestone!');
-        } else if (lastPnlRef.current < 500 && currentPnl >= 500) {
-          celebrate('milestone', 'Reached $500 profit milestone!');
-        } else if (lastPnlRef.current < 1000 && currentPnl >= 1000) {
-          celebrate('achievement', 'Reached $1,000 profit milestone! 🏆');
-        }
-        lastPnlRef.current = currentPnl;
-      }
-      return;
-    }
-
-    // Handle positions updates with merge logic
-    if (type === 'update/account_all_positions' && message.positions) {
-      setPositions(prev => mergePositions(prev, message.positions));
-      return;
-    }
-    if (type === 'update/account_all' && message.positions) {
-      setPositions(prev => mergePositions(prev, message.positions));
-      
-      // Also update funding histories, pool shares, and other data
-      if (message.funding_histories) {
-        setFundingHistories(message.funding_histories);
-      }
-      if (message.shares) {
-        setPoolShares(message.shares);
-      }
-      return;
-    }
-    if (channel?.startsWith('account_all:') && message.positions) {
-      setPositions(prev => mergePositions(prev, message.positions));
-      return;
-    }
-    if (channel?.startsWith('account_all_positions:') && message.positions) {
-      setPositions(prev => mergePositions(prev, message.positions));
-      return;
-    }
-
-    // Handle trades updates
-    if (type === 'update/account_all_trades' && message.trades) {
-      const incomingTrades = normalizeTrades(message.trades);
-      setTrades(prev => {
-        const updated = dedupeAndPrepend(prev, incomingTrades);
-        
-        // Check for new trades and track achievements
-        if (incomingTrades.length > 0) {
-          const newestTrade = incomingTrades[0];
-          const isProfitable = parseFloat(newestTrade.usd_amount || '0') > 0;
-          const achievement = achievementTracker.updateTradeResult(isProfitable);
-          if (achievement) {
-            celebrate(achievement.type, achievement.description);
-          }
-        }
-        
-        return updated;
-      });
-      return;
-    }
-    if (channel?.startsWith('account_all_trades:') && message.trades) {
-      const incomingTrades = normalizeTrades(message.trades);
-      setTrades(prev => {
-        const updated = dedupeAndPrepend(prev, incomingTrades);
-        
-        // Check for new trades and track achievements
-        if (incomingTrades.length > 0) {
-          const newestTrade = incomingTrades[0];
-          const isProfitable = parseFloat(newestTrade.usd_amount || '0') > 0;
-          const achievement = achievementTracker.updateTradeResult(isProfitable);
-          if (achievement) {
-            celebrate(achievement.type, achievement.description);
-          }
-        }
-        
-        return updated;
-      });
-      return;
-    }
-
-    // Handle orders updates
-    if ((type === 'update/account_all_orders' || channel?.startsWith('account_all_orders:')) && message.orders) {
-      setOrders(message.orders);
-      return;
-    }
-
-    // Handle transaction updates
-    if ((type === 'update/account_tx' || channel?.startsWith('account_tx:')) && message.txs) {
-      setTransactions(prev => {
-        const existingHashes = new Set(prev.map(t => t.hash));
-        const newTxs = message.txs.filter((t: any) => !existingHashes.has(t.hash));
-        return [...newTxs, ...prev].slice(0, 100); // Keep last 100 txs
-      });
-      return;
-    }
-  }, [celebrate]);
-
-  // WebSocket reconnect hook
-  const { connectionStatus, reconnect } = useWebSocketReconnect({
-    accountIndex,
-    onConnectionChange: (status) => {
-      onConnectionStatusChange?.(status, reconnect);
-    },
-    onMessage: handleWebSocketMessage,
-    enabled: isHydrated && !!accountIndex,
-  });
 
   // Keyboard shortcuts
   useKeyboardShortcuts([
@@ -364,6 +179,205 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         
         setIsHydrated(true);
         setIsConnecting(false);
+
+        // Phase 3: Connect WebSocket for real-time updates (only after hydration)
+        ws = lighterApi.createWebSocket();
+
+        ws.onopen = () => {
+          if (!isMounted) return;
+          console.log('WebSocket connected');
+          
+          onConnectionStatusChange?.('connected');
+          
+          // Subscribe to channels (no auth required for public data)
+          lighterApi.subscribeToChannel(ws!, `user_stats/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all_positions/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all_trades/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all_orders/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_tx/${index}`);
+          
+          toast({
+            title: "Live updates active",
+            description: "Real-time data stream connected",
+          });
+        };
+
+        ws.onmessage = async (event) => {
+          if (!isMounted) return;
+          
+          try {
+            const message = JSON.parse(event.data);
+            console.log('WebSocket message:', message);
+
+            const channel: string | undefined = message.channel;
+            const type: string | undefined = message.type;
+
+            // Import merge helpers
+            const { mergePositions, dedupeAndPrepend, normalizeTrades } = await import('@/lib/lighter-api');
+
+            // Handle user_stats updates
+            if (type === 'update/user_stats' && message.stats) {
+              const stats = message.stats as UserStats;
+              setUserStats(stats);
+              
+              // Add data point to PnL history (throttled to 10 seconds for real-time feel)
+              const now = Date.now();
+              if (now - lastUpdateRef.current >= 10000) {
+                const portfolio = parseFloat(stats.portfolio_value || '0');
+                const collateral = parseFloat(stats.collateral || '0');
+                setPnlHistory(prev => [...prev, {
+                  timestamp: now,
+                  accountValue: portfolio,
+                  pnl: portfolio - collateral,
+                  collateral: collateral,
+                }]);
+                lastUpdateRef.current = now;
+              }
+              return;
+            }
+            if (channel?.startsWith('user_stats:') && message.stats) {
+              const stats = message.stats as UserStats;
+              setUserStats(stats);
+              
+              // Add data point to PnL history (throttled to 10 seconds for real-time feel)
+              const now = Date.now();
+              if (now - lastUpdateRef.current >= 10000) {
+                const portfolio = parseFloat(stats.portfolio_value || '0');
+                const collateral = parseFloat(stats.collateral || '0');
+                const currentPnl = portfolio - collateral;
+                
+                setPnlHistory(prev => [...prev, {
+                  timestamp: now,
+                  accountValue: portfolio,
+                  pnl: currentPnl,
+                  collateral: collateral,
+                }]);
+                lastUpdateRef.current = now;
+                
+                // Check achievements
+                const achievement = achievementTracker.updatePnL(currentPnl);
+                if (achievement) {
+                  celebrate(achievement.type, achievement.description);
+                }
+                
+                // Celebrate profitable milestones
+                if (lastPnlRef.current < 0 && currentPnl > 0) {
+                  celebrate('profit', 'You\'re back in profit! 🎉');
+                } else if (lastPnlRef.current < 100 && currentPnl >= 100) {
+                  celebrate('milestone', 'Reached $100 profit milestone!');
+                } else if (lastPnlRef.current < 500 && currentPnl >= 500) {
+                  celebrate('milestone', 'Reached $500 profit milestone!');
+                } else if (lastPnlRef.current < 1000 && currentPnl >= 1000) {
+                  celebrate('achievement', 'Reached $1,000 profit milestone! 🏆');
+                }
+                lastPnlRef.current = currentPnl;
+              }
+              return;
+            }
+
+            // Handle positions updates with merge logic
+            if (type === 'update/account_all_positions' && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
+              return;
+            }
+            if (type === 'update/account_all' && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
+              
+              // Also update funding histories, pool shares, and other data
+              if (message.funding_histories) {
+                setFundingHistories(message.funding_histories);
+              }
+              if (message.shares) {
+                setPoolShares(message.shares);
+              }
+              return;
+            }
+            if (channel?.startsWith('account_all:') && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
+              return;
+            }
+            if (channel?.startsWith('account_all_positions:') && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
+              return;
+            }
+
+            // Handle trades updates
+            if (type === 'update/account_all_trades' && message.trades) {
+              const incomingTrades = normalizeTrades(message.trades);
+              setTrades(prev => {
+                const updated = dedupeAndPrepend(prev, incomingTrades);
+                
+                // Check for new trades and track achievements
+                if (incomingTrades.length > 0) {
+                  const newestTrade = incomingTrades[0];
+                  const isProfitable = parseFloat(newestTrade.usd_amount || '0') > 0;
+                  const achievement = achievementTracker.updateTradeResult(isProfitable);
+                  if (achievement) {
+                    celebrate(achievement.type, achievement.description);
+                  }
+                }
+                
+                return updated;
+              });
+              return;
+            }
+            if (channel?.startsWith('account_all_trades:') && message.trades) {
+              const incomingTrades = normalizeTrades(message.trades);
+              setTrades(prev => {
+                const updated = dedupeAndPrepend(prev, incomingTrades);
+                
+                // Check for new trades and track achievements
+                if (incomingTrades.length > 0) {
+                  const newestTrade = incomingTrades[0];
+                  const isProfitable = parseFloat(newestTrade.usd_amount || '0') > 0;
+                  const achievement = achievementTracker.updateTradeResult(isProfitable);
+                  if (achievement) {
+                    celebrate(achievement.type, achievement.description);
+                  }
+                }
+                
+                return updated;
+              });
+              return;
+            }
+
+            // Handle orders updates
+            if ((type === 'update/account_all_orders' || channel?.startsWith('account_all_orders:')) && message.orders) {
+              setOrders(message.orders);
+              return;
+            }
+
+            // Handle transaction updates
+            if ((type === 'update/account_tx' || channel?.startsWith('account_tx:')) && message.txs) {
+              setTransactions(prev => {
+                const existingHashes = new Set(prev.map(t => t.hash));
+                const newTxs = message.txs.filter((t: any) => !existingHashes.has(t.hash));
+                return [...newTxs, ...prev].slice(0, 100); // Keep last 100 txs
+              });
+              return;
+            }
+          } catch (error) {
+            console.error('Error parsing WebSocket message:', error);
+          }
+        };
+
+        ws.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          onConnectionStatusChange?.('disconnected');
+          toast({
+            title: "Connection error",
+            description: "Failed to connect to real-time data feed",
+            variant: "destructive",
+          });
+          setIsConnecting(false);
+        };
+
+        ws.onclose = () => {
+          console.log('WebSocket disconnected');
+          onConnectionStatusChange?.('disconnected');
+        };
+
       } catch (error) {
         console.error('Error initializing dashboard:', error);
         toast({
@@ -380,6 +394,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     // Cleanup
     return () => {
       isMounted = false;
+      if (ws) {
+        ws.close();
+      }
     };
   }, [walletAddress, toast]);
 

@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { 
   Tooltip,
   TooltipContent,
@@ -11,10 +10,9 @@ import { Wifi, WifiOff, RefreshCw } from 'lucide-react';
 interface ConnectionStatusProps {
   status: 'connected' | 'disconnected' | 'reconnecting';
   lastUpdate?: Date;
-  onReconnect?: () => void;
 }
 
-export const ConnectionStatus = ({ status, lastUpdate, onReconnect }: ConnectionStatusProps) => {
+export const ConnectionStatus = ({ status, lastUpdate }: ConnectionStatusProps) => {
   const getStatusConfig = () => {
     switch (status) {
       case 'connected':
@@ -42,36 +40,18 @@ export const ConnectionStatus = ({ status, lastUpdate, onReconnect }: Connection
   };
 
   const config = getStatusConfig();
-  const canReconnect = status === 'disconnected' && onReconnect;
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          {canReconnect ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onReconnect}
-              className="h-auto p-0 hover:bg-transparent"
-            >
-              <Badge 
-                variant={config.variant} 
-                className="gap-1.5 hover-glow-badge cursor-pointer transition-all hover:scale-105"
-              >
-                {config.icon}
-                {config.text}
-              </Badge>
-            </Button>
-          ) : (
-            <Badge 
-              variant={config.variant} 
-              className="gap-1.5 hover-glow-badge cursor-help"
-            >
-              {config.icon}
-              {config.text}
-            </Badge>
-          )}
+          <Badge 
+            variant={config.variant} 
+            className="gap-1.5 hover-glow-badge cursor-help"
+          >
+            {config.icon}
+            {config.text}
+          </Badge>
         </TooltipTrigger>
         <TooltipContent>
           <div className="space-y-1">
@@ -82,11 +62,6 @@ export const ConnectionStatus = ({ status, lastUpdate, onReconnect }: Connection
             {lastUpdate && (
               <p className="text-xs text-muted-foreground">
                 Last update: {lastUpdate.toLocaleTimeString()}
-              </p>
-            )}
-            {canReconnect && (
-              <p className="text-xs text-primary font-medium mt-2">
-                Click to reconnect
               </p>
             )}
           </div>

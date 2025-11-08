@@ -91,30 +91,27 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         .filter(p => parseFloat(p.position || '0') !== 0);
       const tradesArray = normalizeTrades(snapshot.trades || {});
 
-      // Preserve existing values if snapshot is sparse
+      // Update tables but avoid nuking UI if snapshot is sparse
       setPositions(prev => positionsArray.length > 0 ? positionsArray : prev);
       setTrades(prev => tradesArray.length > 0 ? tradesArray : prev);
 
-      const refinedStats: UserStats = snapshot.stats || {
-        collateral: (snapshot.collateral ?? userStats?.collateral ?? '0') as string,
-        portfolio_value: (snapshot.portfolio_value ?? userStats?.portfolio_value ?? '0') as string,
-        leverage: (userStats?.leverage ?? '0') as string,
-        available_balance: (userStats?.available_balance ?? '0') as string,
-        margin_usage: (userStats?.margin_usage ?? '0') as string,
-        buying_power: (userStats?.buying_power ?? '0') as string,
-      };
+      // Only update stats if snapshot includes a meaningful stats object
+      if (snapshot.stats && snapshot.stats.portfolio_value !== undefined) {
+        setUserStats(snapshot.stats);
+      }
 
-      setUserStats(refinedStats);
-
-      // Add new data point to PnL history
-      const portfolio = parseFloat(refinedStats.portfolio_value || '0');
-      const collateral = parseFloat(refinedStats.collateral || '0');
-      setPnlHistory(prev => [...prev, {
-        timestamp: Date.now(),
-        accountValue: portfolio,
-        pnl: portfolio - collateral,
-        collateral: collateral,
-      }]);
+      // Add new data point to PnL history based on the latest known stats
+      const stats = snapshot.stats ?? userStats;
+      const portfolio = parseFloat(stats?.portfolio_value || '0');
+      const collateral = parseFloat(stats?.collateral || '0');
+      if (Number.isFinite(portfolio) && Number.isFinite(collateral)) {
+        setPnlHistory(prev => [...prev, {
+          timestamp: Date.now(),
+          accountValue: portfolio,
+          pnl: portfolio - collateral,
+          collateral: collateral,
+        }]);
+      }
 
       toast({
         title: "Data refreshed",

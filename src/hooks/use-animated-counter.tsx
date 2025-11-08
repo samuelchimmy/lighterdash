@@ -10,14 +10,16 @@ export const useAnimatedCounter = (
   options: UseAnimatedCounterOptions = {}
 ) => {
   const { duration = 1000, decimals = 2 } = options;
-  const [displayValue, setDisplayValue] = useState(targetValue);
+  const sanitize = (v: number) => (Number.isFinite(v) ? v : 0);
+  const [displayValue, setDisplayValue] = useState(sanitize(targetValue));
   const rafRef = useRef<number>();
   const startTimeRef = useRef<number>();
-  const startValueRef = useRef(targetValue);
+  const startValueRef = useRef(sanitize(targetValue));
 
   useEffect(() => {
+    const nextTarget = sanitize(targetValue);
     // If target hasn't changed or is same as display, no animation needed
-    if (targetValue === displayValue) {
+    if (nextTarget === displayValue) {
       return;
     }
 
@@ -36,7 +38,7 @@ export const useAnimatedCounter = (
       const easeOut = 1 - Math.pow(1 - progress, 3);
 
       const currentValue =
-        startValueRef.current + (targetValue - startValueRef.current) * easeOut;
+        startValueRef.current + (nextTarget - startValueRef.current) * easeOut;
 
       setDisplayValue(currentValue);
 

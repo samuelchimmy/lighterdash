@@ -29,15 +29,6 @@ const LighterAnalytics = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          {/* Market Stats Overview */}
-          <MarketStats />
-
-          {/* Order Book & Live Trades Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <OrderBookDepth />
-            <LiveTradeFeed />
-          </div>
-
           {/* Info Card */}
           <div className="bg-card border border-border rounded-xl p-6 shadow-card">
             <h3 className="text-lg font-semibold text-foreground mb-2">
@@ -48,6 +39,15 @@ const LighterAnalytics = () => {
               recent trades, funding rates, and comprehensive market statistics. All data is streamed 
               directly from Lighter's WebSocket API for instant updates.
             </p>
+          </div>
+
+          {/* Market Stats Overview */}
+          <MarketStats />
+
+          {/* Order Book & Live Trades Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <OrderBookDepth />
+            <LiveTradeFeed />
           </div>
         </div>
       </main>

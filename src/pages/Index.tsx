@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
+import { FloatingParticles } from '@/components/FloatingParticles';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Zap, Wallet, Copy, Check, GitCompare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -40,6 +41,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <FloatingParticles />
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -114,34 +116,52 @@ const Index = () => {
 
             {/* Features Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in">
-              <div className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <Wallet className="w-6 h-6 text-primary" />
+              <div className="group relative bg-gradient-to-br from-card/50 to-card rounded-xl p-6 shadow-card hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+                {/* Animated gradient border */}
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-xl opacity-0 group-hover:opacity-100 group-hover:animate-[borderPulse_2s_ease-in-out_infinite] blur-sm transition-opacity duration-300" />
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-primary via-purple-500 to-pink-500 rounded-xl opacity-0 group-hover:opacity-75 animate-[rotate_3s_linear_infinite] transition-opacity duration-300" />
+                
+                <div className="relative bg-gradient-to-br from-card to-card/95 rounded-xl p-6 border border-border/50 group-hover:border-transparent transition-colors duration-300">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Wallet className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Wallet Tracker</h3>
+                  <p className="text-muted-foreground text-sm">
+                    Track any Lighter wallet&apos;s positions, trades, PnL, and performance metrics in real-time.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Wallet Tracker</h3>
-                <p className="text-muted-foreground text-sm">
-                  Track any Lighter wallet&apos;s positions, trades, PnL, and performance metrics in real-time.
-                </p>
               </div>
 
-              <div className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <BarChart3 className="w-6 h-6 text-primary" />
+              <div className="group relative bg-gradient-to-br from-card/50 to-card rounded-xl p-6 shadow-card hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+                {/* Animated gradient border */}
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-500 via-pink-500 to-primary rounded-xl opacity-0 group-hover:opacity-100 group-hover:animate-[borderPulse_2s_ease-in-out_infinite] blur-sm transition-opacity duration-300" />
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-500 via-pink-500 to-primary rounded-xl opacity-0 group-hover:opacity-75 animate-[rotate_3s_linear_infinite] transition-opacity duration-300" />
+                
+                <div className="relative bg-gradient-to-br from-card to-card/95 rounded-xl p-6 border border-border/50 group-hover:border-transparent transition-colors duration-300">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <BarChart3 className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Market Analytics</h3>
+                  <p className="text-muted-foreground text-sm">
+                    View live order books, recent trades, funding rates, and comprehensive market statistics.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Market Analytics</h3>
-                <p className="text-muted-foreground text-sm">
-                  View live order books, recent trades, funding rates, and comprehensive market statistics.
-                </p>
               </div>
 
-              <div className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <Zap className="w-6 h-6 text-primary" />
+              <div className="group relative bg-gradient-to-br from-card/50 to-card rounded-xl p-6 shadow-card hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+                {/* Animated gradient border */}
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-pink-500 via-primary to-purple-500 rounded-xl opacity-0 group-hover:opacity-100 group-hover:animate-[borderPulse_2s_ease-in-out_infinite] blur-sm transition-opacity duration-300" />
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-pink-500 via-primary to-purple-500 rounded-xl opacity-0 group-hover:opacity-75 animate-[rotate_3s_linear_infinite] transition-opacity duration-300" />
+                
+                <div className="relative bg-gradient-to-br from-card to-card/95 rounded-xl p-6 border border-border/50 group-hover:border-transparent transition-colors duration-300">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Zap className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">Real-Time Updates</h3>
+                  <p className="text-muted-foreground text-sm">
+                    WebSocket-powered live data streams for instant market and account updates.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Real-Time Updates</h3>
-                <p className="text-muted-foreground text-sm">
-                  WebSocket-powered live data streams for instant market and account updates.
-                </p>
               </div>
             </div>
 

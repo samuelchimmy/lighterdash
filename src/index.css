@@ -113,6 +113,43 @@ All colors MUST be HSL.
   }
 }
 
+/* Float animation for particles */
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(20px, -20px) scale(1.1);
+  }
+  50% {
+    transform: translate(-15px, -40px) scale(0.9);
+  }
+  75% {
+    transform: translate(-25px, -20px) scale(1.05);
+  }
+}
+
+/* Border gradient pulse animation */
+@keyframes borderPulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
   background: linear-gradient(

@@ -1,6 +1,7 @@
 import { MarketStats } from "@/components/MarketStats";
 import { OrderBookDepth } from "@/components/OrderBookDepth";
 import { LiveTradeFeed } from "@/components/LiveTradeFeed";
+import { FloatingParticles } from "@/components/FloatingParticles";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, ArrowLeft } from "lucide-react";
@@ -10,6 +11,7 @@ const LighterAnalytics = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <FloatingParticles />
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">

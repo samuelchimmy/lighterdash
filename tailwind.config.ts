@@ -13,6 +13,19 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['-apple-system', 'system-ui', 'Roboto', '"Helvetica Neue"', '"Nanum Gothic"', 'sans-serif'],
+      },
+      fontSize: {
+        xs: '0.688rem',    // 11px
+        sm: '0.813rem',    // 13px
+        base: '0.875rem',  // 14px
+        lg: '0.938rem',    // 15px
+        xl: '1rem',        // 16px
+        '2xl': '1.125rem', // 18px
+        '3xl': '1.25rem',  // 20px
+        '4xl': '1.5rem',   // 24px
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

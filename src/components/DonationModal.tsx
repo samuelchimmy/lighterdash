@@ -40,19 +40,19 @@ export const DonationModal = () => {
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-[90vw] sm:max-w-md overflow-hidden p-0">
         {/* Gradient Header */}
-        <div className="relative bg-gradient-to-br from-primary via-primary-glow to-purple-600 p-4 sm:p-8 text-center">
+        <div className="relative bg-gradient-to-br from-primary via-primary-glow to-purple-600 p-3 sm:p-8 text-center">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30" />
           
           <div className="relative">
-            <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-sm mb-3 sm:mb-4 animate-in zoom-in-50 duration-500">
-              <Heart className="w-8 h-8 sm:w-10 sm:h-10 text-white fill-white animate-pulse" />
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-sm mb-2 sm:mb-4 animate-in zoom-in-50 duration-500">
+              <Heart className="w-6 h-6 sm:w-10 sm:h-10 text-white fill-white animate-pulse" />
             </div>
             
             <DialogHeader>
-              <DialogTitle className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              <DialogTitle className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
                 Support LighterDash
               </DialogTitle>
-              <DialogDescription className="text-white/90 text-sm sm:text-base">
+              <DialogDescription className="text-white/90 text-xs sm:text-base">
                 Help us keep the lights on and build more amazing features!
               </DialogDescription>
             </DialogHeader>
@@ -60,8 +60,8 @@ export const DonationModal = () => {
         </div>
 
         {/* Content */}
-        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-          <div className="space-y-3">
+        <div className="p-3 sm:p-6 space-y-3 sm:space-y-6">
+          <div className="space-y-2 sm:space-y-3">
             <p className="text-sm text-muted-foreground">
               LighterDash is a community-built project created with <span className="text-purple-400">💜</span> by{' '}
               <a
@@ -82,8 +82,8 @@ export const DonationModal = () => {
           </div>
 
           {/* Donation Address Card */}
-          <div className="bg-secondary/50 rounded-xl p-4 border border-border">
-            <p className="text-xs text-muted-foreground mb-2 font-medium">Donation Address:</p>
+          <div className="bg-secondary/50 rounded-xl p-3 sm:p-4 border border-border">
+            <p className="text-xs text-muted-foreground mb-1.5 sm:mb-2 font-medium">Donation Address:</p>
             <div className="flex items-center gap-2">
               <code className="flex-1 text-xs font-mono bg-background px-3 py-2 rounded-lg text-foreground break-all border border-border">
                 {DONATION_ADDRESS}
@@ -108,9 +108,9 @@ export const DonationModal = () => {
           </div>
 
           {/* Features Preview */}
-          <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl p-4 border border-primary/20">
-            <p className="text-sm font-medium text-foreground mb-2">What's Coming Next:</p>
-            <ul className="space-y-1 text-xs text-muted-foreground">
+          <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl p-2.5 sm:p-4 border border-primary/20">
+            <p className="text-xs sm:text-sm font-medium text-foreground mb-1.5 sm:mb-2">What's Coming Next:</p>
+            <ul className="space-y-0.5 sm:space-y-1 text-xs text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                 AI-powered trading insights & pattern recognition

@@ -33,9 +33,13 @@ All colors MUST be HSL.
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
+    --destructive-muted: 0 60% 65%;
+    --destructive-light: 0 50% 75%;
     
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
+    --success-muted: 160 65% 55%;
+    --success-light: 160 50% 70%;
     
     --profit: 160 84% 39%;
     --loss: 0 72% 51%;

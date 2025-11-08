@@ -13,6 +13,7 @@ import { AlertMonitor } from './AlertMonitor';
 import { ComparisonCard } from './ComparisonCard';
 import { TradingJournal } from './TradingJournal';
 import { AuthForm } from './AuthForm';
+import { TradeAnalysisView } from './TradeAnalysisView';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -382,16 +383,25 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
           totalPnL={totalPnl}
           totalTrades={trades.length}
         />
-        {user && (
-          <TradingJournal
-            trades={trades}
-            walletAddress={walletAddress}
-            userId={user.id}
-          />
-        )}
+        <PerformanceMetrics trades={trades} positions={positions} />
       </div>
 
-      <PerformanceMetrics trades={trades} positions={positions} />
+      {/* Trade Analysis */}
+      {trades.length > 0 && (
+        <TradeAnalysisView 
+          trades={trades}
+          accountIndex={accountIndex ?? undefined}
+        />
+      )}
+
+      {/* Trading Journal */}
+      {user && (
+        <TradingJournal 
+          trades={trades} 
+          walletAddress={walletAddress}
+          userId={user.id}
+        />
+      )}
 
       <TradesHistory trades={trades} />
     </div>

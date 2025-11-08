@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { validateEthereumAddress } from '@/lib/lighter-api';
@@ -35,27 +35,27 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-2xl mx-auto">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex gap-2 sm:gap-3">
           <div className="flex-1">
             <Input
               type="text"
-              placeholder="Enter Lighter L1 Address (0x...)"
+              placeholder="Enter L1 Address (0x...)"
               value={address}
               onChange={(e) => {
                 setAddress(e.target.value);
-                setError(''); // Clear error on input
+                setError('');
               }}
-              className="h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground"
+              className="h-10 sm:h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground text-sm"
               disabled={isLoading}
             />
           </div>
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-12 px-8 bg-primary hover:bg-primary-glow text-primary-foreground font-semibold"
+            size="icon"
+            className="h-10 w-10 sm:h-12 sm:w-12 bg-primary hover:bg-primary-glow text-primary-foreground shrink-0"
           >
-            <Search className="w-5 h-5 mr-2" />
-            {isLoading ? 'Scanning...' : 'Scan Wallet'}
+            <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </Button>
         </div>
         {error && (

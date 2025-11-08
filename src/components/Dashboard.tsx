@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { lighterApi } from '@/lib/lighter-api';
 import { supabase } from '@/integrations/supabase/client';
-import { achievementTracker } from '@/lib/achievement-tracker';
 import { SummaryCard } from './SummaryCard';
 import { AccountStats } from './AccountStats';
 import { PositionsTable } from './PositionsTable';
@@ -255,12 +254,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
                 }]);
                 lastUpdateRef.current = now;
                 
-                // Check achievements
-                const achievement = achievementTracker.updatePnL(currentPnl);
-                if (achievement) {
-                  celebrate(achievement.type, achievement.description);
-                }
-                
                 // Celebrate profitable milestones
                 if (lastPnlRef.current < 0 && currentPnl > 0) {
                   celebrate('profit', 'You\'re back in profit! 🎉');
@@ -305,40 +298,12 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             // Handle trades updates
             if (type === 'update/account_all_trades' && message.trades) {
               const incomingTrades = normalizeTrades(message.trades);
-              setTrades(prev => {
-                const updated = dedupeAndPrepend(prev, incomingTrades);
-                
-                // Check for new trades and track achievements
-                if (incomingTrades.length > 0) {
-                  const newestTrade = incomingTrades[0];
-                  const isProfitable = parseFloat(newestTrade.usd_amount || '0') > 0;
-                  const achievement = achievementTracker.updateTradeResult(isProfitable);
-                  if (achievement) {
-                    celebrate(achievement.type, achievement.description);
-                  }
-                }
-                
-                return updated;
-              });
+              setTrades(prev => dedupeAndPrepend(prev, incomingTrades));
               return;
             }
             if (channel?.startsWith('account_all_trades:') && message.trades) {
               const incomingTrades = normalizeTrades(message.trades);
-              setTrades(prev => {
-                const updated = dedupeAndPrepend(prev, incomingTrades);
-                
-                // Check for new trades and track achievements
-                if (incomingTrades.length > 0) {
-                  const newestTrade = incomingTrades[0];
-                  const isProfitable = parseFloat(newestTrade.usd_amount || '0') > 0;
-                  const achievement = achievementTracker.updateTradeResult(isProfitable);
-                  if (achievement) {
-                    celebrate(achievement.type, achievement.description);
-                  }
-                }
-                
-                return updated;
-              });
+              setTrades(prev => dedupeAndPrepend(prev, incomingTrades));
               return;
             }
 

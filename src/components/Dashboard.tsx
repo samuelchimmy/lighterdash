@@ -64,15 +64,29 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
             const message = JSON.parse(event.data);
             console.log('WebSocket message:', message);
 
-            // Handle different message types based on Lighter's WebSocket format
-            if (message.type === 'update/user_stats' && message.stats) {
-              console.log('User stats update:', message.stats);
-              setUserStats(message.stats);
-            } else if (message.type === 'update/account_all_positions' && message.positions) {
-              console.log('Positions update:', message.positions);
-              // Convert positions object to array
-              const positionsArray = Object.values(message.positions).flat();
+            const channel: string | undefined = message.channel;
+            const type: string | undefined = message.type;
+
+            // Prefer explicit type handling
+            if (type === 'update/user_stats' && message.stats) {
+              setUserStats(message.stats as UserStats);
+              return;
+            }
+            if (type === 'update/account_all_positions' && message.positions) {
+              const positionsArray = Object.values(message.positions || {});
               setPositions(positionsArray as Position[]);
+              return;
+            }
+
+            // Fallback: route by channel name if type varies (e.g. subscribed/*)
+            if (channel?.startsWith('user_stats:') && message.stats) {
+              setUserStats(message.stats as UserStats);
+              return;
+            }
+            if (channel?.startsWith('account_all_positions:') && message.positions) {
+              const positionsArray = Object.values(message.positions || {});
+              setPositions(positionsArray as Position[]);
+              return;
             }
           } catch (error) {
             console.error('Error parsing WebSocket message:', error);

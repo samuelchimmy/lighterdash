@@ -3,7 +3,7 @@ import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { Button } from '@/components/ui/button';
-import { BarChart3, Zap, Wallet, Copy, Check } from 'lucide-react';
+import { BarChart3, Zap, Wallet, Copy, Check, Trophy, TrendingUp, GitCompare, TestTube } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
@@ -53,27 +53,56 @@ const Index = () => {
                 LighterDash
               </h1>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
               {scannedAddress && (
                 <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
               )}
               {!scannedAddress && (
                 <>
                   <Button
-                    onClick={() => navigate('/community')}
+                    onClick={() => navigate('/community?tab=leaderboard')}
                     variant="outline"
+                    size="sm"
                     className="gap-2"
                   >
-                    <Zap className="w-4 h-4" />
-                    Community Hub
+                    <Trophy className="w-4 h-4" />
+                    <span className="hidden md:inline">Leaderboard</span>
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/community?tab=signals')}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <TrendingUp className="w-4 h-4" />
+                    <span className="hidden md:inline">Copy Trade</span>
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/community?tab=compare')}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <GitCompare className="w-4 h-4" />
+                    <span className="hidden md:inline">Compare</span>
+                  </Button>
+                  <Button
+                    onClick={() => navigate('/community?tab=backtest')}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <TestTube className="w-4 h-4" />
+                    <span className="hidden md:inline">Backtest</span>
                   </Button>
                   <Button
                     onClick={() => navigate('/analytics')}
                     variant="outline"
+                    size="sm"
                     className="gap-2"
                   >
                     <BarChart3 className="w-4 h-4" />
-                    Lighter Analytics
+                    <span className="hidden md:inline">Analytics</span>
                   </Button>
                 </>
               )}

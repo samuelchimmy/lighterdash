@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CommunityLeaderboard } from "@/components/CommunityLeaderboard";
 import { CopyTradingSignals } from "@/components/CopyTradingSignals";
@@ -5,6 +6,8 @@ import { MultiWalletComparison } from "@/components/MultiWalletComparison";
 import { BacktestingTool } from "@/components/BacktestingTool";
 
 export default function CommunityHub() {
+  const [searchParams] = useSearchParams();
+  const defaultTab = searchParams.get("tab") || "leaderboard";
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -17,7 +20,7 @@ export default function CommunityHub() {
           </p>
         </div>
 
-        <Tabs defaultValue="leaderboard" className="w-full">
+        <Tabs defaultValue={defaultTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
             <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
             <TabsTrigger value="signals">Copy Trading</TabsTrigger>

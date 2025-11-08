@@ -94,8 +94,8 @@ export function MarketStats() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {marketList.map((market) => {
             const symbol = MARKET_SYMBOLS[market.market_id] || `Market ${market.market_id}`;
-            const priceChange = market.daily_price_change;
-            const fundingRate = parseFloat(market.current_funding_rate) * 100;
+            const priceChange = market.daily_price_change ?? 0;
+            const fundingRate = parseFloat(market.current_funding_rate || '0') * 100;
             const isPriceUp = priceChange >= 0;
             const isFundingPositive = fundingRate >= 0;
 

@@ -136,7 +136,8 @@ export const formatCurrencySmart = (num: number): string => {
   }).format(num);
 };
 
-export const formatPercentage = (num: number): string => {
+export const formatPercentage = (num: number | undefined | null): string => {
+  if (num === undefined || num === null || isNaN(num)) return '0.00%';
   return `${num >= 0 ? '+' : ''}${num.toFixed(2)}%`;
 };
 

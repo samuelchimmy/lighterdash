@@ -1,6 +1,14 @@
 export interface SubAccount {
-  account_index: number;
+  index: number;
   l1_address: string;
+  account_type: number;
+  cancel_all_time: number;
+  total_order_count: number;
+  total_isolated_order_count: number;
+  pending_order_count: number;
+  available_balance: string;
+  status: number;
+  collateral: string;
 }
 
 export interface AccountResponse {

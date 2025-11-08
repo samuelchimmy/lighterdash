@@ -8,14 +8,14 @@ export const lighterApi = {
   async getAccountIndex(l1Address: string): Promise<number | null> {
     try {
       const response = await axios.get<AccountResponse>(
-        `${BASE_URL}/api/v1/accounts_by_l1_address`,
+        `${BASE_URL}/api/v1/accountsByL1Address`,
         {
           params: { l1_address: l1Address }
         }
       );
       
       if (response.data.sub_accounts && response.data.sub_accounts.length > 0) {
-        return response.data.sub_accounts[0].account_index;
+        return response.data.sub_accounts[0].index;
       }
       
       return null;

@@ -32,11 +32,11 @@ export const createShareableCard = async (
   accountValue: number,
   winRate: number
 ): Promise<string> => {
-  // Create a temporary card element
+  // Create a temporary card element with LighterDash brand colors
   const card = document.createElement('div');
   card.style.width = '600px';
   card.style.padding = '40px';
-  card.style.background = 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)';
+  card.style.background = 'linear-gradient(135deg, hsl(240 10% 5%) 0%, hsl(240 8% 8%) 100%)'; // Brand background gradient
   card.style.borderRadius = '20px';
   card.style.color = 'white';
   card.style.fontFamily = 'system-ui, -apple-system, sans-serif';
@@ -47,7 +47,7 @@ export const createShareableCard = async (
   
   card.innerHTML = `
     <div style="text-align: center; margin-bottom: 30px;">
-      <div style="display: inline-block; background: linear-gradient(135deg, #7C3AED, #A855F7); padding: 15px 25px; border-radius: 12px; margin-bottom: 20px;">
+      <div style="display: inline-block; background: linear-gradient(135deg, hsl(270 70% 60%), hsl(280 65% 65%)); padding: 15px 25px; border-radius: 12px; margin-bottom: 20px;">
         <h1 style="margin: 0; font-size: 28px; font-weight: bold;">LighterDash</h1>
       </div>
       <p style="margin: 0; opacity: 0.7; font-size: 14px;">Lighter Trading Performance</p>
@@ -61,7 +61,7 @@ export const createShareableCard = async (
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
       <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px;">
         <p style="margin: 0 0 8px 0; opacity: 0.7; font-size: 14px;">Total PnL</p>
-        <p style="margin: 0; font-size: 28px; font-weight: bold; color: ${isProfitable ? '#10b981' : '#ef4444'};">
+        <p style="margin: 0; font-size: 28px; font-weight: bold; color: ${isProfitable ? 'hsl(142 76% 36%)' : 'hsl(0 72% 51%)'};">
           ${totalPnl >= 0 ? '+' : ''}${totalPnl.toFixed(2)} USDC
         </p>
       </div>
@@ -77,7 +77,7 @@ export const createShareableCard = async (
     <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px;">
       <p style="margin: 0 0 8px 0; opacity: 0.7; font-size: 14px;">Win Rate</p>
       <div style="background: rgba(255, 255, 255, 0.1); height: 30px; border-radius: 8px; overflow: hidden; position: relative;">
-        <div style="background: linear-gradient(90deg, #7C3AED, #A855F7); height: 100%; width: ${winRate}%; transition: width 0.3s;"></div>
+        <div style="background: linear-gradient(90deg, hsl(270 70% 60%), hsl(280 65% 65%)); height: 100%; width: ${winRate}%; transition: width 0.3s;"></div>
         <p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; font-weight: bold; font-size: 16px;">
           ${winRate.toFixed(1)}%
         </p>
@@ -85,7 +85,7 @@ export const createShareableCard = async (
     </div>
     
     <p style="text-align: center; margin: 25px 0 0 0; opacity: 0.5; font-size: 12px;">
-      Generated on ${new Date().toLocaleDateString()} • lighterdash.app
+      Generated on ${new Date().toLocaleDateString()} • LighterDash.lol
     </p>
   `;
 

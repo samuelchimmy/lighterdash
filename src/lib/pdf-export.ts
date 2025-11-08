@@ -23,8 +23,8 @@ export const exportToPDF = ({ walletAddress, stats, positions, trades }: ExportP
     }
   };
 
-  // Header
-  pdf.setFillColor(75, 50, 150); // Primary purple
+  // Header - Using LighterDash brand colors (hsl(270 70% 60%) = rgb(124, 58, 237))
+  pdf.setFillColor(124, 58, 237); // Primary purple from design system
   pdf.rect(0, 0, pageWidth, 40, 'F');
   
   pdf.setTextColor(255, 255, 255);
@@ -48,7 +48,7 @@ export const exportToPDF = ({ walletAddress, stats, positions, trades }: ExportP
   if (stats) {
     checkAddPage(60);
     pdf.setFontSize(16);
-    pdf.setTextColor(75, 50, 150);
+    pdf.setTextColor(124, 58, 237); // Brand primary color
     pdf.text('Account Summary', 15, yPos);
     yPos += 10;
 
@@ -80,7 +80,7 @@ export const exportToPDF = ({ walletAddress, stats, positions, trades }: ExportP
   if (positions.length > 0) {
     checkAddPage(80);
     pdf.setFontSize(16);
-    pdf.setTextColor(75, 50, 150);
+    pdf.setTextColor(124, 58, 237); // Brand primary color
     pdf.text('Open Positions', 15, yPos);
     yPos += 10;
 
@@ -123,7 +123,7 @@ export const exportToPDF = ({ walletAddress, stats, positions, trades }: ExportP
   if (trades.length > 0) {
     checkAddPage(80);
     pdf.setFontSize(16);
-    pdf.setTextColor(75, 50, 150);
+    pdf.setTextColor(124, 58, 237); // Brand primary color
     pdf.text('Recent Trades (Last 15)', 15, yPos);
     yPos += 10;
 
@@ -149,7 +149,7 @@ export const exportToPDF = ({ walletAddress, stats, positions, trades }: ExportP
     pdf.setFontSize(8);
     pdf.setTextColor(128, 128, 128);
     pdf.text(
-      `Page ${i} of ${totalPages} | LighterDash - Community Analytics for Lighter`,
+      `Page ${i} of ${totalPages} | LighterDash.lol - Community Analytics for Lighter`,
       pageWidth / 2,
       pageHeight - 10,
       { align: 'center' }

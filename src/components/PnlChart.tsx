@@ -4,16 +4,17 @@ import { formatCurrencySmart } from '@/lib/lighter-api';
 import type { PnlDataPoint } from '@/types/lighter';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Area, AreaChart } from 'recharts';
 import { useState, useMemo } from 'react';
-import { TrendingUp, TrendingDown, Trash2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Trash2, RefreshCw } from 'lucide-react';
 
 interface PnlChartProps {
   data: PnlDataPoint[];
   onClearHistory: () => void;
+  onRefresh?: () => void;
 }
 
 type TimeRange = '24h' | '1W' | '1M' | 'All';
 
-export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
+export const PnlChart = ({ data, onClearHistory, onRefresh }: PnlChartProps) => {
   const [timeRange, setTimeRange] = useState<TimeRange>('24h');
 
   const filteredData = useMemo(() => {
@@ -109,6 +110,17 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
+            {onRefresh && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onRefresh}
+                className="h-8 px-2 text-muted-foreground hover:text-primary"
+                title="Refresh data"
+              >
+                <RefreshCw className="w-4 h-4" />
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="sm"

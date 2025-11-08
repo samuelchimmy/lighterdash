@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatAddress } from '@/lib/lighter-api';
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import { useAnimatedCounter } from '@/hooks/use-animated-counter';
+import { MetricTooltip, METRIC_TOOLTIPS } from './MetricTooltip';
 
 interface SummaryCardProps {
   totalPnl: number;
@@ -22,7 +23,9 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <p className="text-sm text-muted-foreground">Total PnL</p>
+              <MetricTooltip {...METRIC_TOOLTIPS.totalPnl}>
+                <p className="text-sm text-muted-foreground">Total PnL</p>
+              </MetricTooltip>
               <Badge variant={isProfitable ? 'default' : 'destructive'} className="text-xs hover-glow-badge">
                 {isProfitable ? 'Profit' : 'Loss'}
               </Badge>
@@ -56,7 +59,9 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
-              <p className="text-sm text-muted-foreground">Total Account Value</p>
+              <MetricTooltip {...METRIC_TOOLTIPS.accountValue}>
+                <p className="text-sm text-muted-foreground">Total Account Value</p>
+              </MetricTooltip>
               <Badge variant="outline" className="text-xs hover-glow-badge">Live</Badge>
             </div>
             <p className="text-3xl font-bold text-foreground">

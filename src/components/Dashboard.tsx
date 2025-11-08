@@ -25,6 +25,8 @@ import { BestWorstTrades } from './BestWorstTrades';
 import { AssetPerformance } from './AssetPerformance';
 import { StreakAnalysis } from './StreakAnalysis';
 import { TimeBasedPerformance } from './TimeBasedPerformance';
+import { SuccessAnimation, useSuccessAnimation } from './SuccessAnimation';
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -35,7 +37,7 @@ import {
 } from './LoadingSkeleton';
 import type { UserStats, Position, LighterTrade, PnlDataPoint } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 
 interface DashboardProps {
   walletAddress: string;
@@ -65,7 +67,21 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   const [isConnecting, setIsConnecting] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const lastUpdateRef = useRef<number>(0);
+  const lastPnlRef = useRef<number>(0);
   const { toast } = useToast();
+  const { animation, celebrate, reset } = useSuccessAnimation();
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts([
+    {
+      key: 'r',
+      ctrl: true,
+      description: 'Refresh data',
+      action: () => {
+        window.location.reload();
+      },
+    },
+  ]);
 
   // Save PnL history to localStorage whenever it changes
   useEffect(() => {
@@ -225,13 +241,27 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
               if (now - lastUpdateRef.current >= 60000) {
                 const portfolio = parseFloat(stats.portfolio_value || '0');
                 const collateral = parseFloat(stats.collateral || '0');
+                const currentPnl = portfolio - collateral;
+                
                 setPnlHistory(prev => [...prev, {
                   timestamp: now,
                   accountValue: portfolio,
-                  pnl: portfolio - collateral,
+                  pnl: currentPnl,
                   collateral: collateral,
                 }]);
                 lastUpdateRef.current = now;
+                
+                // Celebrate profitable milestones
+                if (lastPnlRef.current < 0 && currentPnl > 0) {
+                  celebrate('profit', 'You\'re back in profit! 🎉');
+                } else if (lastPnlRef.current < 100 && currentPnl >= 100) {
+                  celebrate('milestone', 'Reached $100 profit milestone!');
+                } else if (lastPnlRef.current < 500 && currentPnl >= 500) {
+                  celebrate('milestone', 'Reached $500 profit milestone!');
+                } else if (lastPnlRef.current < 1000 && currentPnl >= 1000) {
+                  celebrate('achievement', 'Reached $1,000 profit milestone! 🏆');
+                }
+                lastPnlRef.current = currentPnl;
               }
               return;
             }
@@ -380,6 +410,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <SuccessAnimation {...animation} onComplete={reset} />
       <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
       
       <div className="flex items-center justify-between flex-wrap gap-2">

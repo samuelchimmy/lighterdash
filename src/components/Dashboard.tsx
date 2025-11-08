@@ -51,6 +51,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
           lighterApi.subscribeToChannel(ws!, `account_all_positions/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all_trades/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all_orders/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all/${index}`);
           
           setIsConnecting(false);
           toast({
@@ -74,7 +75,8 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
             }
             if (type === 'update/account_all_positions' && message.positions) {
               const positionsArray = Object.values(message.positions || {});
-              setPositions(positionsArray as Position[]);
+              const filtered = (positionsArray as Position[]).filter((p: any) => parseFloat(p?.position || '0') !== 0);
+              setPositions(filtered as Position[]);
               return;
             }
 

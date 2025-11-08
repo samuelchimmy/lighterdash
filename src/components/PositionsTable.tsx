@@ -62,7 +62,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                   </TableCell>
                   <TableCell className="text-foreground">{formatNumber(Math.abs(size), 4)}</TableCell>
                   <TableCell className="text-foreground">{formatCurrency(parseFloat(position.avg_entry_price || '0'))}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrency(parseFloat(position.position_value || '0'))}</TableCell>
+                  <TableCell className="text-foreground">{formatCurrency(Math.abs(parseFloat(position.position_value || '0')))}</TableCell>
                   <TableCell className="text-foreground">{formatCurrency(parseFloat(position.liquidation_price || '0'))}</TableCell>
                   <TableCell className={`text-right font-semibold ${pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrency(pnl)}

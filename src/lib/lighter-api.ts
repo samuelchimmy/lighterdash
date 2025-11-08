@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AccountResponse } from '@/types/lighter';
+import type { AccountResponse, AccountSnapshot, Position, LighterTrade } from '@/types/lighter';
 
 const BASE_URL = 'https://mainnet.zklighter.elliot.ai';
 const WS_URL = 'wss://mainnet.zklighter.elliot.ai/stream';
@@ -22,6 +22,28 @@ export const lighterApi = {
     } catch (error) {
       console.error('Error fetching account index:', error);
       throw error;
+    }
+  },
+
+  async getAccountSnapshot(accountIndex: number): Promise<AccountSnapshot> {
+    try {
+      const response = await axios.get<AccountSnapshot>(
+        `${BASE_URL}/api/v1/account`,
+        {
+          params: { index: accountIndex }
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching account snapshot:', error);
+      // Return empty snapshot on error
+      return {
+        account_index: accountIndex,
+        positions: {},
+        trades: {},
+        collateral: '0',
+        portfolio_value: '0'
+      };
     }
   },
 
@@ -59,6 +81,62 @@ export const formatCurrency = (num: number): string => {
   }).format(num);
 };
 
+export const formatCurrencySmart = (num: number): string => {
+  const abs = Math.abs(num);
+  const decimals = abs < 1 ? 6 : 2;
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(num);
+};
+
 export const formatPercentage = (num: number): string => {
   return `${num >= 0 ? '+' : ''}${num.toFixed(2)}%`;
+};
+
+// Normalize positions from API response
+export const normalizePositions = (input: Record<string, Position> | Position[] | undefined): Position[] => {
+  if (!input) return [];
+  if (Array.isArray(input)) return input;
+  return Object.values(input);
+};
+
+// Normalize trades from API response
+export const normalizeTrades = (input: Record<string, LighterTrade[]> | LighterTrade[] | undefined): LighterTrade[] => {
+  if (!input) return [];
+  if (Array.isArray(input)) {
+    return input.sort((a, b) => b.timestamp - a.timestamp);
+  }
+  const trades = Object.values(input).flat();
+  return trades.sort((a, b) => b.timestamp - a.timestamp);
+};
+
+// Merge positions by market_id, filtering zero-sized positions
+export const mergePositions = (existing: Position[], incoming: Record<string, Position> | Position[]): Position[] => {
+  const map = new Map<number, Position>();
+  
+  // Add existing positions to map
+  existing.forEach(p => map.set(p.market_id, p));
+  
+  // Merge incoming positions
+  const incomingArray = normalizePositions(incoming);
+  incomingArray.forEach(p => {
+    const size = parseFloat(p.position || '0');
+    if (size === 0) {
+      map.delete(p.market_id);
+    } else {
+      map.set(p.market_id, p);
+    }
+  });
+  
+  return Array.from(map.values());
+};
+
+// Deduplicate and prepend new trades
+export const dedupeAndPrepend = (existing: LighterTrade[], incoming: LighterTrade[]): LighterTrade[] => {
+  const existingIds = new Set(existing.map(t => t.trade_id));
+  const newTrades = incoming.filter(t => !existingIds.has(t.trade_id));
+  return [...newTrades, ...existing].sort((a, b) => b.timestamp - a.timestamp);
 };

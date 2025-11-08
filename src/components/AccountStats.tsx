@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/card';
-import { formatCurrency, formatPercentage } from '@/lib/lighter-api';
+import { formatCurrencySmart, formatPercentage } from '@/lib/lighter-api';
 import type { UserStats } from '@/types/lighter';
 import { Activity, PieChart, DollarSign } from 'lucide-react';
 
@@ -42,7 +42,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             <DollarSign className="w-4 h-4 text-primary" />
             <p className="text-xs text-muted-foreground">Available Balance</p>
           </div>
-          <p className="text-xl font-bold text-foreground">{formatCurrency(parseFloat(stats.available_balance || '0'))}</p>
+          <p className="text-xl font-bold text-foreground">{formatCurrencySmart(parseFloat(stats.available_balance || '0'))}</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4">
@@ -51,7 +51,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             <p className="text-xs text-muted-foreground">Collateral</p>
           </div>
           <p className="text-xl font-bold text-foreground">
-            {formatCurrency(parseFloat(stats.collateral || '0'))}
+            {formatCurrencySmart(parseFloat(stats.collateral || '0'))}
           </p>
         </div>
       </div>

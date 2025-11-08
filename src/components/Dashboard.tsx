@@ -16,16 +16,18 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
   const [isConnecting, setIsConnecting] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     let ws: WebSocket | null = null;
+    let isMounted = true;
 
     const initializeDashboard = async () => {
       try {
         setIsConnecting(true);
         
-        // Fetch account index
+        // Phase 1: Fetch account index
         const index = await lighterApi.getAccountIndex(walletAddress);
         
         if (!index) {
@@ -38,29 +40,55 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
           return;
         }
 
+        if (!isMounted) return;
         setAccountIndex(index);
 
-        // Create WebSocket connection
+        // Phase 2: Fetch initial account snapshot
+        const snapshot = await lighterApi.getAccountSnapshot(index);
+        
+        if (!isMounted) return;
+        
+        // Parse and set initial data
+        const { normalizePositions } = await import('@/lib/lighter-api');
+        const positionsArray = normalizePositions(snapshot.positions || {})
+          .filter(p => parseFloat(p.position || '0') !== 0);
+        
+        const initialStats: UserStats = snapshot.stats || {
+          collateral: snapshot.collateral || '0',
+          portfolio_value: snapshot.portfolio_value || '0',
+          leverage: '0',
+          available_balance: '0',
+          margin_usage: '0',
+          buying_power: '0',
+        };
+        
+        setUserStats(initialStats);
+        setPositions(positionsArray);
+        setIsHydrated(true);
+        setIsConnecting(false);
+
+        // Phase 3: Connect WebSocket for real-time updates (only after hydration)
         ws = lighterApi.createWebSocket();
 
         ws.onopen = () => {
+          if (!isMounted) return;
           console.log('WebSocket connected');
           
-          // Subscribe to channels
+          // Subscribe to channels (no auth required for public data)
           lighterApi.subscribeToChannel(ws!, `user_stats/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all_positions/${index}`);
-          lighterApi.subscribeToChannel(ws!, `account_all_trades/${index}`);
-          lighterApi.subscribeToChannel(ws!, `account_all_orders/${index}`);
           lighterApi.subscribeToChannel(ws!, `account_all/${index}`);
+          lighterApi.subscribeToChannel(ws!, `account_all_trades/${index}`);
           
-          setIsConnecting(false);
           toast({
-            title: "Connected",
-            description: "Real-time data feed active",
+            title: "Live updates active",
+            description: "Real-time data stream connected",
           });
         };
 
-        ws.onmessage = (event) => {
+        ws.onmessage = async (event) => {
+          if (!isMounted) return;
+          
           try {
             const message = JSON.parse(event.data);
             console.log('WebSocket message:', message);
@@ -68,33 +96,34 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
             const channel: string | undefined = message.channel;
             const type: string | undefined = message.type;
 
-            // Prefer explicit type handling
+            // Import merge helpers
+            const { mergePositions } = await import('@/lib/lighter-api');
+
+            // Handle user_stats updates
             if (type === 'update/user_stats' && message.stats) {
               setUserStats(message.stats as UserStats);
               return;
             }
-            if (type === 'update/account_all_positions' && message.positions) {
-              const positionsArray = Object.values(message.positions || {});
-              const filtered = (positionsArray as Position[]).filter((p: any) => parseFloat(p?.position || '0') !== 0);
-              setPositions(filtered as Position[]);
-              return;
-            }
-
-            // Fallback: route by channel name if type varies (e.g. subscribed/*)
             if (channel?.startsWith('user_stats:') && message.stats) {
               setUserStats(message.stats as UserStats);
               return;
             }
-            if ((type === 'update/account_all' || channel?.startsWith('account_all:')) && message.positions) {
-              const positionsArray = Object.values(message.positions || {});
-              const filtered = (positionsArray as Position[]).filter((p: any) => parseFloat(p?.position || '0') !== 0);
-              setPositions(filtered as Position[]);
+
+            // Handle positions updates with merge logic
+            if (type === 'update/account_all_positions' && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
+              return;
+            }
+            if (type === 'update/account_all' && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
+              return;
+            }
+            if (channel?.startsWith('account_all:') && message.positions) {
+              setPositions(prev => mergePositions(prev, message.positions));
               return;
             }
             if (channel?.startsWith('account_all_positions:') && message.positions) {
-              const positionsArray = Object.values(message.positions || {});
-              const filtered = (positionsArray as Position[]).filter((p: any) => parseFloat(p?.position || '0') !== 0);
-              setPositions(filtered as Position[]);
+              setPositions(prev => mergePositions(prev, message.positions));
               return;
             }
           } catch (error) {
@@ -131,6 +160,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
 
     // Cleanup
     return () => {
+      isMounted = false;
       if (ws) {
         ws.close();
       }

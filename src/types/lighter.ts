@@ -91,3 +91,32 @@ export interface PerformanceByAsset {
   total_fees: number;
   trade_count: number;
 }
+
+export interface LighterTrade {
+  trade_id: number;
+  market_id: number;
+  size: string;
+  price: string;
+  usd_amount: string;
+  type: string;
+  timestamp: number;
+  tx_hash?: string;
+  ask_id?: number;
+  bid_id?: number;
+  is_maker_ask?: boolean;
+  taker_fee?: number;
+  maker_fee?: number;
+  taker_position_size_before?: string;
+  taker_entry_quote_before?: string;
+  maker_position_size_before?: string;
+  maker_entry_quote_before?: string;
+}
+
+export interface AccountSnapshot {
+  account_index?: number;
+  stats?: UserStats;
+  positions?: Record<string, Position> | Position[];
+  trades?: Record<string, LighterTrade[]> | LighterTrade[];
+  collateral?: string;
+  portfolio_value?: string;
+}

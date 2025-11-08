@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/card';
-import { formatCurrency, formatAddress } from '@/lib/lighter-api';
+import { formatCurrencySmart, formatAddress } from '@/lib/lighter-api';
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 
 interface SummaryCardProps {
@@ -18,7 +18,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
           <div>
             <p className="text-sm text-muted-foreground mb-1">Total PnL</p>
             <p className={`text-3xl font-bold ${isProfitable ? 'text-profit' : 'text-loss'}`}>
-              {formatCurrency(totalPnl)}
+              {formatCurrencySmart(totalPnl)}
             </p>
           </div>
           {isProfitable ? (
@@ -46,7 +46,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
         <div>
           <p className="text-sm text-muted-foreground mb-1">Total Account Value</p>
           <p className="text-3xl font-bold text-foreground">
-            {formatCurrency(accountValue)}
+            {formatCurrencySmart(accountValue)}
           </p>
         </div>
       </Card>

@@ -7,9 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { formatCurrency, formatNumber } from '@/lib/lighter-api';
+import { formatCurrencySmart, formatNumber } from '@/lib/lighter-api';
 import type { Position } from '@/types/lighter';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 interface PositionsTableProps {
   positions: Position[];
@@ -45,27 +45,30 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
             {positions.map((position, index) => {
               const pnl = parseFloat(position.unrealized_pnl || '0');
               const size = parseFloat(position.position || '0');
-              const side = size > 0 ? 'long' : size < 0 ? 'short' : 'neutral';
+              const side = size > 0 ? 'LONG' : size < 0 ? 'SHORT' : 'NEUTRAL';
+              const sideColor = side === 'LONG' ? 'text-profit' : side === 'SHORT' ? 'text-loss' : 'text-muted-foreground';
               
               return (
                 <TableRow key={index} className="border-border hover:bg-secondary/50">
                   <TableCell className="font-medium text-foreground">{position.symbol}</TableCell>
                   <TableCell>
-                    <span className={`flex items-center gap-1 ${side === 'long' ? 'text-profit' : 'text-loss'}`}>
-                      {side === 'long' ? (
+                    <span className={`flex items-center gap-1 ${sideColor}`}>
+                      {side === 'LONG' ? (
                         <TrendingUp className="w-4 h-4" />
-                      ) : (
+                      ) : side === 'SHORT' ? (
                         <TrendingDown className="w-4 h-4" />
+                      ) : (
+                        <Minus className="w-4 h-4" />
                       )}
-                      {side.toUpperCase()}
+                      {side}
                     </span>
                   </TableCell>
                   <TableCell className="text-foreground">{formatNumber(Math.abs(size), 4)}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrency(parseFloat(position.avg_entry_price || '0'))}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrency(Math.abs(parseFloat(position.position_value || '0')))}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrency(parseFloat(position.liquidation_price || '0'))}</TableCell>
+                  <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.avg_entry_price || '0'))}</TableCell>
+                  <TableCell className="text-foreground">{formatCurrencySmart(Math.abs(parseFloat(position.position_value || '0')))}</TableCell>
+                  <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.liquidation_price || '0'))}</TableCell>
                   <TableCell className={`text-right font-semibold ${pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {formatCurrency(pnl)}
+                    {formatCurrencySmart(pnl)}
                   </TableCell>
                 </TableRow>
               );

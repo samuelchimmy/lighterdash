@@ -89,8 +89,8 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(hsl(var(--primary) / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--primary) / 0.05) 1px, transparent 1px);
+      linear-gradient(hsl(var(--primary) / 0.15) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.15) 1px, transparent 1px);
     background-size: 50px 50px;
     pointer-events: none;
     z-index: 0;
@@ -106,8 +106,8 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(hsl(var(--primary) / 0.12) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--primary) / 0.12) 1px, transparent 1px);
+      linear-gradient(hsl(var(--primary) / 0.25) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.25) 1px, transparent 1px);
     background-size: 250px 250px;
     pointer-events: none;
     z-index: 0;
@@ -123,24 +123,24 @@ All colors MUST be HSL.
 /* Grid animations */
 @keyframes grid-pulse {
   0%, 100% {
-    opacity: 0.4;
+    opacity: 0.6;
   }
   50% {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 
 @keyframes grid-shimmer {
   0% {
     background-position: 0 0;
-    opacity: 0.6;
+    opacity: 0.8;
   }
   50% {
     opacity: 1;
   }
   100% {
     background-position: 1000px 1000px;
-    opacity: 0.6;
+    opacity: 0.8;
   }
 }
 

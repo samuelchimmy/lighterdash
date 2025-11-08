@@ -71,15 +71,67 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   const { toast } = useToast();
   const { animation, celebrate, reset } = useSuccessAnimation();
 
+  // Refresh wallet data function
+  const refreshWalletData = async () => {
+    if (!accountIndex) return;
+    
+    try {
+      toast({
+        title: "Refreshing data...",
+        description: "Fetching latest wallet information",
+      });
+
+      const snapshot = await lighterApi.getAccountSnapshot(accountIndex);
+      const { normalizePositions, normalizeTrades } = await import('@/lib/lighter-api');
+      
+      const positionsArray = normalizePositions(snapshot.positions || {})
+        .filter(p => parseFloat(p.position || '0') !== 0);
+      const tradesArray = normalizeTrades(snapshot.trades || {});
+      
+      const refreshedStats: UserStats = snapshot.stats || {
+        collateral: snapshot.collateral || '0',
+        portfolio_value: snapshot.portfolio_value || '0',
+        leverage: '0',
+        available_balance: '0',
+        margin_usage: '0',
+        buying_power: '0',
+      };
+      
+      setUserStats(refreshedStats);
+      setPositions(positionsArray);
+      setTrades(tradesArray);
+      
+      // Add new data point to PnL history
+      const portfolio = parseFloat(refreshedStats.portfolio_value || '0');
+      const collateral = parseFloat(refreshedStats.collateral || '0');
+      setPnlHistory(prev => [...prev, {
+        timestamp: Date.now(),
+        accountValue: portfolio,
+        pnl: portfolio - collateral,
+        collateral: collateral,
+      }]);
+      
+      toast({
+        title: "Data refreshed",
+        description: "Wallet information updated successfully",
+      });
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+      toast({
+        title: "Refresh failed",
+        description: "Could not fetch latest data",
+        variant: "destructive",
+      });
+    }
+  };
+
   // Keyboard shortcuts
   useKeyboardShortcuts([
     {
       key: 'r',
       ctrl: true,
       description: 'Refresh data',
-      action: () => {
-        window.location.reload();
-      },
+      action: refreshWalletData,
     },
   ]);
 
@@ -417,7 +469,18 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
       
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h2 className="text-xl md:text-2xl font-semibold text-foreground">Wallet Dashboard</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl md:text-2xl font-semibold text-foreground">Wallet Dashboard</h2>
+          <Button 
+            onClick={refreshWalletData} 
+            variant="ghost" 
+            size="icon"
+            className="h-8 w-8"
+            title="Refresh wallet data"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        </div>
         <div className="flex gap-2">
           <ExportMenu
             positions={positions}
@@ -450,9 +513,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             title: "History cleared",
             description: "PnL chart history has been reset",
           });
-        }}
-        onRefresh={() => {
-          window.location.reload();
         }}
       />
 

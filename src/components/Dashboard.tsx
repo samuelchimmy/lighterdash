@@ -15,6 +15,8 @@ import { TradingJournal } from './TradingJournal';
 import { AuthForm } from './AuthForm';
 import { TradeAnalysisView } from './TradeAnalysisView';
 import { PatternRecognition } from './PatternRecognition';
+import { MarketStats } from './MarketStats';
+import { FundingHistory } from './FundingHistory';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -39,6 +41,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
   const [trades, setTrades] = useState<LighterTrade[]>([]);
+  const [fundingHistories, setFundingHistories] = useState<Record<string, any[]>>({});
   const [pnlHistory, setPnlHistory] = useState<PnlDataPoint[]>(() => {
     // Load PnL history from localStorage on mount
     try {
@@ -246,6 +249,11 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             }
             if (type === 'update/account_all' && message.positions) {
               setPositions(prev => mergePositions(prev, message.positions));
+              
+              // Also update funding histories
+              if (message.funding_histories) {
+                setFundingHistories(message.funding_histories);
+              }
               return;
             }
             if (channel?.startsWith('account_all:') && message.positions) {
@@ -355,6 +363,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
       
+      <MarketStats />
+      
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
         <div className="flex gap-2">
@@ -407,6 +417,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         />
         <PerformanceMetrics trades={trades} positions={positions} />
       </div>
+
+      <FundingHistory fundingHistories={fundingHistories} />
 
       {/* Pattern Recognition */}
       {trades.length > 0 && (

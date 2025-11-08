@@ -127,3 +127,29 @@ export interface PnlDataPoint {
   pnl: number;
   collateral: number;
 }
+
+export interface MarketStats {
+  market_id: number;
+  index_price: string;
+  mark_price: string;
+  open_interest: string;
+  last_trade_price: string;
+  current_funding_rate: string;
+  funding_rate: string;
+  funding_timestamp: number;
+  daily_base_token_volume: number;
+  daily_quote_token_volume: number;
+  daily_price_low: number;
+  daily_price_high: number;
+  daily_price_change: number;
+}
+
+export interface FundingHistory {
+  timestamp: number;
+  market_id: number;
+  funding_id: number;
+  change: string;
+  rate: string;
+  position_size: string;
+  position_side: string;
+}

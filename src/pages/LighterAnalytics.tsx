@@ -9,7 +9,13 @@ const LighterAnalytics = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background/90 relative overflow-hidden">
+      {/* Animated background gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 animate-pulse opacity-50" style={{ animationDuration: '8s' }} />
+      <div className="absolute inset-0 bg-gradient-to-tl from-pink-500/5 via-transparent to-primary/5 animate-pulse opacity-30" style={{ animationDuration: '12s', animationDelay: '2s' }} />
+      
+      {/* Content wrapper */}
+      <div className="relative z-10">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -74,6 +80,7 @@ const LighterAnalytics = () => {
           </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 };

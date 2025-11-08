@@ -162,7 +162,7 @@ const Index = () => {
       <footer className="border-t border-border mt-20">
         <div className="container mx-auto px-4 py-6 space-y-3">
           <p className="text-center text-sm text-muted-foreground">
-            Built with love by{' '}
+            Built with 💜 by{' '}
             <a
               href="https://x.com/MetisCharter"
               target="_blank"

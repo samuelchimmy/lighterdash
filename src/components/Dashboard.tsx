@@ -6,6 +6,13 @@ import { PositionsTable } from './PositionsTable';
 import { TradesHistory } from './TradesHistory';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import { PnlChart } from './PnlChart';
+import { 
+  SummaryCardSkeleton, 
+  AccountStatsSkeleton, 
+  PositionsTableSkeleton, 
+  ChartSkeleton,
+  PerformanceMetricsSkeleton 
+} from './LoadingSkeleton';
 import type { UserStats, Position, LighterTrade, PnlDataPoint } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -255,11 +262,12 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
 
   if (isConnecting) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Connecting to Lighter network...</p>
-        </div>
+      <div className="space-y-6 animate-in fade-in duration-500">
+        <SummaryCardSkeleton />
+        <AccountStatsSkeleton />
+        <ChartSkeleton />
+        <PositionsTableSkeleton />
+        <PerformanceMetricsSkeleton />
       </div>
     );
   }

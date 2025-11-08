@@ -18,12 +18,12 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card className="p-6 bg-card border-border shadow-card">
+      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <p className="text-sm text-muted-foreground">Total PnL</p>
-              <Badge variant={isProfitable ? 'default' : 'destructive'} className="text-xs">
+              <Badge variant={isProfitable ? 'default' : 'destructive'} className="text-xs hover-glow-badge">
                 {isProfitable ? 'Profit' : 'Loss'}
               </Badge>
             </div>
@@ -39,7 +39,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
         </div>
       </Card>
 
-      <Card className="p-6 bg-card border-border shadow-card">
+      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm text-muted-foreground mb-1">Wallet Address</p>
@@ -52,12 +52,12 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
         </div>
       </Card>
 
-      <Card className="p-6 bg-card border-border shadow-card">
+      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <p className="text-sm text-muted-foreground">Total Account Value</p>
-              <Badge variant="outline" className="text-xs">Live</Badge>
+              <Badge variant="outline" className="text-xs hover-glow-badge">Live</Badge>
             </div>
             <p className="text-3xl font-bold text-foreground">
               {formatCurrencySmart(animatedAccountValue)}

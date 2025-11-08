@@ -11,15 +11,28 @@ import {
 import { formatCurrencySmart, formatNumber } from '@/lib/lighter-api';
 import type { Position } from '@/types/lighter';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { Sparkline } from './Sparkline';
+import { useMemo } from 'react';
 
 interface PositionsTableProps {
   positions: Position[];
 }
 
 export const PositionsTable = ({ positions }: PositionsTableProps) => {
+  // Generate mock price movement data for sparklines
+  const generateSparklineData = useMemo(() => (basePrice: number) => {
+    const data: number[] = [];
+    let price = basePrice;
+    for (let i = 0; i < 12; i++) {
+      price += (Math.random() - 0.48) * basePrice * 0.02; // Random walk
+      data.push(price);
+    }
+    return data;
+  }, []);
+
   if (!positions || positions.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border shadow-card">
+      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
         <h3 className="text-lg font-semibold mb-4 text-foreground">Open Positions</h3>
         <p className="text-muted-foreground text-center py-8">No open positions</p>
       </Card>
@@ -27,13 +40,14 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
   }
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card overflow-hidden">
+    <Card className="p-6 bg-card border-border shadow-card hover-glow-card overflow-hidden">
       <h3 className="text-lg font-semibold mb-4 text-foreground">Open Positions</h3>
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="border-border hover:bg-secondary/50">
               <TableHead className="text-muted-foreground">Asset</TableHead>
+              <TableHead className="text-muted-foreground">Price Action</TableHead>
               <TableHead className="text-muted-foreground">Side</TableHead>
               <TableHead className="text-muted-foreground">Size</TableHead>
               <TableHead className="text-muted-foreground">Entry Price</TableHead>
@@ -47,15 +61,24 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
               const pnl = parseFloat(position.unrealized_pnl || '0');
               const size = parseFloat(position.position || '0');
               const side = size > 0 ? 'LONG' : size < 0 ? 'SHORT' : 'NEUTRAL';
-              const sideColor = side === 'LONG' ? 'text-profit' : side === 'SHORT' ? 'text-loss' : 'text-muted-foreground';
+              const entryPrice = parseFloat(position.avg_entry_price || '0');
+              const sparklineData = generateSparklineData(entryPrice);
               
               return (
-                <TableRow key={index} className="border-border hover:bg-secondary/50">
+                <TableRow key={index} className="border-border hover:bg-secondary/50 transition-colors">
                   <TableCell className="font-medium text-foreground">{position.symbol}</TableCell>
+                  <TableCell>
+                    <Sparkline 
+                      data={sparklineData} 
+                      width={60} 
+                      height={24}
+                      color="auto"
+                    />
+                  </TableCell>
                   <TableCell>
                     <Badge 
                       variant={side === 'LONG' ? 'default' : side === 'SHORT' ? 'destructive' : 'secondary'}
-                      className="gap-1"
+                      className="gap-1 hover-glow-badge cursor-default"
                     >
                       {side === 'LONG' ? (
                         <TrendingUp className="w-3 h-3" />

@@ -14,6 +14,7 @@ const Index = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('disconnected');
   const [lastUpdate, setLastUpdate] = useState<Date>();
+  const [reconnectHandler, setReconnectHandler] = useState<(() => void) | undefined>(undefined);
   const [copied, setCopied] = useState(false);
 
   const donationAddress = '0xfa2B8eD012f756E22E780B772d604af4575d5fcf';
@@ -24,8 +25,14 @@ const Index = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleConnectionChange = (status: 'connected' | 'disconnected' | 'reconnecting') => {
+  const handleConnectionChange = (
+    status: 'connected' | 'disconnected' | 'reconnecting',
+    reconnect?: () => void
+  ) => {
     setConnectionStatus(status);
+    if (reconnect) {
+      setReconnectHandler(() => reconnect);
+    }
     if (status === 'connected') {
       setLastUpdate(new Date());
     }
@@ -57,7 +64,11 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {scannedAddress && (
-                <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
+                <ConnectionStatus 
+                  status={connectionStatus} 
+                  lastUpdate={lastUpdate} 
+                  onReconnect={reconnectHandler}
+                />
               )}
               {!scannedAddress && (
                 <>
@@ -232,7 +243,10 @@ const Index = () => {
         ) : (
           <section aria-label="Wallet dashboard">
             <button
-              onClick={() => setScannedAddress(null)}
+              onClick={() => {
+                setScannedAddress(null);
+                setReconnectHandler(undefined);
+              }}
               className="mb-6 text-primary hover:text-primary-glow transition-colors flex items-center gap-2"
               aria-label="Scan another wallet"
             >

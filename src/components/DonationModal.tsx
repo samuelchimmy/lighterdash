@@ -63,7 +63,7 @@ export const DonationModal = () => {
         <div className="p-6 space-y-6">
           <div className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              LighterDash is a community-built project created with <span className="text-red-500">❤️</span> by{' '}
+              LighterDash is a community-built project created with <span className="text-purple-400">💜</span> by{' '}
               <a
                 href="https://x.com/MetisCharter"
                 target="_blank"
@@ -109,7 +109,7 @@ export const DonationModal = () => {
 
           {/* Features Preview */}
           <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl p-4 border border-primary/20">
-            <p className="text-sm font-medium text-foreground mb-2">🚀 What's Coming Next:</p>
+            <p className="text-sm font-medium text-foreground mb-2">What's Coming Next:</p>
             <ul className="space-y-1 text-xs text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />

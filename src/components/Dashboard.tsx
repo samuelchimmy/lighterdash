@@ -19,11 +19,26 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
   const [trades, setTrades] = useState<LighterTrade[]>([]);
-  const [pnlHistory, setPnlHistory] = useState<PnlDataPoint[]>([]);
+  const [pnlHistory, setPnlHistory] = useState<PnlDataPoint[]>(() => {
+    // Load PnL history from localStorage on mount
+    try {
+      const stored = localStorage.getItem(`pnl-history-${walletAddress}`);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
   const [isConnecting, setIsConnecting] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const lastUpdateRef = useRef<number>(0);
   const { toast } = useToast();
+
+  // Save PnL history to localStorage whenever it changes
+  useEffect(() => {
+    if (pnlHistory.length > 0) {
+      localStorage.setItem(`pnl-history-${walletAddress}`, JSON.stringify(pnlHistory));
+    }
+  }, [pnlHistory, walletAddress]);
 
   useEffect(() => {
     let ws: WebSocket | null = null;
@@ -74,15 +89,24 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
         setPositions(positionsArray);
         setTrades(tradesArray);
         
-        // Initialize PnL history with first data point
+        // Add initial data point to PnL history if it's fresh data
         const portfolio = parseFloat(initialStats.portfolio_value || '0');
         const collateral = parseFloat(initialStats.collateral || '0');
-        setPnlHistory([{
+        const newDataPoint = {
           timestamp: Date.now(),
           accountValue: portfolio,
           pnl: portfolio - collateral,
           collateral: collateral,
-        }]);
+        };
+        
+        setPnlHistory(prev => {
+          // If we already have data from localStorage, append to it
+          if (prev.length > 0) {
+            return [...prev, newDataPoint];
+          }
+          // Otherwise, start fresh
+          return [newDataPoint];
+        });
         
         setIsHydrated(true);
         setIsConnecting(false);

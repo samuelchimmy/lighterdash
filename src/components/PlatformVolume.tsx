@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { lighterApi, formatCurrencySmart } from "@/lib/lighter-api";
+import { lighterApi, formatCurrencySmart, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
 import { BarChart3, TrendingUp } from "lucide-react";
 
@@ -21,25 +21,27 @@ export function PlatformVolume() {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        
-        if (data.type === "update/market_stats" && data.market_stats) {
-          console.log("📊 PlatformVolume received market:", data.market_stats.market_id);
-          setMarkets(prev => ({
-            ...prev,
-            [data.market_stats.market_id]: data.market_stats
-          }));
-          setIsLoading(false);
-        } else if (data.type === "subscribed/market_stats" && data.market_stats) {
-          setMarkets(prev => ({
-            ...prev,
-            [data.market_stats.market_id]: data.market_stats
-          }));
-          setIsLoading(false);
-        } else if (data.channel === "market_stats:all" && data.market_stats) {
-          setMarkets(prev => ({
-            ...prev,
-            [data.market_stats.market_id]: data.market_stats
-          }));
+
+        const updates: MarketStatsType[] = [];
+        const tryPush = (raw: any) => {
+          const norm = normalizeMarketStats(raw);
+          if (norm) updates.push(norm);
+        };
+
+        if (data.market_stats || data.marketStats) {
+          tryPush(data.market_stats ?? data.marketStats);
+        } else if (Array.isArray(data.markets)) {
+          data.markets.forEach(tryPush);
+        } else if (data.markets && typeof data.markets === 'object') {
+          Object.values(data.markets).forEach(tryPush);
+        }
+
+        if (updates.length > 0) {
+          setMarkets((prev) => {
+            const next = { ...prev };
+            for (const m of updates) next[m.market_id] = m;
+            return next;
+          });
           setIsLoading(false);
         }
       } catch (error) {

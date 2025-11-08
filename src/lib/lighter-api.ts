@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AccountResponse, AccountSnapshot, Position, LighterTrade } from '@/types/lighter';
+import type { AccountResponse, AccountSnapshot, Position, LighterTrade, MarketStats as MarketStatsType } from '@/types/lighter';
 
 const BASE_URL = 'https://mainnet.zklighter.elliot.ai';
 const WS_URL = 'wss://mainnet.zklighter.elliot.ai/stream';
@@ -139,6 +139,34 @@ export const formatCurrencySmart = (num: number): string => {
 export const formatPercentage = (num: number | undefined | null): string => {
   if (num === undefined || num === null || isNaN(num)) return '0.00%';
   return `${num >= 0 ? '+' : ''}${num.toFixed(2)}%`;
+};
+
+// Normalize a single market stats object from various shapes (snake_case / camelCase, string/number)
+export const normalizeMarketStats = (raw: any): MarketStatsType | null => {
+  if (!raw || typeof raw !== 'object') return null;
+  const n = (kSnake: string, kCamel: string, def: any = undefined) =>
+    raw[kSnake] ?? raw[kCamel] ?? def;
+  const toNum = (v: any) => (typeof v === 'number' ? v : parseFloat(v ?? '0'));
+  const toStr = (v: any) => (v !== undefined && v !== null ? String(v) : '0');
+
+  const market_id = n('market_id', 'marketId');
+  if (market_id === undefined || market_id === null) return null;
+
+  return {
+    market_id: Number(market_id),
+    index_price: toStr(n('index_price', 'indexPrice', '0')),
+    mark_price: toStr(n('mark_price', 'markPrice', '0')),
+    open_interest: toStr(n('open_interest', 'openInterest', '0')),
+    last_trade_price: toStr(n('last_trade_price', 'lastTradePrice', '0')),
+    current_funding_rate: toStr(n('current_funding_rate', 'currentFundingRate', '0')),
+    funding_rate: toStr(n('funding_rate', 'fundingRate', '0')),
+    funding_timestamp: Number(n('funding_timestamp', 'fundingTimestamp', 0)),
+    daily_base_token_volume: toNum(n('daily_base_token_volume', 'dailyBaseTokenVolume', 0)),
+    daily_quote_token_volume: toNum(n('daily_quote_token_volume', 'dailyQuoteTokenVolume', 0)),
+    daily_price_low: toNum(n('daily_price_low', 'dailyPriceLow', 0)),
+    daily_price_high: toNum(n('daily_price_high', 'dailyPriceHigh', 0)),
+    daily_price_change: toNum(n('daily_price_change', 'dailyPriceChange', 0)),
+  };
 };
 
 // Normalize positions from API response

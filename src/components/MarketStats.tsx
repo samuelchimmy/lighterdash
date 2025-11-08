@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage } from "@/lib/lighter-api";
+import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
 
@@ -25,40 +25,29 @@ export function MarketStats() {
         const data = JSON.parse(event.data);
         
         console.log("📊 MarketStats RAW message:", JSON.stringify(data, null, 2));
-        
-        // Handle both single market updates and batch updates
-        if (data.type === "update/market_stats") {
-          if (data.market_stats) {
-            console.log("📊 Single market update:", {
-              market_id: data.market_stats.market_id,
-              mark_price: data.market_stats.mark_price,
-              index_price: data.market_stats.index_price
-            });
-            setMarkets(prev => ({
-              ...prev,
-              [data.market_stats.market_id]: data.market_stats
-            }));
-            setIsLoading(false);
-          } else if (data.markets) {
-            // Handle batch market stats
-            console.log("📊 Batch market updates:", Object.keys(data.markets).length);
-            const marketObj: Record<number, MarketStatsType> = {};
-            Object.values(data.markets).forEach((market: any) => {
-              marketObj[market.market_id] = market;
-            });
-            setMarkets(marketObj);
-            setIsLoading(false);
-          }
-        } else if (data.type === "subscribed/market_stats") {
-          // Handle initial subscription response
-          if (data.market_stats) {
-            console.log("📊 Subscribed to market stats:", data.market_stats.market_id);
-            setMarkets(prev => ({
-              ...prev,
-              [data.market_stats.market_id]: data.market_stats
-            }));
-            setIsLoading(false);
-          }
+
+        const updates: MarketStatsType[] = [];
+
+        const tryPush = (raw: any) => {
+          const norm = normalizeMarketStats(raw);
+          if (norm) updates.push(norm);
+        };
+
+        if (data.market_stats || data.marketStats) {
+          tryPush(data.market_stats ?? data.marketStats);
+        } else if (Array.isArray(data.markets)) {
+          data.markets.forEach(tryPush);
+        } else if (data.markets && typeof data.markets === 'object') {
+          Object.values(data.markets).forEach(tryPush);
+        }
+
+        if (updates.length > 0) {
+          setMarkets(prev => {
+            const next = { ...prev };
+            for (const m of updates) next[m.market_id] = m;
+            return next;
+          });
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error parsing market stats:", error);

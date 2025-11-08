@@ -1,16 +1,10 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CommunityLeaderboard } from "@/components/CommunityLeaderboard";
-import { CopyTradingSignals } from "@/components/CopyTradingSignals";
 import { MultiWalletComparison } from "@/components/MultiWalletComparison";
-import { BacktestingTool } from "@/components/BacktestingTool";
-import { ArrowLeft, Home } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export default function CommunityHub() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const defaultTab = searchParams.get("tab") || "leaderboard";
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -27,37 +21,14 @@ export default function CommunityHub() {
 
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            Community Hub
+            Multi-Wallet Comparison
           </h1>
           <p className="text-muted-foreground">
-            Compete, collaborate, and learn from the best traders
+            Compare trading performance across multiple wallets
           </p>
         </div>
 
-        <Tabs defaultValue={defaultTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
-            <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
-            <TabsTrigger value="signals">Copy Trading</TabsTrigger>
-            <TabsTrigger value="compare">Compare</TabsTrigger>
-            <TabsTrigger value="backtest">Backtest</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="leaderboard" className="mt-6">
-            <CommunityLeaderboard />
-          </TabsContent>
-
-          <TabsContent value="signals" className="mt-6">
-            <CopyTradingSignals />
-          </TabsContent>
-
-          <TabsContent value="compare" className="mt-6">
-            <MultiWalletComparison />
-          </TabsContent>
-
-          <TabsContent value="backtest" className="mt-6">
-            <BacktestingTool />
-          </TabsContent>
-        </Tabs>
+        <MultiWalletComparison />
       </div>
     </div>
   );

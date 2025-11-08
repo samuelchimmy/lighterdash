@@ -158,4 +158,11 @@ All colors MUST be HSL.
       0 0 20px hsl(var(--primary) / 0.2);
     transform: scale(1.05);
   }
+
+  .glow-purple {
+    text-shadow: 
+      0 0 10px hsl(270 60% 50% / 0.8),
+      0 0 20px hsl(270 60% 50% / 0.6),
+      0 0 30px hsl(270 60% 50% / 0.4);
+  }
 }

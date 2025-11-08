@@ -172,12 +172,14 @@ const Index = () => {
               Jadeofwallstreet
             </a>
           </p>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-col items-center gap-2">
             <p className="text-center text-sm text-muted-foreground">
               Donate to keep us running:
             </p>
-            <div className="flex items-center gap-2 bg-secondary border border-border rounded-md px-3 py-1.5">
-              <code className="text-xs text-foreground font-mono">{donationAddress}</code>
+            <div className="flex items-center gap-2">
+              <code className="text-sm font-mono text-purple-500 glow-purple">
+                {donationAddress}
+              </code>
               <button
                 onClick={copyToClipboard}
                 className="p-1 hover:bg-accent rounded transition-colors"

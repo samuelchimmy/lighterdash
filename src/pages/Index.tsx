@@ -43,12 +43,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <DonationModal />
-      {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+        <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="relative">
+              <div className="relative" aria-hidden="true">
                 <div className="absolute inset-0 glow-primary rounded-lg" />
                 <BarChart3 className="w-8 h-8 text-primary relative" />
               </div>
@@ -84,67 +83,62 @@ const Index = () => {
               )}
             </div>
           </div>
-        </div>
+        </nav>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8" role="main">
         {isScanning ? (
           <ScanningLoader />
         ) : !scannedAddress ? (
           <div className="max-w-4xl mx-auto">
-            {/* Hero Section */}
-            <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <section className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <h2 className="text-3xl md:text-4xl font-semibold text-foreground mb-4">
-                Track Your Lighter Trading
+                Track Your Lighter Trading Performance
               </h2>
               <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                 Community-built analytics dashboard for Lighter. View real-time trading statistics,
                 track your performance, and analyze your trading data.
               </p>
-            </div>
+            </section>
 
-            {/* Wallet Input */}
-            <div className="mb-12">
+            <section className="mb-12" aria-label="Wallet address input">
               <WalletInput onScan={handleScan} isLoading={isScanning} />
-            </div>
+            </section>
 
-            {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in">
-              <div className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in" aria-label="Key features">
+              <article className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <Wallet className="w-6 h-6 text-primary" />
+                  <Wallet className="w-6 h-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-base md:text-lg font-medium text-foreground mb-2">Wallet Tracker</h3>
                 <p className="text-muted-foreground text-xs md:text-sm">
                   Track any Lighter wallet&apos;s positions, trades, PnL, and performance metrics in real-time.
                 </p>
-              </div>
+              </article>
 
-              <div className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+              <article className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <BarChart3 className="w-6 h-6 text-primary" />
+                  <BarChart3 className="w-6 h-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-base md:text-lg font-medium text-foreground mb-2">Market Analytics</h3>
                 <p className="text-muted-foreground text-xs md:text-sm">
                   View live order books, recent trades, funding rates, and comprehensive market statistics.
                 </p>
-              </div>
+              </article>
 
-              <div className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+              <article className="group bg-gradient-to-br from-card/50 to-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-2xl hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
                 <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <Zap className="w-6 h-6 text-primary" />
+                  <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-base md:text-lg font-medium text-foreground mb-2">Real-Time Updates</h3>
                 <p className="text-muted-foreground text-xs md:text-sm">
                   WebSocket-powered live data streams for instant market and account updates.
                 </p>
-              </div>
-            </div>
+              </article>
+            </section>
 
-            {/* Detailed Feature Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <div className="group relative bg-gradient-to-br from-card/80 via-card/60 to-card/40 border border-border/50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] overflow-hidden">
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: '0.2s' }} aria-label="Detailed features">
+              <article className="group relative bg-gradient-to-br from-card/80 via-card/60 to-card/40 border border-border/50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] overflow-hidden">
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 
@@ -156,7 +150,7 @@ const Index = () => {
                 <div className="relative z-10">
                   <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6 flex items-center gap-3 group-hover:text-primary transition-colors duration-300">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 group-hover:scale-110 transition-transform duration-300">
-                      <BarChart3 className="w-6 h-6 text-primary" />
+                      <BarChart3 className="w-6 h-6 text-primary" aria-hidden="true" />
                     </div>
                     Wallet Analytics
                   </h3>
@@ -187,9 +181,9 @@ const Index = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </article>
 
-              <div className="group relative bg-gradient-to-br from-card/80 via-card/60 to-card/40 border border-border/50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] overflow-hidden">
+              <article className="group relative bg-gradient-to-br from-card/80 via-card/60 to-card/40 border border-border/50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] overflow-hidden">
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-pink-500/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
                 
@@ -201,7 +195,7 @@ const Index = () => {
                 <div className="relative z-10">
                   <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6 flex items-center gap-3 group-hover:text-primary transition-colors duration-300">
                     <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 group-hover:scale-110 transition-transform duration-300">
-                      <Zap className="w-6 h-6 text-primary" />
+                      <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
                     </div>
                     Advanced Features
                   </h3>
@@ -232,24 +226,24 @@ const Index = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
-            </div>
+              </article>
+            </section>
           </div>
         ) : (
-          <div>
+          <section aria-label="Wallet dashboard">
             <button
               onClick={() => setScannedAddress(null)}
               className="mb-6 text-primary hover:text-primary-glow transition-colors flex items-center gap-2"
+              aria-label="Scan another wallet"
             >
               ← Scan another wallet
             </button>
             <Dashboard walletAddress={scannedAddress} onConnectionStatusChange={handleConnectionChange} />
-          </div>
+          </section>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border mt-20">
+      <footer className="border-t border-border mt-20" role="contentinfo">
         <div className="container mx-auto px-4 py-6 space-y-3">
           <p className="text-center text-sm text-muted-foreground">
             Built with 💜 by{' '}

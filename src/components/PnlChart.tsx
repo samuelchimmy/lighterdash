@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatCurrencySmart } from '@/lib/lighter-api';
 import type { PnlDataPoint } from '@/types/lighter';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Area, AreaChart } from 'recharts';
 import { useState, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Trash2 } from 'lucide-react';
 
@@ -151,10 +151,25 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
 
       <div className="w-full h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <AreaChart
             data={filteredData}
             margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
           >
+            <defs>
+              <linearGradient id="gradientAccountValue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
+                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
+              </linearGradient>
+              <linearGradient id="gradientPnlPositive" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(var(--profit))" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="hsl(var(--profit))" stopOpacity={0.05} />
+              </linearGradient>
+              <linearGradient id="gradientPnlNegative" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(var(--loss))" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="hsl(var(--loss))" stopOpacity={0.05} />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
             <XAxis
               dataKey="timestamp"
@@ -171,23 +186,25 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
             />
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
-            <Line
+            <Area
               type="monotone"
               dataKey="accountValue"
               stroke="hsl(var(--primary))"
               strokeWidth={2}
+              fill="url(#gradientAccountValue)"
               dot={false}
-              activeDot={{ r: 4 }}
+              activeDot={{ r: 4, fill: "hsl(var(--primary))" }}
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="pnl"
               stroke={chartMetrics.isPositive ? 'hsl(var(--profit))' : 'hsl(var(--loss))'}
               strokeWidth={2}
+              fill={chartMetrics.isPositive ? 'url(#gradientPnlPositive)' : 'url(#gradientPnlNegative)'}
               dot={false}
               strokeDasharray="5 5"
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
 

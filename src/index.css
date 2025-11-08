@@ -73,8 +73,7 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply text-foreground antialiased;
-    background: linear-gradient(to top right, hsl(var(--background) / 0.5), hsl(var(--background)));
+    @apply bg-background text-foreground antialiased;
   }
   
   html {

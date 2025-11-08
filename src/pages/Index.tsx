@@ -58,10 +58,6 @@ const Index = () => {
                   Lighter Analytics
                 </Button>
               )}
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Zap className="w-4 h-4 text-primary" />
-                <span className="hidden sm:inline">Real-time Analytics</span>
-              </div>
             </div>
           </div>
         </div>

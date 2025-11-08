@@ -120,3 +120,10 @@ export interface AccountSnapshot {
   collateral?: string;
   portfolio_value?: string;
 }
+
+export interface PnlDataPoint {
+  timestamp: number;
+  accountValue: number;
+  pnl: number;
+  collateral: number;
+}

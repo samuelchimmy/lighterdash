@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { lighterApi } from '@/lib/lighter-api';
 import { SummaryCard } from './SummaryCard';
 import { AccountStats } from './AccountStats';
 import { PositionsTable } from './PositionsTable';
 import { TradesHistory } from './TradesHistory';
 import { PerformanceMetrics } from './PerformanceMetrics';
-import type { UserStats, Position, LighterTrade } from '@/types/lighter';
+import { PnlChart } from './PnlChart';
+import type { UserStats, Position, LighterTrade, PnlDataPoint } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -18,8 +19,10 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
   const [trades, setTrades] = useState<LighterTrade[]>([]);
+  const [pnlHistory, setPnlHistory] = useState<PnlDataPoint[]>([]);
   const [isConnecting, setIsConnecting] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
+  const lastUpdateRef = useRef<number>(0);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -70,6 +73,17 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
         setUserStats(initialStats);
         setPositions(positionsArray);
         setTrades(tradesArray);
+        
+        // Initialize PnL history with first data point
+        const portfolio = parseFloat(initialStats.portfolio_value || '0');
+        const collateral = parseFloat(initialStats.collateral || '0');
+        setPnlHistory([{
+          timestamp: Date.now(),
+          accountValue: portfolio,
+          pnl: portfolio - collateral,
+          collateral: collateral,
+        }]);
+        
         setIsHydrated(true);
         setIsConnecting(false);
 
@@ -107,11 +121,41 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
 
             // Handle user_stats updates
             if (type === 'update/user_stats' && message.stats) {
-              setUserStats(message.stats as UserStats);
+              const stats = message.stats as UserStats;
+              setUserStats(stats);
+              
+              // Add data point to PnL history (throttled to once per minute)
+              const now = Date.now();
+              if (now - lastUpdateRef.current >= 60000) {
+                const portfolio = parseFloat(stats.portfolio_value || '0');
+                const collateral = parseFloat(stats.collateral || '0');
+                setPnlHistory(prev => [...prev, {
+                  timestamp: now,
+                  accountValue: portfolio,
+                  pnl: portfolio - collateral,
+                  collateral: collateral,
+                }]);
+                lastUpdateRef.current = now;
+              }
               return;
             }
             if (channel?.startsWith('user_stats:') && message.stats) {
-              setUserStats(message.stats as UserStats);
+              const stats = message.stats as UserStats;
+              setUserStats(stats);
+              
+              // Add data point to PnL history (throttled to once per minute)
+              const now = Date.now();
+              if (now - lastUpdateRef.current >= 60000) {
+                const portfolio = parseFloat(stats.portfolio_value || '0');
+                const collateral = parseFloat(stats.collateral || '0');
+                setPnlHistory(prev => [...prev, {
+                  timestamp: now,
+                  accountValue: portfolio,
+                  pnl: portfolio - collateral,
+                  collateral: collateral,
+                }]);
+                lastUpdateRef.current = now;
+              }
               return;
             }
 
@@ -211,6 +255,8 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
       />
 
       <AccountStats stats={userStats} />
+
+      <PnlChart data={pnlHistory} />
 
       <PositionsTable positions={positions} />
 

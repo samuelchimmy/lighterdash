@@ -9,12 +9,10 @@ import { TrendingUp, TrendingDown, Activity } from "lucide-react";
 const MARKET_SYMBOLS: Record<number, string> = {
   0: "ETH-USD",
   1: "BTC-USD",
-  7: "DOGE-USD",
-  12: "HYPE-USD",
-  14: "SCR-USD",
-  24: "SUI-USD",
-  25: "SOL-USD",
-  29: "ZORA-USD",
+  7: "XRP-USD",
+  24: "HYPE-USD",
+  25: "BNB-USD",
+  29: "ENA-USD",
 };
 
 export function MarketStats() {

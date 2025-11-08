@@ -17,6 +17,9 @@ import { TradeAnalysisView } from './TradeAnalysisView';
 import { PatternRecognition } from './PatternRecognition';
 import { MarketStats } from './MarketStats';
 import { FundingHistory } from './FundingHistory';
+import { LiquidationMonitor } from './LiquidationMonitor';
+import { OrderBookDepth } from './OrderBookDepth';
+import { LiveTradeFeed } from './LiveTradeFeed';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -418,7 +421,14 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         <PerformanceMetrics trades={trades} positions={positions} />
       </div>
 
+      <LiquidationMonitor positions={positions} accountValue={accountValue} />
+
       <FundingHistory fundingHistories={fundingHistories} />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <OrderBookDepth />
+        <LiveTradeFeed />
+      </div>
 
       {/* Pattern Recognition */}
       {trades.length > 0 && (

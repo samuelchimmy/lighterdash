@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import {
   Table,
   TableBody,
@@ -8,9 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { formatCurrencySmart, formatNumber } from '@/lib/lighter-api';
+import { formatCurrencySmart, formatNumber, formatPercentage } from '@/lib/lighter-api';
 import type { Position } from '@/types/lighter';
-import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, AlertTriangle } from 'lucide-react';
 import { Sparkline } from './Sparkline';
 import { useMemo } from 'react';
 
@@ -53,6 +54,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
               <TableHead className="text-muted-foreground">Entry Price</TableHead>
               <TableHead className="text-muted-foreground">Position Value</TableHead>
               <TableHead className="text-muted-foreground">Liq. Price</TableHead>
+              <TableHead className="text-muted-foreground">Liq. Distance</TableHead>
               <TableHead className="text-muted-foreground text-right">Unrealized PnL</TableHead>
             </TableRow>
           </TableHeader>
@@ -64,9 +66,34 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
               const entryPrice = parseFloat(position.avg_entry_price || '0');
               const sparklineData = generateSparklineData(entryPrice);
               
+              // Calculate distance to liquidation
+              const currentPrice = parseFloat(position.position_value || '0') / Math.abs(size || 1);
+              const liqPrice = parseFloat(position.liquidation_price || '0');
+              const isLong = size > 0;
+              
+              const distanceToLiq = liqPrice > 0 
+                ? isLong 
+                  ? ((currentPrice - liqPrice) / currentPrice) * 100
+                  : ((liqPrice - currentPrice) / currentPrice) * 100
+                : 100;
+              
+              const riskPercent = Math.max(0, 100 - distanceToLiq);
+              const riskColor = riskPercent > 70 ? 'text-red-500' : riskPercent > 40 ? 'text-yellow-500' : 'text-green-500';
+              const progressColor = riskPercent > 70 ? 'bg-red-500' : riskPercent > 40 ? 'bg-yellow-500' : 'bg-green-500';
+              
               return (
-                <TableRow key={index} className="border-border hover:bg-secondary/50 transition-colors">
-                  <TableCell className="font-medium text-foreground">{position.symbol}</TableCell>
+                <TableRow 
+                  key={index} 
+                  className={`border-border hover:bg-secondary/50 transition-colors ${
+                    riskPercent > 70 ? 'bg-red-500/5' : riskPercent > 40 ? 'bg-yellow-500/5' : ''
+                  }`}
+                >
+                  <TableCell className="font-medium text-foreground">
+                    <div className="flex items-center gap-2">
+                      {riskPercent > 40 && <AlertTriangle className={`w-4 h-4 ${riskColor}`} />}
+                      {position.symbol}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <Sparkline 
                       data={sparklineData} 
@@ -94,6 +121,16 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                   <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.avg_entry_price || '0'))}</TableCell>
                   <TableCell className="text-foreground">{formatCurrencySmart(Math.abs(parseFloat(position.position_value || '0')))}</TableCell>
                   <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.liquidation_price || '0'))}</TableCell>
+                  <TableCell>
+                    <div className="w-24 space-y-1">
+                      <div className="relative h-2">
+                        <Progress value={riskPercent} className="h-2" />
+                      </div>
+                      <span className={`text-xs font-semibold ${riskColor}`}>
+                        {formatPercentage(distanceToLiq)}
+                      </span>
+                    </div>
+                  </TableCell>
                   <TableCell className={`text-right font-semibold ${pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrencySmart(pnl)}
                   </TableCell>

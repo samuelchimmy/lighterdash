@@ -113,14 +113,14 @@ const Index = () => {
             </div>
 
             {/* Features Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <Wallet className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">Wallet Tracker</h3>
                 <p className="text-muted-foreground text-sm">
-                  Track any Lighter wallet's positions, trades, PnL, and performance metrics in real-time.
+                  Track any Lighter wallet&apos;s positions, trades, PnL, and performance metrics in real-time.
                 </p>
               </div>
 
@@ -145,16 +145,73 @@ const Index = () => {
               </div>
             </div>
 
-            {/* CTA Button */}
-            <div className="flex justify-center mt-8">
-              <Button
-                onClick={() => navigate('/analytics')}
-                size="lg"
-                className="gap-2 bg-primary hover:bg-primary-glow text-primary-foreground"
-              >
-                <BarChart3 className="w-5 h-5" />
-                Explore Lighter Analytics
-              </Button>
+            {/* Detailed Feature Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-card border border-border rounded-xl p-8 shadow-card">
+                <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+                  <BarChart3 className="w-6 h-6 text-primary" />
+                  Wallet Analytics
+                </h3>
+                <ul className="space-y-3 text-muted-foreground">
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Track total PnL, unrealized and realized gains across all positions</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Monitor portfolio value, leverage, and margin usage in real-time</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>View detailed position breakdowns by asset with entry prices and liquidation levels</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Analyze complete trade history with fees, duration, and profitability metrics</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Compare multiple wallets side-by-side to analyze performance differences</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Export trading data and performance reports for external analysis</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-card border border-border rounded-xl p-8 shadow-card">
+                <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+                  <Zap className="w-6 h-6 text-primary" />
+                  Advanced Features
+                </h3>
+                <ul className="space-y-3 text-muted-foreground">
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>AI-powered pattern recognition to identify winning and losing trade setups</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Win/loss streak analysis with performance breakdown by time and market</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Trading journal with custom notes and tags for every trade</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Liquidation risk monitoring with real-time alerts and position health tracking</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Live market data including order book depth, recent trades, and funding rates</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    <span>Performance metrics by asset, time, and trading strategy with visual charts</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         ) : (

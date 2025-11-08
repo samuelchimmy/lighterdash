@@ -3,7 +3,7 @@ import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { ScanningLoader } from '@/components/ScanningLoader';
-import { ChangelogModal } from '@/components/ChangelogModal';
+import { DonationModal } from '@/components/DonationModal';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Zap, Wallet, Copy, Check, GitCompare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -42,7 +42,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ChangelogModal />
+      <DonationModal />
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">

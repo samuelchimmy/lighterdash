@@ -3,7 +3,9 @@ import { lighterApi } from '@/lib/lighter-api';
 import { SummaryCard } from './SummaryCard';
 import { AccountStats } from './AccountStats';
 import { PositionsTable } from './PositionsTable';
-import type { UserStats, Position } from '@/types/lighter';
+import { TradesHistory } from './TradesHistory';
+import { PerformanceMetrics } from './PerformanceMetrics';
+import type { UserStats, Position, LighterTrade } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
@@ -15,6 +17,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
   const [accountIndex, setAccountIndex] = useState<number | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [positions, setPositions] = useState<Position[]>([]);
+  const [trades, setTrades] = useState<LighterTrade[]>([]);
   const [isConnecting, setIsConnecting] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
   const { toast } = useToast();
@@ -49,9 +52,11 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
         if (!isMounted) return;
         
         // Parse and set initial data
-        const { normalizePositions } = await import('@/lib/lighter-api');
+        const { normalizePositions, normalizeTrades } = await import('@/lib/lighter-api');
         const positionsArray = normalizePositions(snapshot.positions || {})
           .filter(p => parseFloat(p.position || '0') !== 0);
+        
+        const tradesArray = normalizeTrades(snapshot.trades || {});
         
         const initialStats: UserStats = snapshot.stats || {
           collateral: snapshot.collateral || '0',
@@ -64,6 +69,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
         
         setUserStats(initialStats);
         setPositions(positionsArray);
+        setTrades(tradesArray);
         setIsHydrated(true);
         setIsConnecting(false);
 
@@ -97,7 +103,7 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
             const type: string | undefined = message.type;
 
             // Import merge helpers
-            const { mergePositions } = await import('@/lib/lighter-api');
+            const { mergePositions, dedupeAndPrepend, normalizeTrades } = await import('@/lib/lighter-api');
 
             // Handle user_stats updates
             if (type === 'update/user_stats' && message.stats) {
@@ -124,6 +130,18 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
             }
             if (channel?.startsWith('account_all_positions:') && message.positions) {
               setPositions(prev => mergePositions(prev, message.positions));
+              return;
+            }
+
+            // Handle trades updates
+            if (type === 'update/account_all_trades' && message.trades) {
+              const incomingTrades = normalizeTrades(message.trades);
+              setTrades(prev => dedupeAndPrepend(prev, incomingTrades));
+              return;
+            }
+            if (channel?.startsWith('account_all_trades:') && message.trades) {
+              const incomingTrades = normalizeTrades(message.trades);
+              setTrades(prev => dedupeAndPrepend(prev, incomingTrades));
               return;
             }
           } catch (error) {
@@ -195,6 +213,10 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
       <AccountStats stats={userStats} />
 
       <PositionsTable positions={positions} />
+
+      <PerformanceMetrics trades={trades} positions={positions} />
+
+      <TradesHistory trades={trades} />
     </div>
   );
 };

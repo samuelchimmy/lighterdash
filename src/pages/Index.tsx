@@ -31,6 +31,12 @@ const Index = () => {
     }
   };
 
+  const handleReconnect = () => {
+    if ((window as any).__dashboardReconnect) {
+      (window as any).__dashboardReconnect();
+    }
+  };
+
   const handleScan = async (address: string) => {
     setIsScanning(true);
     // Simulate a realistic delay for scanning and data fetching (1.5-2 seconds)
@@ -57,7 +63,11 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {scannedAddress && (
-                <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
+                <ConnectionStatus 
+                  status={connectionStatus} 
+                  lastUpdate={lastUpdate}
+                  onReconnect={handleReconnect}
+                />
               )}
               {!scannedAddress && (
                 <>
@@ -238,7 +248,11 @@ const Index = () => {
             >
               ← Scan another wallet
             </button>
-            <Dashboard walletAddress={scannedAddress} onConnectionStatusChange={handleConnectionChange} />
+            <Dashboard 
+              walletAddress={scannedAddress} 
+              onConnectionStatusChange={handleConnectionChange}
+              onReconnectRequest={handleReconnect}
+            />
           </section>
         )}
       </main>

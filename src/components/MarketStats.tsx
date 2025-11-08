@@ -33,8 +33,14 @@ export function MarketStats() {
           if (norm) updates.push(norm);
         };
 
+        // Handle market_stats as an object with market IDs as keys
         if (data.market_stats || data.marketStats) {
-          tryPush(data.market_stats ?? data.marketStats);
+          const stats = data.market_stats ?? data.marketStats;
+          if (typeof stats === 'object' && !Array.isArray(stats)) {
+            Object.values(stats).forEach(tryPush);
+          } else {
+            tryPush(stats);
+          }
         } else if (Array.isArray(data.markets)) {
           data.markets.forEach(tryPush);
         } else if (data.markets && typeof data.markets === 'object') {

@@ -17,17 +17,19 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
     e.preventDefault();
     setError('');
 
-    if (!address) {
+    const trimmedAddress = address.trim();
+
+    if (!trimmedAddress) {
       setError('Please enter a wallet address');
       return;
     }
 
-    if (!validateEthereumAddress(address)) {
-      setError('Invalid Ethereum address');
+    if (!validateEthereumAddress(trimmedAddress)) {
+      setError('Invalid Ethereum address format. Address must start with 0x followed by 40 hexadecimal characters.');
       return;
     }
 
-    onScan(address);
+    onScan(trimmedAddress);
   };
 
   return (
@@ -39,7 +41,10 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
               type="text"
               placeholder="Enter Lighter L1 Address (0x...)"
               value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              onChange={(e) => {
+                setAddress(e.target.value);
+                setError(''); // Clear error on input
+              }}
               className="h-12 bg-secondary border-border text-foreground placeholder:text-muted-foreground"
               disabled={isLoading}
             />

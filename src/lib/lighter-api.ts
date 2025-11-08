@@ -30,7 +30,7 @@ export const lighterApi = {
       const response = await axios.get<AccountSnapshot>(
         `${BASE_URL}/api/v1/account`,
         {
-          params: { index: accountIndex }
+          params: { by: 'index', index: accountIndex }
         }
       );
       return response.data;

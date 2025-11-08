@@ -66,6 +66,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   });
   const [isConnecting, setIsConnecting] = useState(true);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [hasRealtime, setHasRealtime] = useState(false);
   const lastUpdateRef = useRef<number>(0);
   const lastPnlRef = useRef<number>(0);
   const { toast } = useToast();
@@ -74,7 +76,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   // Refresh wallet data function
   const refreshWalletData = async () => {
     if (!accountIndex) return;
-    
+    setIsRefreshing(true);
+
     try {
       toast({
         title: "Refreshing data...",
@@ -83,34 +86,36 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
 
       const snapshot = await lighterApi.getAccountSnapshot(accountIndex);
       const { normalizePositions, normalizeTrades } = await import('@/lib/lighter-api');
-      
+
       const positionsArray = normalizePositions(snapshot.positions || {})
         .filter(p => parseFloat(p.position || '0') !== 0);
       const tradesArray = normalizeTrades(snapshot.trades || {});
-      
-      const refreshedStats: UserStats = snapshot.stats || {
-        collateral: snapshot.collateral || '0',
-        portfolio_value: snapshot.portfolio_value || '0',
-        leverage: '0',
-        available_balance: '0',
-        margin_usage: '0',
-        buying_power: '0',
+
+      // Preserve existing values if snapshot is sparse
+      setPositions(prev => positionsArray.length > 0 ? positionsArray : prev);
+      setTrades(prev => tradesArray.length > 0 ? tradesArray : prev);
+
+      const refinedStats: UserStats = snapshot.stats || {
+        collateral: (snapshot.collateral ?? userStats?.collateral ?? '0') as string,
+        portfolio_value: (snapshot.portfolio_value ?? userStats?.portfolio_value ?? '0') as string,
+        leverage: (userStats?.leverage ?? '0') as string,
+        available_balance: (userStats?.available_balance ?? '0') as string,
+        margin_usage: (userStats?.margin_usage ?? '0') as string,
+        buying_power: (userStats?.buying_power ?? '0') as string,
       };
-      
-      setUserStats(refreshedStats);
-      setPositions(positionsArray);
-      setTrades(tradesArray);
-      
+
+      setUserStats(refinedStats);
+
       // Add new data point to PnL history
-      const portfolio = parseFloat(refreshedStats.portfolio_value || '0');
-      const collateral = parseFloat(refreshedStats.collateral || '0');
+      const portfolio = parseFloat(refinedStats.portfolio_value || '0');
+      const collateral = parseFloat(refinedStats.collateral || '0');
       setPnlHistory(prev => [...prev, {
         timestamp: Date.now(),
         accountValue: portfolio,
         pnl: portfolio - collateral,
         collateral: collateral,
       }]);
-      
+
       toast({
         title: "Data refreshed",
         description: "Wallet information updated successfully",
@@ -122,6 +127,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         description: "Could not fetch latest data",
         variant: "destructive",
       });
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -260,6 +267,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
           try {
             const message = JSON.parse(event.data);
             console.log('WebSocket message:', message);
+            setHasRealtime(true);
 
             const channel: string | undefined = message.channel;
             const type: string | undefined = message.type;
@@ -442,9 +450,11 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   };
 
   // Check if wallet has any real activity
-  const hasActivity = positions.length > 0 || trades.length > 0 || portfolio > 0.01;
+  const hasActivity = positions.length > 0 || trades.length > 0 || portfolio > 0.01 || poolShares.length > 0;
 
-  if (!isHydrated || !hasActivity) {
+  const showEmpty = isHydrated && hasRealtime && !isRefreshing && !hasActivity;
+
+  if (showEmpty) {
     return <EmptyWalletState />;
   }
 

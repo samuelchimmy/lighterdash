@@ -15,11 +15,8 @@ import { TradingJournal } from './TradingJournal';
 import { AuthForm } from './AuthForm';
 import { TradeAnalysisView } from './TradeAnalysisView';
 import { PatternRecognition } from './PatternRecognition';
-import { MarketStats } from './MarketStats';
 import { FundingHistory } from './FundingHistory';
 import { LiquidationMonitor } from './LiquidationMonitor';
-import { OrderBookDepth } from './OrderBookDepth';
-import { LiveTradeFeed } from './LiveTradeFeed';
 import { Button } from '@/components/ui/button';
 import { 
   SummaryCardSkeleton, 
@@ -366,10 +363,8 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
       
-      <MarketStats />
-      
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
+        <h2 className="text-2xl font-bold text-foreground">Wallet Dashboard</h2>
         <div className="flex gap-2">
           <ExportMenu
             positions={positions}
@@ -424,11 +419,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       <LiquidationMonitor positions={positions} accountValue={accountValue} />
 
       <FundingHistory fundingHistories={fundingHistories} />
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <OrderBookDepth />
-        <LiveTradeFeed />
-      </div>
 
       {/* Pattern Recognition */}
       {trades.length > 0 && (

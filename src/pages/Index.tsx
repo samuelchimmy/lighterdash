@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
-import { BarChart3, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { BarChart3, Zap, Wallet } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [scannedAddress, setScannedAddress] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('disconnected');
@@ -45,9 +48,19 @@ const Index = () => {
               {scannedAddress && (
                 <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
               )}
+              {!scannedAddress && (
+                <Button
+                  onClick={() => navigate('/analytics')}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  Lighter Analytics
+                </Button>
+              )}
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Zap className="w-4 h-4 text-primary" />
-                <span>Real-time Analytics</span>
+                <span className="hidden sm:inline">Real-time Analytics</span>
               </div>
             </div>
           </div>
@@ -86,33 +99,45 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Wallet className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Wallet Tracker</h3>
+                <p className="text-muted-foreground text-sm">
+                  Track any Lighter wallet's positions, trades, PnL, and performance metrics in real-time.
+                </p>
+              </div>
+
+              <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <BarChart3 className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Market Analytics</h3>
+                <p className="text-muted-foreground text-sm">
+                  View live order books, recent trades, funding rates, and comprehensive market statistics.
+                </p>
+              </div>
+
+              <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                   <Zap className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Real-Time Data</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Real-Time Updates</h3>
                 <p className="text-muted-foreground text-sm">
-                  Live WebSocket connection to Lighter for instant updates on positions, trades, and account stats.
+                  WebSocket-powered live data streams for instant market and account updates.
                 </p>
               </div>
+            </div>
 
-              <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <BarChart3 className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Advanced Analytics</h3>
-                <p className="text-muted-foreground text-sm">
-                  Comprehensive trading metrics including PnL breakdowns, winrate, and performance by asset.
-                </p>
-              </div>
-
-              <div className="bg-card border border-border rounded-xl p-6 shadow-card hover:shadow-lg transition-shadow">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                  <BarChart3 className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">Mobile Responsive</h3>
-                <p className="text-muted-foreground text-sm">
-                  Access your trading dashboard anywhere with a fully responsive design optimized for all devices.
-                </p>
-              </div>
+            {/* CTA Button */}
+            <div className="flex justify-center mt-8">
+              <Button
+                onClick={() => navigate('/analytics')}
+                size="lg"
+                className="gap-2 bg-primary hover:bg-primary-glow text-primary-foreground"
+              >
+                <BarChart3 className="w-5 h-5" />
+                Explore Lighter Analytics
+              </Button>
             </div>
           </div>
         ) : (

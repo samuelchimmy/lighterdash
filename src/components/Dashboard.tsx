@@ -125,8 +125,10 @@ export const Dashboard = ({ walletAddress }: DashboardProps) => {
     );
   }
 
-  const totalPnl = (userStats?.unrealized_pnl || 0) + (userStats?.realized_pnl || 0);
-  const accountValue = userStats?.portfolio_value || 0;
+  const totalPnl = userStats 
+    ? (parseFloat(userStats.portfolio_value || '0') - parseFloat(userStats.collateral || '0'))
+    : 0;
+  const accountValue = userStats ? parseFloat(userStats.portfolio_value || '0') : 0;
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">

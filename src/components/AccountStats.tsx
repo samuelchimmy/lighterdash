@@ -26,7 +26,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             <Activity className="w-4 h-4 text-primary" />
             <p className="text-xs text-muted-foreground">Leverage</p>
           </div>
-          <p className="text-2xl font-bold text-foreground">{stats.leverage.toFixed(2)}x</p>
+          <p className="text-2xl font-bold text-foreground">{parseFloat(stats.leverage || '0').toFixed(2)}x</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4">
@@ -34,7 +34,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             <PieChart className="w-4 h-4 text-primary" />
             <p className="text-xs text-muted-foreground">Margin Usage</p>
           </div>
-          <p className="text-2xl font-bold text-foreground">{formatPercentage(stats.margin_usage)}</p>
+          <p className="text-2xl font-bold text-foreground">{formatPercentage(parseFloat(stats.margin_usage || '0') * 100)}</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4">
@@ -42,16 +42,16 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             <DollarSign className="w-4 h-4 text-primary" />
             <p className="text-xs text-muted-foreground">Available Balance</p>
           </div>
-          <p className="text-xl font-bold text-foreground">{formatCurrency(stats.available_balance)}</p>
+          <p className="text-xl font-bold text-foreground">{formatCurrency(parseFloat(stats.available_balance || '0'))}</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Activity className="w-4 h-4 text-primary" />
-            <p className="text-xs text-muted-foreground">Realized PnL</p>
+            <p className="text-xs text-muted-foreground">Collateral</p>
           </div>
-          <p className={`text-xl font-bold ${stats.realized_pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-            {formatCurrency(stats.realized_pnl)}
+          <p className="text-xl font-bold text-foreground">
+            {formatCurrency(parseFloat(stats.collateral || '0'))}
           </p>
         </div>
       </div>

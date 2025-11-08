@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
@@ -6,11 +6,17 @@ import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Zap, Wallet, Copy, Check, GitCompare } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Index = () => {
   const navigate = useNavigate();
-  const [scannedAddress, setScannedAddress] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [scannedAddress, setScannedAddress] = useState<string | null>(() => {
+    // Initialize from URL params or localStorage
+    const urlAddress = searchParams.get('wallet');
+    const storedAddress = localStorage.getItem('lighterdash-wallet');
+    return urlAddress || storedAddress;
+  });
   const [isScanning, setIsScanning] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'reconnecting'>('disconnected');
   const [lastUpdate, setLastUpdate] = useState<Date>();
@@ -36,9 +42,23 @@ const Index = () => {
     // Simulate a realistic delay for scanning and data fetching (1.5-2 seconds)
     setTimeout(() => {
       setScannedAddress(address);
+      // Persist to localStorage and URL
+      localStorage.setItem('lighterdash-wallet', address);
+      setSearchParams({ wallet: address });
       setIsScanning(false);
     }, 1800);
   };
+
+  // Sync scannedAddress changes to localStorage and URL
+  useEffect(() => {
+    if (scannedAddress) {
+      localStorage.setItem('lighterdash-wallet', scannedAddress);
+      setSearchParams({ wallet: scannedAddress });
+    } else {
+      localStorage.removeItem('lighterdash-wallet');
+      setSearchParams({});
+    }
+  }, [scannedAddress, setSearchParams]);
 
   return (
     <div className="min-h-screen">
@@ -232,7 +252,11 @@ const Index = () => {
         ) : (
           <section aria-label="Wallet dashboard">
             <button
-              onClick={() => setScannedAddress(null)}
+              onClick={() => {
+                setScannedAddress(null);
+                localStorage.removeItem('lighterdash-wallet');
+                setSearchParams({});
+              }}
               className="mb-6 text-primary hover:text-primary-glow transition-colors flex items-center gap-2"
               aria-label="Scan another wallet"
             >

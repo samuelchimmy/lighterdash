@@ -80,7 +80,7 @@ All colors MUST be HSL.
     @apply scroll-smooth;
   }
   
-  /* Grid pattern background */
+  /* Animated grid pattern background */
   body::before {
     content: '';
     position: fixed;
@@ -94,9 +94,10 @@ All colors MUST be HSL.
     background-size: 50px 50px;
     pointer-events: none;
     z-index: 0;
+    animation: grid-pulse 8s ease-in-out infinite;
   }
   
-  /* Grid accent lines */
+  /* Animated grid accent lines with shimmer */
   body::after {
     content: '';
     position: fixed;
@@ -105,16 +106,41 @@ All colors MUST be HSL.
     width: 100%;
     height: 100%;
     background-image: 
-      linear-gradient(hsl(var(--primary) / 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(var(--primary) / 0.08) 1px, transparent 1px);
+      linear-gradient(hsl(var(--primary) / 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.12) 1px, transparent 1px);
     background-size: 250px 250px;
     pointer-events: none;
     z-index: 0;
+    animation: grid-shimmer 15s linear infinite;
   }
   
   body > * {
     position: relative;
     z-index: 1;
+  }
+}
+
+/* Grid animations */
+@keyframes grid-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes grid-shimmer {
+  0% {
+    background-position: 0 0;
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 1000px 1000px;
+    opacity: 0.6;
   }
 }
 

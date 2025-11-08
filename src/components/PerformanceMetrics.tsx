@@ -4,6 +4,7 @@ import { formatCurrencySmart, formatPercentage } from '@/lib/lighter-api';
 import type { LighterTrade, Position } from '@/types/lighter';
 import { TrendingUp, Target, Award, PieChart } from 'lucide-react';
 import { useMemo } from 'react';
+import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 
 interface PerformanceMetricsProps {
   trades: LighterTrade[];
@@ -73,6 +74,13 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
     };
   }, [trades, positions]);
 
+  const animatedTotalPnL = useAnimatedCounter(metrics.totalPnL, { duration: 1000 });
+  const animatedWinRate = useAnimatedCounter(metrics.winRate, { decimals: 1, duration: 800 });
+  const animatedBestTradeSize = useAnimatedCounter(
+    metrics.bestTrade ? parseFloat(metrics.bestTrade.usd_amount || '0') : 0,
+    { duration: 800 }
+  );
+
   if (!trades || trades.length === 0) {
     return (
       <Card className="p-6 bg-card border-border shadow-card">
@@ -93,7 +101,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
               <p className="text-xs text-muted-foreground">Total Realized PnL</p>
             </div>
             <p className={`text-2xl font-bold ${metrics.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
-              {formatCurrencySmart(metrics.totalPnL)}
+              {formatCurrencySmart(animatedTotalPnL)}
             </p>
           </div>
 
@@ -111,7 +119,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
               )}
             </div>
             <p className="text-2xl font-bold text-foreground">
-              {metrics.winRate.toFixed(1)}%
+              {animatedWinRate.toFixed(1)}%
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {metrics.winningTrades} / {metrics.totalTrades} winning
@@ -124,7 +132,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
               <p className="text-xs text-muted-foreground">Best Trade Size</p>
             </div>
             <p className="text-2xl font-bold text-foreground">
-              {metrics.bestTrade ? formatCurrencySmart(parseFloat(metrics.bestTrade.usd_amount || '0')) : '$0.00'}
+              {formatCurrencySmart(animatedBestTradeSize)}
             </p>
           </div>
 

@@ -3,12 +3,18 @@ import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatPercentage } from '@/lib/lighter-api';
 import type { UserStats } from '@/types/lighter';
 import { Activity, PieChart, DollarSign } from 'lucide-react';
+import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 
 interface AccountStatsProps {
   stats: UserStats | null;
 }
 
 export const AccountStats = ({ stats }: AccountStatsProps) => {
+  const animatedLeverage = useAnimatedCounter(parseFloat(stats?.leverage || '0'), { decimals: 2, duration: 800 });
+  const animatedMarginUsage = useAnimatedCounter(parseFloat(stats?.margin_usage || '0'), { decimals: 4, duration: 800 });
+  const animatedAvailableBalance = useAnimatedCounter(parseFloat(stats?.available_balance || '0'), { duration: 800 });
+  const animatedCollateral = useAnimatedCounter(parseFloat(stats?.collateral || '0'), { duration: 800 });
+
   if (!stats) {
     return (
       <Card className="p-6 bg-card border-border shadow-card">
@@ -32,7 +38,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
               <Badge variant="destructive" className="text-xs">High</Badge>
             )}
           </div>
-          <p className="text-2xl font-bold text-foreground">{parseFloat(stats.leverage || '0').toFixed(2)}x</p>
+          <p className="text-2xl font-bold text-foreground">{animatedLeverage.toFixed(2)}x</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4 border border-border/50">
@@ -45,7 +51,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
               <Badge variant="destructive" className="text-xs">High Risk</Badge>
             )}
           </div>
-          <p className="text-2xl font-bold text-foreground">{formatPercentage(parseFloat(stats.margin_usage || '0') * 100)}</p>
+          <p className="text-2xl font-bold text-foreground">{formatPercentage(animatedMarginUsage * 100)}</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4 border border-border/50">
@@ -53,7 +59,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             <DollarSign className="w-4 h-4 text-primary" />
             <p className="text-xs text-muted-foreground">Available Balance</p>
           </div>
-          <p className="text-xl font-bold text-foreground">{formatCurrencySmart(parseFloat(stats.available_balance || '0'))}</p>
+          <p className="text-xl font-bold text-foreground">{formatCurrencySmart(animatedAvailableBalance)}</p>
         </div>
 
         <div className="bg-secondary/50 rounded-lg p-4 border border-border/50">
@@ -67,7 +73,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
             )}
           </div>
           <p className="text-xl font-bold text-foreground">
-            {formatCurrencySmart(parseFloat(stats.collateral || '0'))}
+            {formatCurrencySmart(animatedCollateral)}
           </p>
         </div>
       </div>

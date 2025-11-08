@@ -2,6 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatAddress } from '@/lib/lighter-api';
 import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 
 interface SummaryCardProps {
   totalPnl: number;
@@ -11,6 +12,9 @@ interface SummaryCardProps {
 
 export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCardProps) => {
   const isProfitable = totalPnl >= 0;
+  
+  const animatedPnl = useAnimatedCounter(totalPnl, { duration: 1000 });
+  const animatedAccountValue = useAnimatedCounter(accountValue, { duration: 1000 });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -24,7 +28,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
               </Badge>
             </div>
             <p className={`text-3xl font-bold ${isProfitable ? 'text-profit' : 'text-loss'}`}>
-              {formatCurrencySmart(totalPnl)}
+              {formatCurrencySmart(animatedPnl)}
             </p>
           </div>
           {isProfitable ? (
@@ -56,7 +60,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
               <Badge variant="outline" className="text-xs">Live</Badge>
             </div>
             <p className="text-3xl font-bold text-foreground">
-              {formatCurrencySmart(accountValue)}
+              {formatCurrencySmart(animatedAccountValue)}
             </p>
           </div>
         </div>

@@ -17,10 +17,10 @@ All colors MUST be HSL.
     --popover: 240 8% 8%;
     --popover-foreground: 0 0% 90%;
 
-    --primary: 270 65% 50%;
+    --primary: 270 60% 40%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-glow: 270 55% 65%;
+    --primary-glow: 270 50% 55%;
 
     --secondary: 240 6% 14%;
     --secondary-foreground: 0 0% 90%;
@@ -28,7 +28,7 @@ All colors MUST be HSL.
     --muted: 240 6% 14%;
     --muted-foreground: 240 5% 64%;
 
-    --accent: 270 65% 50%;
+    --accent: 270 60% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 51%;
@@ -36,34 +36,34 @@ All colors MUST be HSL.
     --destructive-muted: 0 60% 65%;
     --destructive-light: 0 50% 75%;
     
-    --success: 270 65% 50%;
+    --success: 270 60% 40%;
     --success-foreground: 0 0% 100%;
-    --success-muted: 270 55% 65%;
-    --success-light: 270 45% 75%;
+    --success-muted: 270 50% 55%;
+    --success-light: 270 40% 65%;
     
-    --profit: 270 65% 50%;
+    --profit: 270 60% 40%;
     --loss: 0 72% 51%;
 
     --border: 240 6% 12%;
     --input: 240 6% 12%;
-    --ring: 270 65% 50%;
+    --ring: 270 60% 40%;
 
     --radius: 0.5rem;
     
-    --gradient-primary: linear-gradient(135deg, hsl(270 65% 50%), hsl(270 55% 65%));
+    --gradient-primary: linear-gradient(135deg, hsl(270 60% 40%), hsl(270 50% 55%));
     --gradient-subtle: linear-gradient(180deg, hsl(240 10% 5%), hsl(240 8% 8%));
-    --gradient-chart: linear-gradient(180deg, hsl(270 65% 50% / 0.3), hsl(270 65% 50% / 0.05));
-    --shadow-glow: 0 0 30px hsl(270 65% 50% / 0.25);
+    --gradient-chart: linear-gradient(180deg, hsl(270 60% 40% / 0.3), hsl(270 60% 40% / 0.05));
+    --shadow-glow: 0 0 30px hsl(270 60% 40% / 0.25);
     --shadow-card: 0 2px 10px hsl(0 0% 0% / 0.5);
 
     --sidebar-background: 240 10% 5%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 270 65% 50%;
+    --sidebar-primary: 270 60% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 6% 14%;
     --sidebar-accent-foreground: 0 0% 90%;
     --sidebar-border: 240 6% 12%;
-    --sidebar-ring: 270 65% 50%;
+    --sidebar-ring: 270 60% 40%;
   }
 }
 

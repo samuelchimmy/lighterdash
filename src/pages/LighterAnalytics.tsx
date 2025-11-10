@@ -4,7 +4,7 @@ import { LiveTradeFeed } from "@/components/LiveTradeFeed";
 import { PlatformVolume } from "@/components/PlatformVolume";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, ArrowLeft } from "lucide-react";
+import { BarChart3, ArrowLeft, Calculator } from "lucide-react";
 
 const LighterAnalytics = () => {
   const navigate = useNavigate();
@@ -29,14 +29,25 @@ const LighterAnalytics = () => {
                 </p>
               </div>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => navigate("/")}
-              className="gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/calculator')}
+                className="gap-2"
+              >
+                <Calculator className="h-4 w-4" />
+                <span className="hidden md:inline">Calculator</span>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => navigate("/")}
+                className="gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Home
+              </Button>
+            </div>
           </div>
         </div>
       </header>

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import LighterAnalytics from "./pages/LighterAnalytics";
 import CommunityHub from "./pages/CommunityHub";
+import FuturesCalculator from "./pages/FuturesCalculator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/analytics" element={<LighterAnalytics />} />
+          <Route path="/calculator" element={<FuturesCalculator />} />
           <Route path="/community" element={<CommunityHub />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

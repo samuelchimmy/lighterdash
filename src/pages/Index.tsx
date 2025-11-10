@@ -5,7 +5,7 @@ import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
 import { Button } from '@/components/ui/button';
-import { BarChart3, Zap, Wallet, Copy, Check, GitCompare } from 'lucide-react';
+import { BarChart3, Zap, Wallet, Copy, Check, GitCompare, Calculator } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Index = () => {
@@ -81,6 +81,15 @@ const Index = () => {
               )}
               {!scannedAddress && (
                 <>
+                  <Button
+                    onClick={() => navigate('/calculator')}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Calculator className="w-4 h-4" />
+                    <span className="hidden md:inline">Calculator</span>
+                  </Button>
                   <Button
                     onClick={() => navigate('/community')}
                     variant="outline"

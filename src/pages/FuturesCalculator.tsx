@@ -1,13 +1,18 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AssetSelector, MARKETS, type Market } from "@/components/calculators/AssetSelector";
 import { PnLCalculator } from "@/components/calculators/PnLCalculator";
 import { LiquidationCalculator } from "@/components/calculators/LiquidationCalculator";
 import { TargetPriceCalculator } from "@/components/calculators/TargetPriceCalculator";
+import { MaxOpenCalculator } from "@/components/calculators/MaxOpenCalculator";
+import { OpenPriceCalculator } from "@/components/calculators/OpenPriceCalculator";
 
 export default function FuturesCalculator() {
   const navigate = useNavigate();
+  const [selectedMarket, setSelectedMarket] = useState<Market>(MARKETS[0]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -33,57 +38,67 @@ export default function FuturesCalculator() {
       </header>
 
       {/* Main Content */}
-      <main className="container py-8 px-4 max-w-5xl mx-auto">
-        <div className="mb-6 text-center space-y-2">
-          <h2 className="text-2xl font-bold text-foreground">
-            Plan Your Trades with Precision
-          </h2>
-          <p className="text-muted-foreground">
-            Calculate PnL, liquidation prices, and target prices for your futures positions
-          </p>
+      <main className="container py-8 px-4 max-w-6xl mx-auto">
+        {/* Asset Selector */}
+        <div className="mb-6">
+          <AssetSelector 
+            selectedMarket={selectedMarket}
+            onMarketChange={setSelectedMarket}
+          />
         </div>
 
         <Tabs defaultValue="pnl" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="pnl">PnL Calculator</TabsTrigger>
-            <TabsTrigger value="liquidation">Liquidation Price</TabsTrigger>
-            <TabsTrigger value="target">Target Price</TabsTrigger>
+          <TabsList className="w-full justify-start mb-8 bg-transparent border-b border-border rounded-none p-0 h-auto">
+            <TabsTrigger 
+              value="pnl"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+            >
+              PnL
+            </TabsTrigger>
+            <TabsTrigger 
+              value="target"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+            >
+              Target Price
+            </TabsTrigger>
+            <TabsTrigger 
+              value="liquidation"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+            >
+              Liquidation Price
+            </TabsTrigger>
+            <TabsTrigger 
+              value="maxopen"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+            >
+              Max Open
+            </TabsTrigger>
+            <TabsTrigger 
+              value="openprice"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+            >
+              Open Price
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="pnl" className="space-y-4">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-foreground mb-1">
-                Profit & Loss Calculator
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Calculate potential profit, loss, and ROE for your trade
-              </p>
-            </div>
-            <PnLCalculator />
+          <TabsContent value="pnl" className="mt-6">
+            <PnLCalculator selectedMarket={selectedMarket} />
           </TabsContent>
 
-          <TabsContent value="liquidation" className="space-y-4">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-foreground mb-1">
-                Liquidation Price Estimator
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Estimate the price at which your position would be liquidated
-              </p>
-            </div>
+          <TabsContent value="target" className="mt-6">
+            <TargetPriceCalculator selectedMarket={selectedMarket} />
+          </TabsContent>
+
+          <TabsContent value="liquidation" className="mt-6">
             <LiquidationCalculator />
           </TabsContent>
 
-          <TabsContent value="target" className="space-y-4">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-foreground mb-1">
-                Target Price Calculator
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Find the exit price needed to achieve your desired ROE
-              </p>
-            </div>
-            <TargetPriceCalculator />
+          <TabsContent value="maxopen" className="mt-6">
+            <MaxOpenCalculator selectedMarket={selectedMarket} />
+          </TabsContent>
+
+          <TabsContent value="openprice" className="mt-6">
+            <OpenPriceCalculator selectedMarket={selectedMarket} />
           </TabsContent>
         </Tabs>
       </main>

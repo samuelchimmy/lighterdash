@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
-import { SideToggle } from "./SideToggle";
-import { LeverageInput } from "./LeverageInput";
-import { CalculatorInput } from "./CalculatorInput";
-import { CalculatorOutput } from "./CalculatorOutput";
+import { useState } from "react";
+import { EnhancedSideToggle } from "./EnhancedSideToggle";
+import { EnhancedLeverageInput } from "./EnhancedLeverageInput";
+import { EnhancedCalculatorInput } from "./EnhancedCalculatorInput";
+import { ResultsDisplay } from "./ResultsDisplay";
+import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import {
@@ -17,27 +18,26 @@ export function LiquidationCalculator() {
   const [side, setSide] = useState<Side>('long');
   const [leverage, setLeverage] = useState(10);
   const [entryPrice, setEntryPrice] = useState('');
-  const [liquidationPrice, setLiquidationPrice] = useState(0);
-  const [distanceToLiquidation, setDistanceToLiquidation] = useState(0);
+  const [liquidationPrice, setLiquidationPrice] = useState('--');
+  const [distanceToLiquidation, setDistanceToLiquidation] = useState('--');
 
-  useEffect(() => {
+  const handleCalculate = () => {
     const entry = parseNumberInput(entryPrice);
 
     if (entry > 0 && leverage > 0) {
       const liqPrice = calculateLiquidationPrice(side, entry, leverage);
-      setLiquidationPrice(liqPrice);
-
-      // Calculate distance to liquidation as percentage
       const distance = Math.abs((liqPrice - entry) / entry * 100);
-      setDistanceToLiquidation(distance);
+      
+      setLiquidationPrice(formatCurrency(liqPrice) + ' USDT');
+      setDistanceToLiquidation(formatPercentage(distance) + '%');
     } else {
-      setLiquidationPrice(0);
-      setDistanceToLiquidation(0);
+      setLiquidationPrice('--');
+      setDistanceToLiquidation('--');
     }
-  }, [side, leverage, entryPrice]);
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Alert className="border-yellow-500/50 bg-yellow-500/10">
         <AlertTriangle className="h-4 w-4 text-yellow-500" />
         <AlertDescription className="text-sm text-foreground">
@@ -45,39 +45,41 @@ export function LiquidationCalculator() {
         </AlertDescription>
       </Alert>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid md:grid-cols-2 gap-6">
         <div className="space-y-4">
-          <SideToggle side={side} onSideChange={setSide} />
-          <LeverageInput leverage={leverage} onLeverageChange={setLeverage} />
-        </div>
-        <div className="space-y-4">
-          <CalculatorInput
+          <EnhancedSideToggle side={side} onSideChange={setSide} />
+          
+          <EnhancedLeverageInput leverage={leverage} onLeverageChange={setLeverage} />
+          
+          <EnhancedCalculatorInput
             label="Entry Price"
             value={entryPrice}
             onChange={setEntryPrice}
-            placeholder="Enter price in USDC"
-            suffix="USDC"
+            suffix="USDT"
           />
-        </div>
-      </div>
 
-      <CalculatorOutput
-        title="Liquidation Estimate"
-        outputs={[
-          {
-            label: "Liquidation Price",
-            value: formatCurrency(liquidationPrice),
-            suffix: "USDC",
-            colorClass: "text-destructive",
-          },
-          {
-            label: "Distance to Liquidation",
-            value: formatPercentage(distanceToLiquidation),
-            suffix: "%",
-            colorClass: "text-muted-foreground",
-          },
-        ]}
-      />
+          <Button 
+            onClick={handleCalculate}
+            className="w-full h-12 bg-primary hover:bg-primary/90"
+          >
+            Calculate
+          </Button>
+        </div>
+
+        <ResultsDisplay
+          results={[
+            {
+              label: "Liquidation Price",
+              value: liquidationPrice,
+              colorClass: "text-destructive",
+            },
+            {
+              label: "Distance to Liquidation",
+              value: distanceToLiquidation,
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }

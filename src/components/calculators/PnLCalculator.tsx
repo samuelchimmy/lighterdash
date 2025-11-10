@@ -1,101 +1,105 @@
-import { useState, useEffect } from "react";
-import { SideToggle } from "./SideToggle";
-import { LeverageInput } from "./LeverageInput";
-import { CalculatorInput } from "./CalculatorInput";
-import { CalculatorOutput } from "./CalculatorOutput";
+import { useState } from "react";
+import { EnhancedSideToggle } from "./EnhancedSideToggle";
+import { EnhancedLeverageInput } from "./EnhancedLeverageInput";
+import { EnhancedCalculatorInput } from "./EnhancedCalculatorInput";
+import { ResultsDisplay } from "./ResultsDisplay";
+import { Button } from "@/components/ui/button";
 import {
-  calculateInitialMargin,
   calculatePnL,
   calculateROE,
+  calculateInitialMargin,
   formatCurrency,
-  formatPercentage,
   parseNumberInput,
-  getPnLColorClass,
   Side,
 } from "@/lib/calculator-utils";
+import type { Market } from "./AssetSelector";
 
-export function PnLCalculator() {
+interface PnLCalculatorProps {
+  selectedMarket: Market;
+}
+
+export function PnLCalculator({ selectedMarket }: PnLCalculatorProps) {
   const [side, setSide] = useState<Side>('long');
   const [leverage, setLeverage] = useState(10);
   const [entryPrice, setEntryPrice] = useState('');
   const [exitPrice, setExitPrice] = useState('');
   const [quantity, setQuantity] = useState('');
+  
+  const [initialMargin, setInitialMargin] = useState('--');
+  const [pnl, setPnl] = useState('--');
+  const [roe, setRoe] = useState('--');
 
-  const [initialMargin, setInitialMargin] = useState(0);
-  const [pnl, setPnl] = useState(0);
-  const [roe, setRoe] = useState(0);
-
-  useEffect(() => {
+  const handleCalculate = () => {
     const entry = parseNumberInput(entryPrice);
     const exit = parseNumberInput(exitPrice);
     const qty = parseNumberInput(quantity);
 
     if (entry > 0 && exit > 0 && qty > 0 && leverage > 0) {
       const margin = calculateInitialMargin(qty, entry, leverage);
-      const profitLoss = calculatePnL(side, entry, exit, qty);
-      const returnOnEquity = calculateROE(profitLoss, margin);
+      const calculatedPnl = calculatePnL(side, entry, exit, qty);
+      const calculatedRoe = calculateROE(calculatedPnl, margin);
 
-      setInitialMargin(margin);
-      setPnl(profitLoss);
-      setRoe(returnOnEquity);
+      setInitialMargin(formatCurrency(margin) + ' USDT');
+      setPnl(formatCurrency(calculatedPnl) + ' USDT');
+      setRoe(calculatedRoe.toFixed(2) + '%');
     } else {
-      setInitialMargin(0);
-      setPnl(0);
-      setRoe(0);
+      setInitialMargin('--');
+      setPnl('--');
+      setRoe('--');
     }
-  }, [side, leverage, entryPrice, exitPrice, quantity]);
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-4">
-          <SideToggle side={side} onSideChange={setSide} />
-          <LeverageInput leverage={leverage} onLeverageChange={setLeverage} />
-          <CalculatorInput
-            label="Entry Price"
-            value={entryPrice}
-            onChange={setEntryPrice}
-            placeholder="Enter price in USDC"
-            suffix="USDC"
-          />
-        </div>
-        <div className="space-y-4">
-          <CalculatorInput
-            label="Exit Price"
-            value={exitPrice}
-            onChange={setExitPrice}
-            placeholder="Enter price in USDC"
-            suffix="USDC"
-          />
-          <CalculatorInput
-            label="Quantity"
-            value={quantity}
-            onChange={setQuantity}
-            placeholder="Enter position size"
-            helpText="Size in base asset (e.g., BTC, ETH)"
-          />
-        </div>
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <EnhancedSideToggle side={side} onSideChange={setSide} />
+        
+        <EnhancedLeverageInput leverage={leverage} onLeverageChange={setLeverage} />
+        
+        <EnhancedCalculatorInput
+          label="Entry Price"
+          value={entryPrice}
+          onChange={setEntryPrice}
+          suffix="USDT"
+        />
+        
+        <EnhancedCalculatorInput
+          label="Exit Price"
+          value={exitPrice}
+          onChange={setExitPrice}
+          suffix="USDT"
+        />
+        
+        <EnhancedCalculatorInput
+          label="Quantity"
+          value={quantity}
+          onChange={setQuantity}
+          suffix={selectedMarket.baseAsset}
+        />
+
+        <Button 
+          onClick={handleCalculate}
+          className="w-full h-12 bg-primary hover:bg-primary/90"
+        >
+          Calculate
+        </Button>
       </div>
 
-      <CalculatorOutput
-        title="Calculation Results"
-        outputs={[
+      <ResultsDisplay
+        results={[
           {
             label: "Initial Margin",
-            value: formatCurrency(initialMargin),
-            suffix: "USDC",
+            value: initialMargin,
           },
           {
             label: "PnL",
-            value: formatCurrency(pnl),
-            suffix: "USDC",
-            colorClass: getPnLColorClass(pnl),
+            value: pnl,
+            colorClass: pnl.includes('-') ? 'text-loss' : pnl === '--' ? '' : 'text-profit',
           },
           {
-            label: "ROE",
-            value: formatPercentage(roe),
-            suffix: "%",
-            colorClass: getPnLColorClass(roe),
+            label: "ROI",
+            value: roe,
+            colorClass: roe.includes('-') ? 'text-loss' : roe === '--' ? '' : 'text-profit',
           },
         ]}
       />

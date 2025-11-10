@@ -1,101 +1,84 @@
-import { useState, useEffect } from "react";
-import { SideToggle } from "./SideToggle";
-import { LeverageInput } from "./LeverageInput";
-import { CalculatorInput } from "./CalculatorInput";
-import { CalculatorOutput } from "./CalculatorOutput";
+import { useState } from "react";
+import { EnhancedSideToggle } from "./EnhancedSideToggle";
+import { EnhancedLeverageInput } from "./EnhancedLeverageInput";
+import { EnhancedCalculatorInput } from "./EnhancedCalculatorInput";
+import { ResultsDisplay } from "./ResultsDisplay";
+import { Button } from "@/components/ui/button";
 import {
   calculateTargetPrice,
   formatCurrency,
-  formatPercentage,
   parseNumberInput,
-  getPnLColorClass,
   Side,
 } from "@/lib/calculator-utils";
+import type { Market } from "./AssetSelector";
 
-export function TargetPriceCalculator() {
+interface TargetPriceCalculatorProps {
+  selectedMarket: Market;
+}
+
+export function TargetPriceCalculator({ selectedMarket }: TargetPriceCalculatorProps) {
   const [side, setSide] = useState<Side>('long');
   const [leverage, setLeverage] = useState(10);
   const [entryPrice, setEntryPrice] = useState('');
   const [quantity, setQuantity] = useState('');
   const [roePercent, setRoePercent] = useState('');
+  const [targetPrice, setTargetPrice] = useState('--');
 
-  const [targetPrice, setTargetPrice] = useState(0);
-  const [priceMovement, setPriceMovement] = useState(0);
-  const [priceMovementPercent, setPriceMovementPercent] = useState(0);
-
-  useEffect(() => {
+  const handleCalculate = () => {
     const entry = parseNumberInput(entryPrice);
     const qty = parseNumberInput(quantity);
     const roe = parseNumberInput(roePercent);
 
     if (entry > 0 && qty > 0 && leverage > 0) {
       const target = calculateTargetPrice(side, entry, qty, leverage, roe);
-      setTargetPrice(target);
-
-      const movement = target - entry;
-      const movementPercent = (movement / entry) * 100;
-      setPriceMovement(movement);
-      setPriceMovementPercent(movementPercent);
+      setTargetPrice(formatCurrency(target) + ' USDT');
     } else {
-      setTargetPrice(0);
-      setPriceMovement(0);
-      setPriceMovementPercent(0);
+      setTargetPrice('--');
     }
-  }, [side, leverage, entryPrice, quantity, roePercent]);
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-4">
-          <SideToggle side={side} onSideChange={setSide} />
-          <LeverageInput leverage={leverage} onLeverageChange={setLeverage} />
-          <CalculatorInput
-            label="Entry Price"
-            value={entryPrice}
-            onChange={setEntryPrice}
-            placeholder="Enter price in USDC"
-            suffix="USDC"
-          />
-        </div>
-        <div className="space-y-4">
-          <CalculatorInput
-            label="Quantity"
-            value={quantity}
-            onChange={setQuantity}
-            placeholder="Enter position size"
-            helpText="Size in base asset (e.g., BTC, ETH)"
-          />
-          <CalculatorInput
-            label="Desired ROE"
-            value={roePercent}
-            onChange={setRoePercent}
-            placeholder="Enter target ROE"
-            suffix="%"
-            helpText="Target return on equity percentage"
-          />
-        </div>
+    <div className="grid md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <EnhancedSideToggle side={side} onSideChange={setSide} />
+        
+        <EnhancedLeverageInput leverage={leverage} onLeverageChange={setLeverage} />
+        
+        <EnhancedCalculatorInput
+          label="Entry Price"
+          value={entryPrice}
+          onChange={setEntryPrice}
+          suffix="USDT"
+        />
+        
+        <EnhancedCalculatorInput
+          label="Quantity"
+          value={quantity}
+          onChange={setQuantity}
+          suffix={selectedMarket.baseAsset}
+        />
+        
+        <EnhancedCalculatorInput
+          label="Desired ROE %"
+          value={roePercent}
+          onChange={setRoePercent}
+          suffix="%"
+        />
+
+        <Button 
+          onClick={handleCalculate}
+          className="w-full h-12 bg-primary hover:bg-primary/90"
+        >
+          Calculate
+        </Button>
       </div>
 
-      <CalculatorOutput
-        title="Target Price Analysis"
-        outputs={[
+      <ResultsDisplay
+        results={[
           {
             label: "Target Price",
-            value: formatCurrency(targetPrice),
-            suffix: "USDC",
-            colorClass: getPnLColorClass(parseNumberInput(roePercent)),
-          },
-          {
-            label: "Price Movement Needed",
-            value: formatCurrency(Math.abs(priceMovement)),
-            suffix: "USDC",
-            colorClass: "text-muted-foreground",
-          },
-          {
-            label: "Movement %",
-            value: formatPercentage(Math.abs(priceMovementPercent)),
-            suffix: "%",
-            colorClass: "text-muted-foreground",
+            value: targetPrice,
+            colorClass: "text-primary",
           },
         ]}
       />

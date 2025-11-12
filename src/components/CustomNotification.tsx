@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -53,7 +54,7 @@ export const CustomNotification = ({ notification, onClose }: CustomNotification
   return (
     <div
       className={cn(
-        "fixed bottom-4 right-4 w-96 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 z-[9999]",
+        "relative w-96 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 z-[100000] pointer-events-auto",
         bgClass,
         isVisible && !isLeaving ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       )}
@@ -96,13 +97,12 @@ export const CustomNotificationContainer = ({
   notifications: CustomNotificationData[];
   onClose: (id: string) => void;
 }) => {
-  return (
-    <>
-      {notifications.map((notification, index) => (
-        <div key={notification.id} style={{ bottom: `${(index * 120) + 16}px` }} className="fixed right-0">
-          <CustomNotification notification={notification} onClose={onClose} />
-        </div>
+  return createPortal(
+    <div className="fixed bottom-4 right-4 z-[100000] flex flex-col-reverse items-end gap-3 pointer-events-none">
+      {notifications.map((notification) => (
+        <CustomNotification key={notification.id} notification={notification} onClose={onClose} />
       ))}
-    </>
+    </div>,
+    document.body
   );
 };

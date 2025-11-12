@@ -11,7 +11,22 @@ import { TrendingUp, TrendingDown, Activity, ChevronDown, Search, Star, Bell } f
 import { resolveMarketSymbol, loadMarkets, subscribeMarkets, ensureMarkets } from "@/lib/markets";
 import { Button } from "@/components/ui/button";
 import { MarketAlertDialog, MarketAlert } from "./MarketAlertDialog";
+import { AlertHistory, AlertHistoryItem } from "./AlertHistory";
+import { ActiveAlertsPanel } from "./ActiveAlertsPanel";
 import { useToast } from "@/hooks/use-toast";
+import { alertSoundManager } from "@/lib/alert-sounds";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Settings, Volume2 } from "lucide-react";
 
 export function MarketStats() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
@@ -25,8 +40,13 @@ export function MarketStats() {
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [selectedMarketId, setSelectedMarketId] = useState<number | null>(null);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>("default");
+  const [alertHistory, setAlertHistory] = useState<AlertHistoryItem[]>([]);
+  const [lastAlertTime, setLastAlertTime] = useState<Record<string, number>>({});
+  const [soundSettings, setSoundSettings] = useState(alertSoundManager.getSettings());
   const previousVolumes = useRef<Record<number, number>>({});
   const { toast } = useToast();
+
+  const ALERT_COOLDOWN = 5 * 60 * 1000; // 5 minutes cooldown between same alerts
 
   // Request notification permission
   useEffect(() => {
@@ -62,6 +82,15 @@ export function MarketStats() {
         console.error('Failed to parse alerts:', error);
       }
     }
+
+    const historyStored = localStorage.getItem('lighter-alert-history');
+    if (historyStored) {
+      try {
+        setAlertHistory(JSON.parse(historyStored));
+      } catch (error) {
+        console.error('Failed to parse alert history:', error);
+      }
+    }
   }, []);
 
   // Save favorites to localStorage
@@ -73,6 +102,11 @@ export function MarketStats() {
   useEffect(() => {
     localStorage.setItem('lighter-market-alerts', JSON.stringify(alerts));
   }, [alerts]);
+
+  // Save alert history to localStorage
+  useEffect(() => {
+    localStorage.setItem('lighter-alert-history', JSON.stringify(alertHistory));
+  }, [alertHistory]);
 
   // Toggle favorite
   const toggleFavorite = (marketId: number) => {
@@ -101,6 +135,78 @@ export function MarketStats() {
     });
   };
 
+  // Delete alert
+  const deleteAlert = (marketId: number) => {
+    setAlerts(prev => {
+      const newAlerts = { ...prev };
+      delete newAlerts[marketId];
+      return newAlerts;
+    });
+    toast({
+      title: "Alert Deleted",
+      description: `Alerts removed for ${resolveMarketSymbol(marketId)}`,
+    });
+  };
+
+  // Toggle specific alert type
+  const toggleAlertType = (marketId: number, alertType: keyof MarketAlert, enabled: boolean) => {
+    setAlerts(prev => {
+      const currentAlert = prev[marketId];
+      if (!currentAlert) return prev;
+
+      const updatedAlert: MarketAlert = {
+        ...currentAlert,
+        [alertType]: {
+          ...(currentAlert[alertType] as object),
+          enabled,
+        },
+      };
+
+      return {
+        ...prev,
+        [marketId]: updatedAlert,
+      };
+    });
+  };
+
+  // Add to alert history
+  const addToHistory = (item: Omit<AlertHistoryItem, "id">) => {
+    const newItem: AlertHistoryItem = {
+      ...item,
+      id: `${item.marketId}-${item.type}-${Date.now()}`,
+    };
+    setAlertHistory(prev => [newItem, ...prev].slice(0, 100)); // Keep last 100 alerts
+  };
+
+  // Clear alert history
+  const clearHistory = () => {
+    setAlertHistory([]);
+    toast({
+      title: "History Cleared",
+      description: "All alert history has been removed",
+    });
+  };
+
+  // Remove single history item
+  const removeHistoryItem = (id: string) => {
+    setAlertHistory(prev => prev.filter(item => item.id !== id));
+  };
+
+  // Check if alert should be sent (cooldown check)
+  const shouldSendAlert = (alertKey: string): boolean => {
+    const lastTime = lastAlertTime[alertKey];
+    if (!lastTime) return true;
+    return Date.now() - lastTime > ALERT_COOLDOWN;
+  };
+
+  // Record alert sent
+  const recordAlertSent = (alertKey: string) => {
+    setLastAlertTime(prev => ({
+      ...prev,
+      [alertKey]: Date.now(),
+    }));
+  };
+
   // Check alerts
   useEffect(() => {
     if (Object.keys(markets).length === 0) return;
@@ -118,16 +224,22 @@ export function MarketStats() {
       // Check price alerts
       if (alert.priceThreshold?.enabled) {
         if (alert.priceThreshold.above && price >= alert.priceThreshold.above) {
-          sendNotification(
-            `${symbol} Price Alert`,
-            `Price is now $${price.toLocaleString()}, above threshold of $${alert.priceThreshold.above.toLocaleString()}`
-          );
+          const alertKey = `price-above-${marketId}`;
+          if (shouldSendAlert(alertKey)) {
+            const message = `Price is now $${price.toLocaleString()}, above threshold of $${alert.priceThreshold.above.toLocaleString()}`;
+            sendNotification(`${symbol} Price Alert`, message, 'price');
+            addToHistory({ marketId, marketSymbol: symbol, type: 'price', message, timestamp: Date.now() });
+            recordAlertSent(alertKey);
+          }
         }
         if (alert.priceThreshold.below && price <= alert.priceThreshold.below) {
-          sendNotification(
-            `${symbol} Price Alert`,
-            `Price is now $${price.toLocaleString()}, below threshold of $${alert.priceThreshold.below.toLocaleString()}`
-          );
+          const alertKey = `price-below-${marketId}`;
+          if (shouldSendAlert(alertKey)) {
+            const message = `Price is now $${price.toLocaleString()}, below threshold of $${alert.priceThreshold.below.toLocaleString()}`;
+            sendNotification(`${symbol} Price Alert`, message, 'price');
+            addToHistory({ marketId, marketSymbol: symbol, type: 'price', message, timestamp: Date.now() });
+            recordAlertSent(alertKey);
+          }
         }
       }
 
@@ -137,10 +249,13 @@ export function MarketStats() {
         if (previousVolume) {
           const percentageIncrease = ((currentVolume - previousVolume) / previousVolume) * 100;
           if (percentageIncrease >= alert.volumeSpike.percentageIncrease) {
-            sendNotification(
-              `${symbol} Volume Spike`,
-              `Volume increased by ${percentageIncrease.toFixed(1)}%`
-            );
+            const alertKey = `volume-${marketId}`;
+            if (shouldSendAlert(alertKey)) {
+              const message = `Volume increased by ${percentageIncrease.toFixed(1)}%`;
+              sendNotification(`${symbol} Volume Spike`, message, 'volume');
+              addToHistory({ marketId, marketSymbol: symbol, type: 'volume', message, timestamp: Date.now() });
+              recordAlertSent(alertKey);
+            }
           }
         }
         previousVolumes.current[marketId] = currentVolume;
@@ -149,23 +264,39 @@ export function MarketStats() {
       // Check funding rate alerts
       if (alert.fundingRate?.enabled) {
         if (alert.fundingRate.above && fundingRate >= alert.fundingRate.above) {
-          sendNotification(
-            `${symbol} Funding Rate Alert`,
-            `Funding rate is now ${fundingRate.toFixed(4)}%, above threshold of ${alert.fundingRate.above}%`
-          );
+          const alertKey = `funding-above-${marketId}`;
+          if (shouldSendAlert(alertKey)) {
+            const message = `Funding rate is now ${fundingRate.toFixed(4)}%, above threshold of ${alert.fundingRate.above}%`;
+            sendNotification(`${symbol} Funding Rate Alert`, message, 'funding');
+            addToHistory({ marketId, marketSymbol: symbol, type: 'funding', message, timestamp: Date.now() });
+            recordAlertSent(alertKey);
+          }
         }
         if (alert.fundingRate.below && fundingRate <= alert.fundingRate.below) {
-          sendNotification(
-            `${symbol} Funding Rate Alert`,
-            `Funding rate is now ${fundingRate.toFixed(4)}%, below threshold of ${alert.fundingRate.below}%`
-          );
+          const alertKey = `funding-below-${marketId}`;
+          if (shouldSendAlert(alertKey)) {
+            const message = `Funding rate is now ${fundingRate.toFixed(4)}%, below threshold of ${alert.fundingRate.below}%`;
+            sendNotification(`${symbol} Funding Rate Alert`, message, 'funding');
+            addToHistory({ marketId, marketSymbol: symbol, type: 'funding', message, timestamp: Date.now() });
+            recordAlertSent(alertKey);
+          }
         }
       }
     });
   }, [markets, alerts]);
 
-  // Send browser notification
-  const sendNotification = (title: string, body: string) => {
+  // Send browser notification and play sound
+  const sendNotification = (title: string, body: string, type: 'price' | 'volume' | 'funding') => {
+    // Play sound
+    if (type === 'price') {
+      alertSoundManager.playPriceAlert();
+    } else if (type === 'volume') {
+      alertSoundManager.playVolumeAlert();
+    } else if (type === 'funding') {
+      alertSoundManager.playFundingAlert();
+    }
+
+    // Browser notification
     if (notificationPermission === "granted") {
       new Notification(title, {
         body,
@@ -173,7 +304,8 @@ export function MarketStats() {
         badge: "/favicon.ico",
       });
     }
-    // Also show toast
+    
+    // Toast notification
     toast({
       title,
       description: body,
@@ -360,6 +492,105 @@ export function MarketStats() {
         </CardHeader>
         <CollapsibleContent>
           <CardContent className="space-y-6">
+        {/* Sound Settings Dialog */}
+        <div className="flex justify-end">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Settings className="h-4 w-4" />
+                Alert Settings
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Alert Sound Settings</DialogTitle>
+                <DialogDescription>
+                  Configure sound notifications for market alerts
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-6 py-4">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="sound-enabled">Enable Sound Alerts</Label>
+                  <Switch
+                    id="sound-enabled"
+                    checked={soundSettings.enabled}
+                    onCheckedChange={(enabled) => {
+                      alertSoundManager.setSoundEnabled(enabled);
+                      setSoundSettings(alertSoundManager.getSettings());
+                    }}
+                  />
+                </div>
+                {soundSettings.enabled && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="volume">Volume</Label>
+                      <span className="text-sm text-muted-foreground">
+                        {Math.round(soundSettings.volume * 100)}%
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Volume2 className="h-4 w-4 text-muted-foreground" />
+                      <Slider
+                        id="volume"
+                        value={[soundSettings.volume]}
+                        onValueChange={([value]) => {
+                          alertSoundManager.setVolume(value);
+                          setSoundSettings(alertSoundManager.getSettings());
+                        }}
+                        max={1}
+                        step={0.1}
+                        className="flex-1"
+                      />
+                    </div>
+                    <div className="space-y-2 pt-4">
+                      <p className="text-sm font-medium">Test Sounds</p>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => alertSoundManager.playPriceAlert()}
+                        >
+                          Price Alert
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => alertSoundManager.playVolumeAlert()}
+                        >
+                          Volume Alert
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => alertSoundManager.playFundingAlert()}
+                        >
+                          Funding Alert
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {/* Active Alerts Panel */}
+        <ActiveAlertsPanel
+          alerts={alerts}
+          getMarketSymbol={resolveMarketSymbol}
+          onEdit={openAlertDialog}
+          onDelete={deleteAlert}
+          onToggleAlert={toggleAlertType}
+        />
+
+        {/* Alert History */}
+        <AlertHistory
+          history={alertHistory}
+          onClear={clearHistory}
+          onRemove={removeHistoryItem}
+        />
+
         {/* Watchlist Summary */}
         {watchlistMetrics.count > 0 && (
           <div className="p-4 rounded-lg border bg-gradient-to-r from-primary/10 to-primary/5">

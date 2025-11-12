@@ -87,56 +87,114 @@ class AlertSoundManager {
     oscillator.stop(context.currentTime + duration);
   }
 
-  // Eye-catching rising chime for price alerts
+  // Dramatic, attention-grabbing alert for price changes
   async playPriceAlert() {
     if (!this.soundEnabled) return;
 
     const context = this.getContext();
     const now = context.currentTime;
     
-    // Create three notes rising in pitch (like a notification chime)
-    const notes = [
-      { freq: 523.25, start: 0, duration: 0.15 },      // C5
-      { freq: 659.25, start: 0.12, duration: 0.15 },   // E5
-      { freq: 783.99, start: 0.24, duration: 0.25 },   // G5
+    // Create a dramatic rising sweep with multiple layers
+    const duration = 1.2;
+    
+    // Layer 1: Rising frequency sweep (siren-like)
+    const sweep = context.createOscillator();
+    const sweepGain = context.createGain();
+    sweep.connect(sweepGain);
+    sweepGain.connect(context.destination);
+    
+    sweep.type = 'sine';
+    sweep.frequency.setValueAtTime(400, now);
+    sweep.frequency.exponentialRampToValueAtTime(1200, now + 0.4);
+    sweep.frequency.exponentialRampToValueAtTime(800, now + 0.8);
+    sweep.frequency.exponentialRampToValueAtTime(1400, now + duration);
+    
+    sweepGain.gain.setValueAtTime(0, now);
+    sweepGain.gain.linearRampToValueAtTime(this.volume * 0.8, now + 0.05);
+    sweepGain.gain.setValueAtTime(this.volume * 0.8, now + duration - 0.2);
+    sweepGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    
+    sweep.start(now);
+    sweep.stop(now + duration);
+
+    // Layer 2: Pulsing bass tone for power
+    const bass = context.createOscillator();
+    const bassGain = context.createGain();
+    const bassTremolo = context.createGain();
+    const tremoloOsc = context.createOscillator();
+    
+    bass.connect(bassGain);
+    bassGain.connect(bassTremolo);
+    bassTremolo.connect(context.destination);
+    
+    // Tremolo effect (pulsing)
+    tremoloOsc.connect(bassTremolo.gain);
+    tremoloOsc.frequency.value = 8; // 8Hz pulse
+    tremoloOsc.start(now);
+    tremoloOsc.stop(now + duration);
+    
+    bass.type = 'triangle';
+    bass.frequency.value = 200;
+    
+    bassGain.gain.setValueAtTime(0, now);
+    bassGain.gain.linearRampToValueAtTime(this.volume * 0.6, now + 0.1);
+    bassGain.gain.setValueAtTime(this.volume * 0.6, now + duration - 0.2);
+    bassGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    
+    bassTremolo.gain.setValueAtTime(0.5, now);
+    
+    bass.start(now);
+    bass.stop(now + duration);
+
+    // Layer 3: High-pitched accent notes for sparkle
+    const accents = [
+      { time: 0.3, freq: 1568, duration: 0.15 },
+      { time: 0.5, freq: 1760, duration: 0.15 },
+      { time: 0.7, freq: 1976, duration: 0.2 },
     ];
 
-    notes.forEach(note => {
-      // Primary oscillator
+    accents.forEach(accent => {
       const osc = context.createOscillator();
       const gain = context.createGain();
       
       osc.connect(gain);
       gain.connect(context.destination);
       
-      osc.frequency.value = note.freq;
-      osc.type = 'sine';
+      osc.type = 'square';
+      osc.frequency.value = accent.freq;
       
-      // Envelope
-      gain.gain.setValueAtTime(0, now + note.start);
-      gain.gain.linearRampToValueAtTime(this.volume * 0.7, now + note.start + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + note.start + note.duration);
+      gain.gain.setValueAtTime(0, now + accent.time);
+      gain.gain.linearRampToValueAtTime(this.volume * 0.5, now + accent.time + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + accent.time + accent.duration);
       
-      osc.start(now + note.start);
-      osc.stop(now + note.start + note.duration);
-
-      // Add harmonic for richness
-      const harmonic = context.createOscillator();
-      const harmonicGain = context.createGain();
-      
-      harmonic.connect(harmonicGain);
-      harmonicGain.connect(context.destination);
-      
-      harmonic.frequency.value = note.freq * 2; // One octave higher
-      harmonic.type = 'sine';
-      
-      harmonicGain.gain.setValueAtTime(0, now + note.start);
-      harmonicGain.gain.linearRampToValueAtTime(this.volume * 0.3, now + note.start + 0.02);
-      harmonicGain.gain.exponentialRampToValueAtTime(0.001, now + note.start + note.duration);
-      
-      harmonic.start(now + note.start);
-      harmonic.stop(now + note.start + note.duration);
+      osc.start(now + accent.time);
+      osc.stop(now + accent.time + accent.duration);
     });
+
+    // Layer 4: White noise burst for impact at the start
+    const noiseBuffer = context.createBuffer(1, context.sampleRate * 0.1, context.sampleRate);
+    const noiseData = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < noiseData.length; i++) {
+      noiseData[i] = Math.random() * 2 - 1;
+    }
+    
+    const noise = context.createBufferSource();
+    const noiseGain = context.createGain();
+    const noiseFilter = context.createBiquadFilter();
+    
+    noise.buffer = noiseBuffer;
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(context.destination);
+    
+    noiseFilter.type = 'highpass';
+    noiseFilter.frequency.value = 1000;
+    
+    noiseGain.gain.setValueAtTime(this.volume * 0.3, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+    
+    noise.start(now);
+    noise.stop(now + 0.1);
   }
 
   async playVolumeAlert() {

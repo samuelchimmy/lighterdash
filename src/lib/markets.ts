@@ -27,17 +27,23 @@ export async function loadMarkets(): Promise<void> {
 
   loadPromise = (async () => {
     try {
+      console.log('🔄 Loading markets from API...');
       const markets = await lighterApi.getAllMarkets();
+      console.log(`📊 Received ${markets.length} markets:`, markets);
+      
       if (markets.length > 0) {
         runtimeMapping.clear();
         markets.forEach(m => {
+          console.log(`➕ Adding market: ${m.market_index} -> ${m.symbol}`);
           runtimeMapping.set(m.market_index, m.symbol);
         });
         isLoaded = true;
-        console.log(`✅ Loaded ${markets.length} markets from API`);
+        console.log(`✅ Loaded ${markets.length} markets. Current mapping:`, Array.from(runtimeMapping.entries()));
+      } else {
+        console.warn('⚠️ No markets returned from API, using fallback');
       }
     } catch (error) {
-      console.error('Failed to load markets, using fallback:', error);
+      console.error('❌ Failed to load markets:', error);
     }
   })();
 

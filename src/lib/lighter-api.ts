@@ -16,17 +16,31 @@ export const lighterApi = {
   async getAllMarkets(): Promise<MarketDetail[]> {
     try {
       const response = await axios.get(`${BASE_URL}/api/v1/orderBookDetails`);
-      const markets = response.data.order_books || [];
+      console.log('📊 Raw API response:', response.data);
       
-      return markets.map((market: any) => ({
-        market_index: market.market_index,
-        symbol: market.symbol || `MARKET-${market.market_index}`,
-        base_asset: market.symbol ? market.symbol.split('-')[0] : 'UNKNOWN',
-        asks: market.asks || [],
-        bids: market.bids || [],
-      }));
+      const orderBooks = response.data.order_books || response.data;
+      console.log('📊 Order books:', orderBooks);
+      
+      if (!Array.isArray(orderBooks)) {
+        console.error('❌ Order books is not an array:', orderBooks);
+        return [];
+      }
+      
+      const markets = orderBooks.map((book: any) => {
+        console.log('📊 Processing book:', book);
+        return {
+          market_index: book.market_index ?? book.market_id ?? book.index,
+          symbol: book.symbol || `MARKET-${book.market_index || book.market_id || 'UNKNOWN'}`,
+          base_asset: book.symbol ? book.symbol.split('-')[0] : 'UNKNOWN',
+          asks: book.asks || [],
+          bids: book.bids || [],
+        };
+      });
+      
+      console.log('✅ Processed markets:', markets);
+      return markets;
     } catch (error) {
-      console.error('Error fetching markets:', error);
+      console.error('❌ Error fetching markets:', error);
       return [];
     }
   },

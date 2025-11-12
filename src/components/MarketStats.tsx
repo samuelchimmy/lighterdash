@@ -5,14 +5,24 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
-
-import { resolveMarketSymbol } from "@/lib/markets";
+import { resolveMarketSymbol, loadMarkets } from "@/lib/markets";
 
 export function MarketStats() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [marketsLoaded, setMarketsLoaded] = useState(false);
+
+  // Load markets first
+  useEffect(() => {
+    loadMarkets().then(() => {
+      console.log('✅ Markets loaded, ready to display');
+      setMarketsLoaded(true);
+    });
+  }, []);
 
   useEffect(() => {
+    if (!marketsLoaded) return;
+
     const ws = lighterApi.createWebSocket();
 
     ws.onopen = () => {
@@ -67,7 +77,7 @@ export function MarketStats() {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [marketsLoaded]);
 
   if (isLoading) {
     return (

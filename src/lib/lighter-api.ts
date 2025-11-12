@@ -19,56 +19,29 @@ export const lighterApi = {
       const raw = response.data;
       console.log('📊 Raw API response:', raw);
 
-      // Normalize into an array regardless of server shape
-      const orderBooks: any[] = Array.isArray(raw)
-        ? raw
-        : Array.isArray(raw.order_books)
-          ? raw.order_books
-          : Array.isArray(raw.orderBookDetails)
-            ? raw.orderBookDetails
-            : (raw && typeof raw === 'object')
-              ? Object.values(raw)
-              : [];
-
-      if (!Array.isArray(orderBooks) || orderBooks.length === 0) {
-        console.warn('⚠️ No order books found in response');
+      // The API returns { code: 200, order_book_details: [...] }
+      const orderBooks = raw.order_book_details || [];
+      
+      if (!Array.isArray(orderBooks)) {
+        console.error('❌ order_book_details is not an array');
         return [];
       }
 
-      const markets: MarketDetail[] = orderBooks
-        .map((book: any) => {
-          const id = Number(
-            book.market_index ?? book.market_id ?? book.index ?? book.marketId ?? book.id
-          );
+      const markets = orderBooks.map((book: any) => {
+        const marketId = book.market_id ?? book.market_index;
+        const baseSymbol = book.symbol; // e.g., "STBL", "ETH", "BTC"
+        const fullSymbol = baseSymbol ? `${baseSymbol}-USD` : `MARKET-${marketId}`;
+        
+        return {
+          market_index: marketId,
+          symbol: fullSymbol,
+          base_asset: baseSymbol || 'UNKNOWN',
+          asks: book.asks || [],
+          bids: book.bids || [],
+        };
+      });
 
-          // Try multiple symbol field candidates and fallbacks
-          const rawSymbol: string | undefined = (
-            book.symbol ||
-            book.pair ||
-            book.market_symbol ||
-            book.name ||
-            (book.base_symbol && book.quote_symbol
-              ? `${book.base_symbol}-${book.quote_symbol}`
-              : undefined) ||
-            (book.meta && (book.meta.symbol || book.meta.pair))
-          );
-
-          const symbol = rawSymbol ? String(rawSymbol).toUpperCase() : undefined;
-          const base = symbol?.includes('-') ? symbol.split('-')[0] : undefined;
-
-          return id >= 0
-            ? {
-                market_index: id,
-                symbol: symbol || `MARKET-${id}`,
-                base_asset: base || 'UNKNOWN',
-                asks: book.asks || [],
-                bids: book.bids || [],
-              }
-            : null;
-        })
-        .filter(Boolean) as MarketDetail[];
-
-      console.log('✅ Processed markets (first 10):', markets.slice(0, 10));
+      console.log(`✅ Processed ${markets.length} markets (first 10):`, markets.slice(0, 10));
       return markets;
     } catch (error) {
       console.error('❌ Error fetching markets:', error);
@@ -83,31 +56,20 @@ export const lighterApi = {
       });
       const raw = response.data;
 
-      const book = Array.isArray(raw)
-        ? raw.find((b: any) => (b.market_index ?? b.market_id ?? b.index) == marketIndex)
-        : raw?.order_books?.find?.((b: any) => (b.market_index ?? b.market_id ?? b.index) == marketIndex) ?? raw;
-
+      // Single market returns { code: 200, order_book_details: [{ ... }] }
+      const books = raw.order_book_details || [];
+      const book = books[0];
+      
       if (!book) return null;
 
-      const id = Number(book.market_index ?? book.market_id ?? book.index ?? marketIndex);
-      const rawSymbol: string | undefined = (
-        book.symbol ||
-        book.pair ||
-        book.market_symbol ||
-        book.name ||
-        (book.base_symbol && book.quote_symbol
-          ? `${book.base_symbol}-${book.quote_symbol}`
-          : undefined) ||
-        (book.meta && (book.meta.symbol || book.meta.pair))
-      );
-
-      const symbol = rawSymbol ? String(rawSymbol).toUpperCase() : undefined;
-      const base = symbol?.includes('-') ? symbol.split('-')[0] : undefined;
+      const marketId = book.market_id ?? book.market_index ?? marketIndex;
+      const baseSymbol = book.symbol;
+      const fullSymbol = baseSymbol ? `${baseSymbol}-USD` : `MARKET-${marketId}`;
 
       return {
-        market_index: id,
-        symbol: symbol || `MARKET-${id}`,
-        base_asset: base || 'UNKNOWN',
+        market_index: marketId,
+        symbol: fullSymbol,
+        base_asset: baseSymbol || 'UNKNOWN',
         asks: book.asks || [],
         bids: book.bids || [],
       };
@@ -116,6 +78,7 @@ export const lighterApi = {
       return null;
     }
   },
+
 
   async getAccountIndex(l1Address: string): Promise<number | null> {
     try {

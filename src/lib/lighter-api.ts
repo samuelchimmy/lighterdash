@@ -16,28 +16,59 @@ export const lighterApi = {
   async getAllMarkets(): Promise<MarketDetail[]> {
     try {
       const response = await axios.get(`${BASE_URL}/api/v1/orderBookDetails`);
-      console.log('📊 Raw API response:', response.data);
-      
-      const orderBooks = response.data.order_books || response.data;
-      console.log('📊 Order books:', orderBooks);
-      
-      if (!Array.isArray(orderBooks)) {
-        console.error('❌ Order books is not an array:', orderBooks);
+      const raw = response.data;
+      console.log('📊 Raw API response:', raw);
+
+      // Normalize into an array regardless of server shape
+      const orderBooks: any[] = Array.isArray(raw)
+        ? raw
+        : Array.isArray(raw.order_books)
+          ? raw.order_books
+          : Array.isArray(raw.orderBookDetails)
+            ? raw.orderBookDetails
+            : (raw && typeof raw === 'object')
+              ? Object.values(raw)
+              : [];
+
+      if (!Array.isArray(orderBooks) || orderBooks.length === 0) {
+        console.warn('⚠️ No order books found in response');
         return [];
       }
-      
-      const markets = orderBooks.map((book: any) => {
-        console.log('📊 Processing book:', book);
-        return {
-          market_index: book.market_index ?? book.market_id ?? book.index,
-          symbol: book.symbol || `MARKET-${book.market_index || book.market_id || 'UNKNOWN'}`,
-          base_asset: book.symbol ? book.symbol.split('-')[0] : 'UNKNOWN',
-          asks: book.asks || [],
-          bids: book.bids || [],
-        };
-      });
-      
-      console.log('✅ Processed markets:', markets);
+
+      const markets: MarketDetail[] = orderBooks
+        .map((book: any) => {
+          const id = Number(
+            book.market_index ?? book.market_id ?? book.index ?? book.marketId ?? book.id
+          );
+
+          // Try multiple symbol field candidates and fallbacks
+          const rawSymbol: string | undefined = (
+            book.symbol ||
+            book.pair ||
+            book.market_symbol ||
+            book.name ||
+            (book.base_symbol && book.quote_symbol
+              ? `${book.base_symbol}-${book.quote_symbol}`
+              : undefined) ||
+            (book.meta && (book.meta.symbol || book.meta.pair))
+          );
+
+          const symbol = rawSymbol ? String(rawSymbol).toUpperCase() : undefined;
+          const base = symbol?.includes('-') ? symbol.split('-')[0] : undefined;
+
+          return id >= 0
+            ? {
+                market_index: id,
+                symbol: symbol || `MARKET-${id}`,
+                base_asset: base || 'UNKNOWN',
+                asks: book.asks || [],
+                bids: book.bids || [],
+              }
+            : null;
+        })
+        .filter(Boolean) as MarketDetail[];
+
+      console.log('✅ Processed markets (first 10):', markets.slice(0, 10));
       return markets;
     } catch (error) {
       console.error('❌ Error fetching markets:', error);

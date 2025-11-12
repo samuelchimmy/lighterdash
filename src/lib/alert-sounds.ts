@@ -87,9 +87,56 @@ class AlertSoundManager {
     oscillator.stop(context.currentTime + duration);
   }
 
+  // Eye-catching rising chime for price alerts
   async playPriceAlert() {
-    // High-pitched single beep
-    await this.playTone(800, 0.3, 'single');
+    if (!this.soundEnabled) return;
+
+    const context = this.getContext();
+    const now = context.currentTime;
+    
+    // Create three notes rising in pitch (like a notification chime)
+    const notes = [
+      { freq: 523.25, start: 0, duration: 0.15 },      // C5
+      { freq: 659.25, start: 0.12, duration: 0.15 },   // E5
+      { freq: 783.99, start: 0.24, duration: 0.25 },   // G5
+    ];
+
+    notes.forEach(note => {
+      // Primary oscillator
+      const osc = context.createOscillator();
+      const gain = context.createGain();
+      
+      osc.connect(gain);
+      gain.connect(context.destination);
+      
+      osc.frequency.value = note.freq;
+      osc.type = 'sine';
+      
+      // Envelope
+      gain.gain.setValueAtTime(0, now + note.start);
+      gain.gain.linearRampToValueAtTime(this.volume * 0.7, now + note.start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + note.start + note.duration);
+      
+      osc.start(now + note.start);
+      osc.stop(now + note.start + note.duration);
+
+      // Add harmonic for richness
+      const harmonic = context.createOscillator();
+      const harmonicGain = context.createGain();
+      
+      harmonic.connect(harmonicGain);
+      harmonicGain.connect(context.destination);
+      
+      harmonic.frequency.value = note.freq * 2; // One octave higher
+      harmonic.type = 'sine';
+      
+      harmonicGain.gain.setValueAtTime(0, now + note.start);
+      harmonicGain.gain.linearRampToValueAtTime(this.volume * 0.3, now + note.start + 0.02);
+      harmonicGain.gain.exponentialRampToValueAtTime(0.001, now + note.start + note.duration);
+      
+      harmonic.start(now + note.start);
+      harmonic.stop(now + note.start + note.duration);
+    });
   }
 
   async playVolumeAlert() {

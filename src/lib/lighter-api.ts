@@ -4,7 +4,33 @@ import type { AccountResponse, AccountSnapshot, Position, LighterTrade, MarketSt
 const BASE_URL = 'https://mainnet.zklighter.elliot.ai';
 const WS_URL = 'wss://mainnet.zklighter.elliot.ai/stream';
 
+export interface MarketDetail {
+  market_index: number;
+  symbol: string;
+  base_asset: string;
+  asks: Array<{ price: string; size: string }>;
+  bids: Array<{ price: string; size: string }>;
+}
+
 export const lighterApi = {
+  async getAllMarkets(): Promise<MarketDetail[]> {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/v1/orderBookDetails`);
+      const markets = response.data.order_books || [];
+      
+      return markets.map((market: any) => ({
+        market_index: market.market_index,
+        symbol: market.symbol || `MARKET-${market.market_index}`,
+        base_asset: market.symbol ? market.symbol.split('-')[0] : 'UNKNOWN',
+        asks: market.asks || [],
+        bids: market.bids || [],
+      }));
+    } catch (error) {
+      console.error('Error fetching markets:', error);
+      return [];
+    }
+  },
+
   async getAccountIndex(l1Address: string): Promise<number | null> {
     try {
       const response = await axios.get<AccountResponse>(

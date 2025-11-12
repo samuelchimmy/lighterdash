@@ -5,12 +5,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
-import { resolveMarketSymbol, loadMarkets } from "@/lib/markets";
+import { resolveMarketSymbol, loadMarkets, subscribeMarkets, ensureMarkets } from "@/lib/markets";
 
 export function MarketStats() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [marketsLoaded, setMarketsLoaded] = useState(false);
+  const [, forceRender] = useState(0);
 
   // Load markets first
   useEffect(() => {
@@ -78,6 +79,21 @@ export function MarketStats() {
       ws.close();
     };
   }, [marketsLoaded]);
+
+  // If unknown MARKET-XX appear, fetch details for those IDs and re-render
+  useEffect(() => {
+    const ids = Object.keys(markets).map((k) => Number(k));
+    const unresolved = ids.filter((id) => resolveMarketSymbol(id).startsWith('MARKET-'));
+    if (unresolved.length > 0) {
+      ensureMarkets(unresolved).then(() => forceRender((x) => x + 1));
+    }
+  }, [markets]);
+
+  // Subscribe to mapping updates to re-render symbols
+  useEffect(() => {
+    const unsub = subscribeMarkets(() => forceRender((x) => x + 1));
+    return () => unsub();
+  }, []);
 
   if (isLoading) {
     return (

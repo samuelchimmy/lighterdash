@@ -13,12 +13,24 @@ const FALLBACK_MARKETS: MarketMapping = {
   29: "ENA-USD",
 };
 
-// In-memory runtime mapping cache
+// In-memory runtime mapping cache and listeners
 let runtimeMapping = new Map<number, string>(
   Object.entries(FALLBACK_MARKETS).map(([k, v]) => [Number(k), v])
 );
 let isLoaded = false;
 let loadPromise: Promise<void> | null = null;
+const listeners = new Set<() => void>();
+
+function notify() {
+  listeners.forEach((fn) => {
+    try { fn(); } catch {}
+  });
+}
+
+export function subscribeMarkets(listener: () => void) {
+  listeners.add(listener);
+  return () => { listeners.delete(listener); };
+}
 
 // Load all markets from API
 export async function loadMarkets(): Promise<void> {
@@ -34,11 +46,13 @@ export async function loadMarkets(): Promise<void> {
       if (markets.length > 0) {
         runtimeMapping.clear();
         markets.forEach(m => {
-          console.log(`➕ Adding market: ${m.market_index} -> ${m.symbol}`);
-          runtimeMapping.set(m.market_index, m.symbol);
+          if (m?.market_index != null && m.symbol) {
+            runtimeMapping.set(m.market_index, m.symbol);
+          }
         });
         isLoaded = true;
         console.log(`✅ Loaded ${markets.length} markets. Current mapping:`, Array.from(runtimeMapping.entries()));
+        notify();
       } else {
         console.warn('⚠️ No markets returned from API, using fallback');
       }
@@ -48,6 +62,21 @@ export async function loadMarkets(): Promise<void> {
   })();
 
   return loadPromise;
+}
+
+// Ensure specific market IDs are loaded
+export async function ensureMarkets(ids: number[]): Promise<void> {
+  const missing = ids.filter((id) => !runtimeMapping.has(id));
+  if (missing.length === 0) return;
+  const results = await Promise.all(missing.map((id) => lighterApi.getMarketDetail(id)));
+  let updated = false;
+  results.forEach((m) => {
+    if (m && m.symbol) {
+      runtimeMapping.set(m.market_index, m.symbol);
+      updated = true;
+    }
+  });
+  if (updated) notify();
 }
 
 // Resolve market symbol by ID

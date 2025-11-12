@@ -76,6 +76,47 @@ export const lighterApi = {
     }
   },
 
+  async getMarketDetail(marketIndex: number): Promise<MarketDetail | null> {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/v1/orderBookDetails`, {
+        params: { market_index: marketIndex },
+      });
+      const raw = response.data;
+
+      const book = Array.isArray(raw)
+        ? raw.find((b: any) => (b.market_index ?? b.market_id ?? b.index) == marketIndex)
+        : raw?.order_books?.find?.((b: any) => (b.market_index ?? b.market_id ?? b.index) == marketIndex) ?? raw;
+
+      if (!book) return null;
+
+      const id = Number(book.market_index ?? book.market_id ?? book.index ?? marketIndex);
+      const rawSymbol: string | undefined = (
+        book.symbol ||
+        book.pair ||
+        book.market_symbol ||
+        book.name ||
+        (book.base_symbol && book.quote_symbol
+          ? `${book.base_symbol}-${book.quote_symbol}`
+          : undefined) ||
+        (book.meta && (book.meta.symbol || book.meta.pair))
+      );
+
+      const symbol = rawSymbol ? String(rawSymbol).toUpperCase() : undefined;
+      const base = symbol?.includes('-') ? symbol.split('-')[0] : undefined;
+
+      return {
+        market_index: id,
+        symbol: symbol || `MARKET-${id}`,
+        base_asset: base || 'UNKNOWN',
+        asks: book.asks || [],
+        bids: book.bids || [],
+      };
+    } catch (error) {
+      console.error('❌ Error fetching market detail:', error);
+      return null;
+    }
+  },
+
   async getAccountIndex(l1Address: string): Promise<number | null> {
     try {
       const response = await axios.get<AccountResponse>(

@@ -70,14 +70,14 @@ const LighterAnalytics = () => {
           {/* Platform Volume Overview */}
           <PlatformVolume />
 
+          {/* Market Stats Overview - Collapsible */}
+          <MarketStats />
+
           {/* Order Book & Live Trades Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <OrderBookDepth />
             <LiveTradeFeed />
           </div>
-
-          {/* Market Stats Overview - Collapsible */}
-          <MarketStats />
         </div>
       </main>
 

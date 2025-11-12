@@ -200,6 +200,16 @@ export function MarketStats() {
     .sort((a, b) => parseFloat(b.open_interest || '0') - parseFloat(a.open_interest || '0'))
     .slice(0, 3);
 
+  // Calculate watchlist metrics
+  const favoriteMarkets = allMarkets.filter(m => favorites.includes(m.market_id));
+  const watchlistMetrics = {
+    count: favoriteMarkets.length,
+    totalVolume: favoriteMarkets.reduce((sum, m) => sum + (m.daily_quote_token_volume ?? 0), 0),
+    avgChange: favoriteMarkets.length > 0 
+      ? favoriteMarkets.reduce((sum, m) => sum + (m.daily_price_change ?? 0), 0) / favoriteMarkets.length
+      : 0
+  };
+
   return (
     <Collapsible defaultOpen={false}>
       <Card>
@@ -216,6 +226,39 @@ export function MarketStats() {
         </CardHeader>
         <CollapsibleContent>
           <CardContent className="space-y-6">
+        {/* Watchlist Summary */}
+        {watchlistMetrics.count > 0 && (
+          <div className="p-4 rounded-lg border bg-gradient-to-r from-primary/10 to-primary/5">
+            <div className="flex items-center gap-2 mb-3">
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <h3 className="text-sm font-semibold">Watchlist Summary</h3>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Markets</p>
+                <p className="text-2xl font-bold">{watchlistMetrics.count}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">24h Volume</p>
+                <p className="text-2xl font-bold">{formatCurrencySmart(watchlistMetrics.totalVolume)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Avg Change</p>
+                <div className="flex items-center gap-1">
+                  <p className={`text-2xl font-bold ${watchlistMetrics.avgChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {formatPercentage(watchlistMetrics.avgChange)}
+                  </p>
+                  {watchlistMetrics.avgChange >= 0 ? (
+                    <TrendingUp className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <TrendingDown className="h-5 w-5 text-red-500" />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Top Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Top Open Interest */}

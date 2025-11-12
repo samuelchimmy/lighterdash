@@ -227,7 +227,7 @@ export function MarketStats() {
           const alertKey = `price-above-${marketId}`;
           if (shouldSendAlert(alertKey)) {
             const message = `Price is now $${price.toLocaleString()}, above threshold of $${alert.priceThreshold.above.toLocaleString()}`;
-            sendNotification(`${symbol} Price Alert`, message, 'price');
+            sendNotification(`🟢 ${symbol} Price Alert`, message, 'price', 'above');
             addToHistory({ marketId, marketSymbol: symbol, type: 'price', message, timestamp: Date.now() });
             recordAlertSent(alertKey);
           }
@@ -236,7 +236,7 @@ export function MarketStats() {
           const alertKey = `price-below-${marketId}`;
           if (shouldSendAlert(alertKey)) {
             const message = `Price is now $${price.toLocaleString()}, below threshold of $${alert.priceThreshold.below.toLocaleString()}`;
-            sendNotification(`${symbol} Price Alert`, message, 'price');
+            sendNotification(`🔴 ${symbol} Price Alert`, message, 'price', 'below');
             addToHistory({ marketId, marketSymbol: symbol, type: 'price', message, timestamp: Date.now() });
             recordAlertSent(alertKey);
           }
@@ -252,7 +252,7 @@ export function MarketStats() {
             const alertKey = `volume-${marketId}`;
             if (shouldSendAlert(alertKey)) {
               const message = `Volume increased by ${percentageIncrease.toFixed(1)}%`;
-              sendNotification(`${symbol} Volume Spike`, message, 'volume');
+              sendNotification(`🟡 ${symbol} Volume Spike`, message, 'volume', 'neutral');
               addToHistory({ marketId, marketSymbol: symbol, type: 'volume', message, timestamp: Date.now() });
               recordAlertSent(alertKey);
             }
@@ -267,7 +267,7 @@ export function MarketStats() {
           const alertKey = `funding-above-${marketId}`;
           if (shouldSendAlert(alertKey)) {
             const message = `Funding rate is now ${fundingRate.toFixed(4)}%, above threshold of ${alert.fundingRate.above}%`;
-            sendNotification(`${symbol} Funding Rate Alert`, message, 'funding');
+            sendNotification(`🟢 ${symbol} Funding Rate Alert`, message, 'funding', 'above');
             addToHistory({ marketId, marketSymbol: symbol, type: 'funding', message, timestamp: Date.now() });
             recordAlertSent(alertKey);
           }
@@ -276,7 +276,7 @@ export function MarketStats() {
           const alertKey = `funding-below-${marketId}`;
           if (shouldSendAlert(alertKey)) {
             const message = `Funding rate is now ${fundingRate.toFixed(4)}%, below threshold of ${alert.fundingRate.below}%`;
-            sendNotification(`${symbol} Funding Rate Alert`, message, 'funding');
+            sendNotification(`🔴 ${symbol} Funding Rate Alert`, message, 'funding', 'below');
             addToHistory({ marketId, marketSymbol: symbol, type: 'funding', message, timestamp: Date.now() });
             recordAlertSent(alertKey);
           }
@@ -286,7 +286,7 @@ export function MarketStats() {
   }, [markets, alerts]);
 
   // Send browser notification and play sound
-  const sendNotification = (title: string, body: string, type: 'price' | 'volume' | 'funding') => {
+  const sendNotification = (title: string, body: string, type: 'price' | 'volume' | 'funding', direction?: 'above' | 'below' | 'neutral') => {
     // Play sound
     if (type === 'price') {
       alertSoundManager.playPriceAlert();
@@ -567,11 +567,18 @@ export function MarketStats() {
                       size="sm"
                       className="w-full"
                       onClick={() => {
-                        new Notification("Test Alert", {
-                          body: "This is a test browser notification from LighterDash",
+                        new Notification("🟢 Test Alert - Above Threshold", {
+                          body: "This is a test browser notification (green indicator for above threshold)",
                           icon: "/favicon.ico",
                           badge: "/favicon.ico",
                         });
+                        setTimeout(() => {
+                          new Notification("🔴 Test Alert - Below Threshold", {
+                            body: "This is a test browser notification (red indicator for below threshold)",
+                            icon: "/favicon.ico",
+                            badge: "/favicon.ico",
+                          });
+                        }, 1500);
                         alertSoundManager.playPriceAlert();
                       }}
                     >

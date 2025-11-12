@@ -53,7 +53,7 @@ export const CustomNotification = ({ notification, onClose }: CustomNotification
   return (
     <div
       className={cn(
-        "fixed top-4 right-4 w-96 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 z-[9999]",
+        "fixed bottom-4 right-4 w-96 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 z-[9999]",
         bgClass,
         isVisible && !isLeaving ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       )}
@@ -99,7 +99,7 @@ export const CustomNotificationContainer = ({
   return (
     <>
       {notifications.map((notification, index) => (
-        <div key={notification.id} style={{ top: `${(index * 120) + 16}px` }} className="fixed right-0">
+        <div key={notification.id} style={{ bottom: `${(index * 120) + 16}px` }} className="fixed right-0">
           <CustomNotification notification={notification} onClose={onClose} />
         </div>
       ))}

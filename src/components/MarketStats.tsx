@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
-import { TrendingUp, TrendingDown, Activity, ChevronDown, Search, Star } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, ChevronDown, Search, Star, Bell } from "lucide-react";
 import { resolveMarketSymbol, loadMarkets, subscribeMarkets, ensureMarkets } from "@/lib/markets";
 import { Button } from "@/components/ui/button";
+import { MarketAlertDialog, MarketAlert } from "./MarketAlertDialog";
+import { useToast } from "@/hooks/use-toast";
 
 export function MarketStats() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
@@ -19,6 +21,24 @@ export function MarketStats() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"priceChange" | "volume" | "openInterest" | "fundingRate">("priceChange");
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [alerts, setAlerts] = useState<Record<number, MarketAlert>>({});
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+  const [selectedMarketId, setSelectedMarketId] = useState<number | null>(null);
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>("default");
+  const previousVolumes = useRef<Record<number, number>>({});
+  const { toast } = useToast();
+
+  // Request notification permission
+  useEffect(() => {
+    if ("Notification" in window) {
+      setNotificationPermission(Notification.permission);
+      if (Notification.permission === "default") {
+        Notification.requestPermission().then(permission => {
+          setNotificationPermission(permission);
+        });
+      }
+    }
+  }, []);
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -32,10 +52,27 @@ export function MarketStats() {
     }
   }, []);
 
+  // Load alerts from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('lighter-market-alerts');
+    if (stored) {
+      try {
+        setAlerts(JSON.parse(stored));
+      } catch (error) {
+        console.error('Failed to parse alerts:', error);
+      }
+    }
+  }, []);
+
   // Save favorites to localStorage
   useEffect(() => {
     localStorage.setItem('lighter-favorite-markets', JSON.stringify(favorites));
   }, [favorites]);
+
+  // Save alerts to localStorage
+  useEffect(() => {
+    localStorage.setItem('lighter-market-alerts', JSON.stringify(alerts));
+  }, [alerts]);
 
   // Toggle favorite
   const toggleFavorite = (marketId: number) => {
@@ -44,6 +81,103 @@ export function MarketStats() {
         ? prev.filter(id => id !== marketId)
         : [...prev, marketId]
     );
+  };
+
+  // Open alert dialog
+  const openAlertDialog = (marketId: number) => {
+    setSelectedMarketId(marketId);
+    setAlertDialogOpen(true);
+  };
+
+  // Save alert
+  const saveAlert = (alert: MarketAlert) => {
+    setAlerts(prev => ({
+      ...prev,
+      [alert.marketId]: alert,
+    }));
+    toast({
+      title: "Alert Saved",
+      description: `Alerts configured for ${resolveMarketSymbol(alert.marketId)}`,
+    });
+  };
+
+  // Check alerts
+  useEffect(() => {
+    if (Object.keys(markets).length === 0) return;
+
+    Object.entries(alerts).forEach(([marketIdStr, alert]) => {
+      const marketId = parseInt(marketIdStr);
+      const market = markets[marketId];
+      if (!market) return;
+
+      const price = parseFloat(market.mark_price);
+      const fundingRate = parseFloat(market.current_funding_rate || '0') * 100;
+      const currentVolume = market.daily_quote_token_volume ?? 0;
+      const symbol = resolveMarketSymbol(marketId);
+
+      // Check price alerts
+      if (alert.priceThreshold?.enabled) {
+        if (alert.priceThreshold.above && price >= alert.priceThreshold.above) {
+          sendNotification(
+            `${symbol} Price Alert`,
+            `Price is now $${price.toLocaleString()}, above threshold of $${alert.priceThreshold.above.toLocaleString()}`
+          );
+        }
+        if (alert.priceThreshold.below && price <= alert.priceThreshold.below) {
+          sendNotification(
+            `${symbol} Price Alert`,
+            `Price is now $${price.toLocaleString()}, below threshold of $${alert.priceThreshold.below.toLocaleString()}`
+          );
+        }
+      }
+
+      // Check volume spike
+      if (alert.volumeSpike?.enabled) {
+        const previousVolume = previousVolumes.current[marketId];
+        if (previousVolume) {
+          const percentageIncrease = ((currentVolume - previousVolume) / previousVolume) * 100;
+          if (percentageIncrease >= alert.volumeSpike.percentageIncrease) {
+            sendNotification(
+              `${symbol} Volume Spike`,
+              `Volume increased by ${percentageIncrease.toFixed(1)}%`
+            );
+          }
+        }
+        previousVolumes.current[marketId] = currentVolume;
+      }
+
+      // Check funding rate alerts
+      if (alert.fundingRate?.enabled) {
+        if (alert.fundingRate.above && fundingRate >= alert.fundingRate.above) {
+          sendNotification(
+            `${symbol} Funding Rate Alert`,
+            `Funding rate is now ${fundingRate.toFixed(4)}%, above threshold of ${alert.fundingRate.above}%`
+          );
+        }
+        if (alert.fundingRate.below && fundingRate <= alert.fundingRate.below) {
+          sendNotification(
+            `${symbol} Funding Rate Alert`,
+            `Funding rate is now ${fundingRate.toFixed(4)}%, below threshold of ${alert.fundingRate.below}%`
+          );
+        }
+      }
+    });
+  }, [markets, alerts]);
+
+  // Send browser notification
+  const sendNotification = (title: string, body: string) => {
+    if (notificationPermission === "granted") {
+      new Notification(title, {
+        body,
+        icon: "/favicon.ico",
+        badge: "/favicon.ico",
+      });
+    }
+    // Also show toast
+    toast({
+      title,
+      description: body,
+    });
   };
 
   // Load markets first
@@ -352,23 +486,38 @@ export function MarketStats() {
             const isPriceUp = priceChange >= 0;
             const isFundingPositive = fundingRate >= 0;
             const isFavorite = favorites.includes(market.market_id);
+            const hasAlert = !!alerts[market.market_id];
 
             return (
               <div 
                 key={market.market_id}
                 className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors relative"
               >
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-2 right-2 h-8 w-8"
-                  onClick={() => toggleFavorite(market.market_id)}
-                >
-                  <Star 
-                    className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
-                  />
-                </Button>
-                <div className="flex items-start justify-between mb-3 pr-8">
+                <div className="absolute top-2 right-2 flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => openAlertDialog(market.market_id)}
+                    title="Configure alerts"
+                  >
+                    <Bell 
+                      className={`h-4 w-4 ${hasAlert ? 'fill-blue-400 text-blue-400' : 'text-muted-foreground'}`}
+                    />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={() => toggleFavorite(market.market_id)}
+                    title="Add to favorites"
+                  >
+                    <Star 
+                      className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
+                    />
+                  </Button>
+                </div>
+                <div className="flex items-start justify-between mb-3 pr-16">
                   <div>
                     <h3 className="font-semibold text-lg">{symbol}</h3>
                     <p className="text-2xl font-bold text-foreground">
@@ -418,6 +567,20 @@ export function MarketStats() {
           </CardContent>
         </CollapsibleContent>
       </Card>
+
+      {/* Alert Dialog */}
+      {selectedMarketId !== null && markets[selectedMarketId] && (
+        <MarketAlertDialog
+          open={alertDialogOpen}
+          onOpenChange={setAlertDialogOpen}
+          marketId={selectedMarketId}
+          marketSymbol={resolveMarketSymbol(selectedMarketId)}
+          currentPrice={parseFloat(markets[selectedMarketId].mark_price)}
+          currentFundingRate={parseFloat(markets[selectedMarketId].current_funding_rate || '0')}
+          alert={alerts[selectedMarketId]}
+          onSave={saveAlert}
+        />
+      )}
     </Collapsible>
   );
 }

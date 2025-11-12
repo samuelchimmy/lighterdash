@@ -503,73 +503,149 @@ export function MarketStats() {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Alert Sound Settings</DialogTitle>
+                <DialogTitle>Alert Settings</DialogTitle>
                 <DialogDescription>
-                  Configure sound notifications for market alerts
+                  Configure sound and browser notifications for market alerts
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-6 py-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="sound-enabled">Enable Sound Alerts</Label>
-                  <Switch
-                    id="sound-enabled"
-                    checked={soundSettings.enabled}
-                    onCheckedChange={(enabled) => {
-                      alertSoundManager.setSoundEnabled(enabled);
-                      setSoundSettings(alertSoundManager.getSettings());
-                    }}
-                  />
-                </div>
-                {soundSettings.enabled && (
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="volume">Volume</Label>
-                      <span className="text-sm text-muted-foreground">
-                        {Math.round(soundSettings.volume * 100)}%
-                      </span>
+                {/* Browser Notifications */}
+                <div className="space-y-3 p-4 rounded-lg border bg-card/50">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-base font-semibold">Browser Notifications</Label>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {notificationPermission === "granted" 
+                          ? "Notifications enabled - you'll receive pop-up alerts" 
+                          : notificationPermission === "denied"
+                          ? "Notifications blocked - please enable in browser settings"
+                          : "Click to enable notification pop-ups"}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Volume2 className="h-4 w-4 text-muted-foreground" />
-                      <Slider
-                        id="volume"
-                        value={[soundSettings.volume]}
-                        onValueChange={([value]) => {
-                          alertSoundManager.setVolume(value);
-                          setSoundSettings(alertSoundManager.getSettings());
+                    {notificationPermission === "granted" ? (
+                      <Badge variant="default" className="gap-1">
+                        <Bell className="h-3 w-3" />
+                        Enabled
+                      </Badge>
+                    ) : notificationPermission === "denied" ? (
+                      <Badge variant="destructive" className="gap-1">
+                        <Bell className="h-3 w-3" />
+                        Blocked
+                      </Badge>
+                    ) : (
+                      <Button
+                        size="sm"
+                        onClick={async () => {
+                          const permission = await Notification.requestPermission();
+                          setNotificationPermission(permission);
+                          if (permission === "granted") {
+                            toast({
+                              title: "Notifications Enabled",
+                              description: "You'll now receive browser notification pop-ups for alerts",
+                            });
+                            // Send test notification
+                            new Notification("LighterDash Alert Test", {
+                              body: "Notifications are now enabled! You'll receive alerts like this.",
+                              icon: "/favicon.ico",
+                              badge: "/favicon.ico",
+                            });
+                          }
                         }}
-                        max={1}
-                        step={0.1}
-                        className="flex-1"
-                      />
-                    </div>
-                    <div className="space-y-2 pt-4">
-                      <p className="text-sm font-medium">Test Sounds</p>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => alertSoundManager.playPriceAlert()}
-                        >
-                          Price Alert
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => alertSoundManager.playVolumeAlert()}
-                        >
-                          Volume Alert
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => alertSoundManager.playFundingAlert()}
-                        >
-                          Funding Alert
-                        </Button>
-                      </div>
-                    </div>
+                      >
+                        Enable
+                      </Button>
+                    )}
                   </div>
-                )}
+                  {notificationPermission === "denied" && (
+                    <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded">
+                      To enable notifications: Go to your browser settings → Site settings → Notifications → Allow
+                    </div>
+                  )}
+                  {notificationPermission === "granted" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        new Notification("Test Alert", {
+                          body: "This is a test browser notification from LighterDash",
+                          icon: "/favicon.ico",
+                          badge: "/favicon.ico",
+                        });
+                        alertSoundManager.playPriceAlert();
+                      }}
+                    >
+                      Test Notification & Sound
+                    </Button>
+                  )}
+                </div>
+
+                {/* Sound Alerts */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="sound-enabled" className="text-base font-semibold">Sound Alerts</Label>
+                    <Switch
+                      id="sound-enabled"
+                      checked={soundSettings.enabled}
+                      onCheckedChange={(enabled) => {
+                        alertSoundManager.setSoundEnabled(enabled);
+                        setSoundSettings(alertSoundManager.getSettings());
+                      }}
+                    />
+                  </div>
+                  {soundSettings.enabled && (
+                    <>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="volume">Volume</Label>
+                          <span className="text-sm text-muted-foreground">
+                            {Math.round(soundSettings.volume * 100)}%
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Volume2 className="h-4 w-4 text-muted-foreground" />
+                          <Slider
+                            id="volume"
+                            value={[soundSettings.volume]}
+                            onValueChange={([value]) => {
+                              alertSoundManager.setVolume(value);
+                              setSoundSettings(alertSoundManager.getSettings());
+                            }}
+                            max={1}
+                            step={0.1}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2 pt-2">
+                        <p className="text-sm font-medium">Test Sounds</p>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => alertSoundManager.playPriceAlert()}
+                          >
+                            Price Alert
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => alertSoundManager.playVolumeAlert()}
+                          >
+                            Volume Alert
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => alertSoundManager.playFundingAlert()}
+                          >
+                            Funding Alert
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </DialogContent>
           </Dialog>

@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
-import { TrendingUp, TrendingDown, Activity, ChevronDown, Search } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, ChevronDown, Search, Star } from "lucide-react";
 import { resolveMarketSymbol, loadMarkets, subscribeMarkets, ensureMarkets } from "@/lib/markets";
+import { Button } from "@/components/ui/button";
 
 export function MarketStats() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
@@ -17,6 +18,33 @@ export function MarketStats() {
   const [, forceRender] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<"priceChange" | "volume" | "openInterest" | "fundingRate">("priceChange");
+  const [favorites, setFavorites] = useState<number[]>([]);
+
+  // Load favorites from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem('lighter-favorite-markets');
+    if (stored) {
+      try {
+        setFavorites(JSON.parse(stored));
+      } catch (error) {
+        console.error('Failed to parse favorites:', error);
+      }
+    }
+  }, []);
+
+  // Save favorites to localStorage
+  useEffect(() => {
+    localStorage.setItem('lighter-favorite-markets', JSON.stringify(favorites));
+  }, [favorites]);
+
+  // Toggle favorite
+  const toggleFavorite = (marketId: number) => {
+    setFavorites(prev => 
+      prev.includes(marketId) 
+        ? prev.filter(id => id !== marketId)
+        : [...prev, marketId]
+    );
+  };
 
   // Load markets first
   useEffect(() => {
@@ -135,8 +163,15 @@ export function MarketStats() {
     });
   }
   
-  // Apply sorting
+  // Apply sorting - favorites always on top
   marketList = marketList.sort((a, b) => {
+    // Favorites first
+    const aFav = favorites.includes(a.market_id);
+    const bFav = favorites.includes(b.market_id);
+    if (aFav && !bFav) return -1;
+    if (!aFav && bFav) return 1;
+    
+    // Then by selected sort
     switch (sortBy) {
       case "priceChange":
         return (b.daily_price_change ?? 0) - (a.daily_price_change ?? 0);
@@ -273,13 +308,24 @@ export function MarketStats() {
             const fundingRate = parseFloat(market.current_funding_rate || '0') * 100;
             const isPriceUp = priceChange >= 0;
             const isFundingPositive = fundingRate >= 0;
+            const isFavorite = favorites.includes(market.market_id);
 
             return (
               <div 
                 key={market.market_id}
-                className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors relative"
               >
-                <div className="flex items-start justify-between mb-3">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-2 right-2 h-8 w-8"
+                  onClick={() => toggleFavorite(market.market_id)}
+                >
+                  <Star 
+                    className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
+                  />
+                </Button>
+                <div className="flex items-start justify-between mb-3 pr-8">
                   <div>
                     <h3 className="font-semibold text-lg">{symbol}</h3>
                     <p className="text-2xl font-bold text-foreground">

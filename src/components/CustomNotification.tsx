@@ -18,32 +18,39 @@ interface CustomNotificationProps {
 
 export const CustomNotification = ({ notification, onClose }: CustomNotificationProps) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
-    // Slide in animation
-    setTimeout(() => setIsVisible(true), 10);
+    // Trigger slide-in animation
+    const timer = setTimeout(() => setIsVisible(true), 10);
 
     // Auto dismiss after 5 seconds
-    const timer = setTimeout(() => {
-      handleClose();
+    const dismissTimer = setTimeout(() => {
+      setIsVisible(false);
+      setTimeout(() => onClose(notification.id), 300);
     }, 5000);
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(dismissTimer);
+    };
+  }, [notification.id, onClose]);
 
   const handleClose = () => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      onClose(notification.id);
-    }, 300);
+    setIsVisible(false);
+    setTimeout(() => onClose(notification.id), 300);
   };
 
   const bgClass = notification.direction === 'above' 
-    ? 'bg-gradient-to-r from-green-500 to-green-600' 
+    ? 'bg-gradient-to-br from-emerald-500 via-green-500 to-emerald-600' 
     : notification.direction === 'below'
-    ? 'bg-gradient-to-r from-red-500 to-red-600'
-    : 'bg-gradient-to-r from-yellow-500 to-yellow-600';
+    ? 'bg-gradient-to-br from-rose-500 via-red-500 to-rose-600'
+    : 'bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-500';
+
+  const glowClass = notification.direction === 'above'
+    ? 'shadow-[0_0_30px_rgba(16,185,129,0.4)]'
+    : notification.direction === 'below'
+    ? 'shadow-[0_0_30px_rgba(239,68,68,0.4)]'
+    : 'shadow-[0_0_30px_rgba(251,191,36,0.4)]';
 
   const icon = notification.direction === 'above' 
     ? <TrendingUp className="w-5 h-5" />
@@ -54,33 +61,50 @@ export const CustomNotification = ({ notification, onClose }: CustomNotification
   return (
     <div
       className={cn(
-        "relative w-96 rounded-lg shadow-2xl overflow-hidden transition-all duration-300 z-[100000] pointer-events-auto",
+        "relative w-96 rounded-xl overflow-hidden transition-all duration-300 pointer-events-auto",
+        "border-2 border-white/20 backdrop-blur-sm",
         bgClass,
-        isVisible && !isLeaving ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+        glowClass,
+        isVisible ? "animate-slide-in-right" : "animate-slide-out-right"
       )}
     >
-      <div className="p-4 text-white">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3 flex-1">
-            <div className="bg-white/20 p-2 rounded-full backdrop-blur-sm">
+      {/* Decorative gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+      
+      {/* Subtle animated background pattern */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent)]" />
+      </div>
+      
+      <div className="relative p-5 text-white">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 flex-1 min-w-0">
+            <div className="bg-white/30 p-2.5 rounded-xl backdrop-blur-md shadow-lg flex-shrink-0">
               {icon}
             </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-sm mb-1 truncate">{notification.title}</h4>
-              <p className="text-xs text-white/90 leading-relaxed">{notification.body}</p>
+            <div className="flex-1 min-w-0 pt-0.5">
+              <h4 className="font-bold text-base mb-1.5 truncate drop-shadow-md">
+                {notification.title}
+              </h4>
+              <p className="text-sm text-white/95 leading-relaxed font-medium">
+                {notification.body}
+              </p>
             </div>
           </div>
           <button
             onClick={handleClose}
-            className="flex-shrink-0 hover:bg-white/20 rounded-full p-1 transition-colors"
+            className="flex-shrink-0 hover:bg-white/25 rounded-lg p-1.5 transition-all duration-200 hover:scale-110 active:scale-95"
+            aria-label="Close notification"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 drop-shadow" />
           </button>
         </div>
       </div>
-      <div className="h-1 bg-white/30">
+      
+      {/* Progress bar */}
+      <div className="h-1.5 bg-black/20">
         <div 
-          className="h-full bg-white/50 animate-[shrink_5s_linear]"
+          className="h-full bg-white/60 shadow-[0_0_8px_rgba(255,255,255,0.5)]"
           style={{
             animation: 'shrink 5s linear forwards'
           }}

@@ -2,6 +2,7 @@ import { MarketStats } from "@/components/MarketStats";
 import { OrderBookDepth } from "@/components/OrderBookDepth";
 import { LiveTradeFeed } from "@/components/LiveTradeFeed";
 import { PlatformVolume } from "@/components/PlatformVolume";
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { BarChart3, ArrowLeft, Calculator } from "lucide-react";
@@ -81,14 +82,7 @@ const LighterAnalytics = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border mt-20">
-        <div className="container mx-auto px-4 py-6">
-          <p className="text-center text-sm text-muted-foreground">
-            Community-built analytics for Lighter • Not affiliated with Lighter
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/Footer";
 import { MultiWalletComparison } from "@/components/MultiWalletComparison";
 import { ArrowLeft } from "lucide-react";
 
@@ -30,6 +31,7 @@ export default function CommunityHub() {
 
         <MultiWalletComparison />
       </div>
+      <Footer />
     </div>
   );
 }

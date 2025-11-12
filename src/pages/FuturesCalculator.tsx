@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssetSelector, MARKETS, type Market } from "@/components/calculators/AssetSelector";
 import { PnLCalculator } from "@/components/calculators/PnLCalculator";
@@ -103,14 +104,7 @@ export default function FuturesCalculator() {
         </Tabs>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-border/40 py-6 mt-12">
-        <div className="container px-4 text-center text-sm text-muted-foreground">
-          <p>
-            Built for the Lighter community • Not financial advice • Always DYOR
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

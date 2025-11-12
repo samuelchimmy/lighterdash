@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
-import { TrendingUp, TrendingDown, Activity } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, ChevronDown } from "lucide-react";
 import { resolveMarketSymbol, loadMarkets, subscribeMarkets, ensureMarkets } from "@/lib/markets";
 
 export function MarketStats() {
@@ -135,14 +136,21 @@ export function MarketStats() {
     .slice(0, 3);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Activity className="h-5 w-5" />
-          Market Overview
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Collapsible defaultOpen={false}>
+      <Card>
+        <CardHeader>
+          <CollapsibleTrigger className="w-full group">
+            <div className="flex items-center justify-between hover:opacity-80 transition-opacity">
+              <div className="flex items-center gap-2">
+                <Activity className="h-5 w-5" />
+                <CardTitle>All Markets</CardTitle>
+              </div>
+              <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+            </div>
+          </CollapsibleTrigger>
+        </CardHeader>
+        <CollapsibleContent>
+          <CardContent className="space-y-6">
         {/* Top Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Top Open Interest */}
@@ -267,7 +275,9 @@ export function MarketStats() {
           })}
           </div>
         </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </CollapsibleContent>
+      </Card>
+    </Collapsible>
   );
 }

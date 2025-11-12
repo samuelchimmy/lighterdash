@@ -4,17 +4,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { lighterApi, formatCurrency, formatNumber } from "@/lib/lighter-api";
+import { getMarketEntries } from "@/lib/markets";
 import { Activity, TrendingUp, TrendingDown } from "lucide-react";
 import { LighterTrade } from "@/types/lighter";
-
-const MARKET_SYMBOLS: Record<number, string> = {
-  0: "ETH-USD",
-  1: "BTC-USD",
-  7: "XRP-USD",
-  24: "HYPE-USD",
-  25: "BNB-USD",
-  29: "ENA-USD",
-};
 
 export function LiveTradeFeed() {
   const [selectedMarket, setSelectedMarket] = useState<number>(0);
@@ -79,7 +71,7 @@ export function LiveTradeFeed() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(MARKET_SYMBOLS).map(([id, symbol]) => (
+              {getMarketEntries().map(([id, symbol]) => (
                 <SelectItem key={id} value={id}>
                   {symbol}
                 </SelectItem>

@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { lighterApi, formatCurrency, formatNumber } from "@/lib/lighter-api";
+import { getMarketEntries } from "@/lib/markets";
 import { BookOpen } from "lucide-react";
+
 
 interface OrderBookLevel {
   price: string;
@@ -14,15 +16,6 @@ interface OrderBook {
   asks: OrderBookLevel[];
   bids: OrderBookLevel[];
 }
-
-const MARKET_SYMBOLS: Record<number, string> = {
-  0: "ETH-USD",
-  1: "BTC-USD",
-  7: "XRP-USD",
-  24: "HYPE-USD",
-  25: "BNB-USD",
-  29: "ENA-USD",
-};
 
 export function OrderBookDepth() {
   const [selectedMarket, setSelectedMarket] = useState<number>(0);
@@ -87,7 +80,7 @@ export function OrderBookDepth() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(MARKET_SYMBOLS).map(([id, symbol]) => (
+              {getMarketEntries().map(([id, symbol]) => (
                 <SelectItem key={id} value={id}>
                   {symbol}
                 </SelectItem>

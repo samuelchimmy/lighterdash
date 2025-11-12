@@ -124,7 +124,7 @@ export function MarketStats() {
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Open Interest (24h)</h3>
             <div className="space-y-2">
               {topOpenInterest.map((market) => {
-                const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+                const symbol = resolveMarketSymbol(market.market_id);
                 return (
                   <div key={market.market_id} className="flex items-center justify-between">
                     <span className="font-medium">{symbol}</span>
@@ -142,7 +142,7 @@ export function MarketStats() {
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Gainers (24h)</h3>
             <div className="space-y-2">
               {topGainers.map((market) => {
-                const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+                const symbol = resolveMarketSymbol(market.market_id);
                 const change = market.daily_price_change ?? 0;
                 return (
                   <div key={market.market_id} className="flex items-center justify-between">
@@ -162,7 +162,7 @@ export function MarketStats() {
             <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Losers (24h)</h3>
             <div className="space-y-2">
               {topLosers.map((market) => {
-                const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+                const symbol = resolveMarketSymbol(market.market_id);
                 const change = market.daily_price_change ?? 0;
                 return (
                   <div key={market.market_id} className="flex items-center justify-between">
@@ -183,7 +183,7 @@ export function MarketStats() {
           <h3 className="text-sm font-semibold text-muted-foreground mb-3">All Markets</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {marketList.map((market) => {
-            const symbol = resolveMarketSymbol(market.market_id, parseFloat(market.mark_price)) || `Market ${market.market_id}`;
+            const symbol = resolveMarketSymbol(market.market_id);
             const priceChange = market.daily_price_change ?? 0;
             const fundingRate = parseFloat(market.current_funding_rate || '0') * 100;
             const isPriceUp = priceChange >= 0;

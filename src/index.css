@@ -185,3 +185,12 @@ All colors MUST be HSL.
       0 0 30px hsl(270 70% 60% / 0.4);
   }
 }
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}

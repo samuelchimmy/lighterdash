@@ -15,6 +15,7 @@ import { AlertHistory, AlertHistoryItem } from "./AlertHistory";
 import { ActiveAlertsPanel } from "./ActiveAlertsPanel";
 import { useToast } from "@/hooks/use-toast";
 import { alertSoundManager } from "@/lib/alert-sounds";
+import { CustomNotificationContainer, type CustomNotificationData } from './CustomNotification';
 import {
   Dialog,
   DialogContent,
@@ -41,6 +42,7 @@ export function MarketStats() {
   const [selectedMarketId, setSelectedMarketId] = useState<number | null>(null);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>("default");
   const [alertHistory, setAlertHistory] = useState<AlertHistoryItem[]>([]);
+  const [customNotifications, setCustomNotifications] = useState<CustomNotificationData[]>([]);
   const [lastAlertTime, setLastAlertTime] = useState<Record<string, number>>({});
   const [soundSettings, setSoundSettings] = useState(alertSoundManager.getSettings());
   const previousVolumes = useRef<Record<number, number>>({});
@@ -296,20 +298,29 @@ export function MarketStats() {
       alertSoundManager.playFundingAlert();
     }
 
-    // Browser notification
+    // Show custom colored notification
+    const notification: CustomNotificationData = {
+      id: `${Date.now()}-${Math.random()}`,
+      title,
+      body,
+      direction: direction || 'neutral',
+      type
+    };
+    
+    setCustomNotifications(prev => [...prev, notification]);
+
+    // Send browser notification if permission granted (as backup)
     if (notificationPermission === "granted") {
       new Notification(title, {
         body,
-        icon: "/favicon.ico",
-        badge: "/favicon.ico",
+        icon: '/favicon.ico',
+        badge: '/favicon.ico',
       });
     }
-    
-    // Toast notification
-    toast({
-      title,
-      description: body,
-    });
+  };
+
+  const handleCloseNotification = (id: string) => {
+    setCustomNotifications(prev => prev.filter(n => n.id !== id));
   };
 
   // Load markets first
@@ -477,7 +488,13 @@ export function MarketStats() {
   };
 
   return (
-    <Collapsible defaultOpen={false}>
+    <>
+      <CustomNotificationContainer 
+        notifications={customNotifications}
+        onClose={handleCloseNotification}
+      />
+      
+      <Collapsible defaultOpen={false}>
       <Card>
         <CardHeader>
           <CollapsibleTrigger className="w-full group">
@@ -896,5 +913,6 @@ export function MarketStats() {
         />
       )}
     </Collapsible>
+    </>
   );
 }

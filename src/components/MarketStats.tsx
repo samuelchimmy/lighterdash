@@ -3,9 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { lighterApi, formatCurrency, formatCurrencySmart, formatPercentage, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
-import { TrendingUp, TrendingDown, Activity, ChevronDown } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, ChevronDown, Search } from "lucide-react";
 import { resolveMarketSymbol, loadMarkets, subscribeMarkets, ensureMarkets } from "@/lib/markets";
 
 export function MarketStats() {
@@ -13,6 +15,8 @@ export function MarketStats() {
   const [isLoading, setIsLoading] = useState(true);
   const [marketsLoaded, setMarketsLoaded] = useState(false);
   const [, forceRender] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState<"priceChange" | "volume" | "openInterest" | "fundingRate">("priceChange");
 
   // Load markets first
   useEffect(() => {
@@ -120,18 +124,44 @@ export function MarketStats() {
     );
   }
 
-  const marketList = Object.values(markets).sort((a, b) => a.market_id - b.market_id);
+  // Filter and sort market list
+  let marketList = Object.values(markets);
+  
+  // Apply search filter
+  if (searchTerm) {
+    marketList = marketList.filter(market => {
+      const symbol = resolveMarketSymbol(market.market_id);
+      return symbol.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+  }
+  
+  // Apply sorting
+  marketList = marketList.sort((a, b) => {
+    switch (sortBy) {
+      case "priceChange":
+        return (b.daily_price_change ?? 0) - (a.daily_price_change ?? 0);
+      case "volume":
+        return (b.daily_quote_token_volume ?? 0) - (a.daily_quote_token_volume ?? 0);
+      case "openInterest":
+        return parseFloat(b.open_interest || '0') - parseFloat(a.open_interest || '0');
+      case "fundingRate":
+        return parseFloat(b.current_funding_rate || '0') - parseFloat(a.current_funding_rate || '0');
+      default:
+        return a.market_id - b.market_id;
+    }
+  });
 
-  // Calculate top gainers, losers, and open interest
-  const topGainers = [...marketList]
+  // Calculate top gainers, losers, and open interest (from all markets, not filtered)
+  const allMarkets = Object.values(markets);
+  const topGainers = [...allMarkets]
     .sort((a, b) => (b.daily_price_change ?? 0) - (a.daily_price_change ?? 0))
     .slice(0, 3);
   
-  const topLosers = [...marketList]
+  const topLosers = [...allMarkets]
     .sort((a, b) => (a.daily_price_change ?? 0) - (b.daily_price_change ?? 0))
     .slice(0, 3);
   
-  const topOpenInterest = [...marketList]
+  const topOpenInterest = [...allMarkets]
     .sort((a, b) => parseFloat(b.open_interest || '0') - parseFloat(a.open_interest || '0'))
     .slice(0, 3);
 
@@ -214,7 +244,28 @@ export function MarketStats() {
 
         {/* All Markets Grid */}
         <div>
-          <h3 className="text-sm font-semibold text-muted-foreground mb-3">All Markets</h3>
+          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search trading pairs..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+              <SelectTrigger className="w-full sm:w-[200px]">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="priceChange">Price Change</SelectItem>
+                <SelectItem value="volume">Volume</SelectItem>
+                <SelectItem value="openInterest">Open Interest</SelectItem>
+                <SelectItem value="fundingRate">Funding Rate</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {marketList.map((market) => {
             const symbol = resolveMarketSymbol(market.market_id);

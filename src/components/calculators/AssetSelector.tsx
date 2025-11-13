@@ -45,7 +45,10 @@ export function AssetSelector({ selectedMarket, onMarketChange }: AssetSelectorP
   useEffect(() => {
     const fetchMarkets = async () => {
       try {
+        console.log('🔄 AssetSelector: Fetching markets...');
         const apiMarkets = await lighterApi.getAllMarkets();
+        console.log('📊 AssetSelector: Received markets:', apiMarkets.length, apiMarkets.slice(0, 3));
+        
         if (apiMarkets.length > 0) {
           const formattedMarkets = apiMarkets.map(m => ({
             index: m.market_index,
@@ -55,6 +58,15 @@ export function AssetSelector({ selectedMarket, onMarketChange }: AssetSelectorP
             open_interest: m.open_interest,
             market_cap: m.market_cap,
           }));
+          
+          console.log('✅ AssetSelector: Formatted markets with volume data:', 
+            formattedMarkets.slice(0, 3).map(m => ({
+              symbol: m.symbol,
+              volume: m.daily_quote_token_volume,
+              oi: m.open_interest
+            }))
+          );
+          
           setMarkets(formattedMarkets);
           
           // Update selected market if it exists in new list
@@ -66,7 +78,7 @@ export function AssetSelector({ selectedMarket, onMarketChange }: AssetSelectorP
           }
         }
       } catch (error) {
-        console.error('Failed to fetch markets, using fallback:', error);
+        console.error('❌ AssetSelector: Failed to fetch markets, using fallback:', error);
       } finally {
         setIsLoading(false);
       }
@@ -92,6 +104,17 @@ export function AssetSelector({ selectedMarket, onMarketChange }: AssetSelectorP
     }
   });
 
+  // Debug: Log sorting
+  useEffect(() => {
+    console.log('🔄 AssetSelector: Sorting by:', sortBy);
+    console.log('📊 Top 5 sorted markets:', sortedMarkets.slice(0, 5).map(m => ({
+      symbol: m.symbol,
+      volume: m.daily_quote_token_volume,
+      oi: m.open_interest,
+      cap: m.market_cap
+    })));
+  }, [sortBy, markets]);
+
   const getSortLabel = () => {
     switch (sortBy) {
       case "volume": return "24h Volume";
@@ -106,8 +129,11 @@ export function AssetSelector({ selectedMarket, onMarketChange }: AssetSelectorP
       <Select
         value={selectedMarket.symbol}
         onValueChange={(value) => {
-          const market = markets.find(m => m.symbol === value);
-          if (market) onMarketChange(market);
+          const market = sortedMarkets.find(m => m.symbol === value);
+          if (market) {
+            console.log('🔄 AssetSelector: Selected market:', market);
+            onMarketChange(market);
+          }
         }}
         disabled={isLoading}
       >

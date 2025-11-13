@@ -798,12 +798,12 @@ export function MarketStats() {
               />
             </div>
             <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-              <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectTrigger className="w-full sm:w-[200px] bg-card border-border">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-card border-border z-50">
                 <SelectItem value="priceChange">Price Change</SelectItem>
-                <SelectItem value="volume">Volume</SelectItem>
+                <SelectItem value="volume">24h Volume</SelectItem>
                 <SelectItem value="openInterest">Open Interest</SelectItem>
                 <SelectItem value="fundingRate">Funding Rate</SelectItem>
               </SelectContent>

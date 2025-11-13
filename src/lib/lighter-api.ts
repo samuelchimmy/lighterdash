@@ -10,27 +10,43 @@ export interface MarketDetail {
   base_asset: string;
   asks: Array<{ price: string; size: string }>;
   bids: Array<{ price: string; size: string }>;
+  daily_quote_token_volume?: number;
+  open_interest?: string;
+  market_cap?: number;
 }
 
 export const lighterApi = {
   async getAllMarkets(): Promise<MarketDetail[]> {
     try {
-      const response = await axios.get(`${BASE_URL}/api/v1/orderBookDetails`);
-      const raw = response.data;
+      const [orderBookResponse, statsResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/api/v1/orderBookDetails`),
+        axios.get(`${BASE_URL}/api/v1/marketStats`).catch(() => ({ data: { market_stats: [] } }))
+      ]);
+      
+      const raw = orderBookResponse.data;
       console.log('📊 Raw API response:', raw);
 
-      // The API returns { code: 200, order_book_details: [...] }
       const orderBooks = raw.order_book_details || [];
+      const marketStats = statsResponse.data.market_stats || [];
       
       if (!Array.isArray(orderBooks)) {
         console.error('❌ order_book_details is not an array');
         return [];
       }
 
+      // Create a map of market stats by market_id
+      const statsMap = new Map();
+      marketStats.forEach((stat: any) => {
+        if (stat.market_id !== undefined) {
+          statsMap.set(stat.market_id, stat);
+        }
+      });
+
       const markets = orderBooks.map((book: any) => {
         const marketId = book.market_id ?? book.market_index;
-        const baseSymbol = book.symbol; // e.g., "STBL", "ETH", "BTC"
+        const baseSymbol = book.symbol;
         const fullSymbol = baseSymbol ? `${baseSymbol}-USD` : `MARKET-${marketId}`;
+        const stats = statsMap.get(marketId);
         
         return {
           market_index: marketId,
@@ -38,6 +54,9 @@ export const lighterApi = {
           base_asset: baseSymbol || 'UNKNOWN',
           asks: book.asks || [],
           bids: book.bids || [],
+          daily_quote_token_volume: stats?.daily_quote_token_volume || 0,
+          open_interest: stats?.open_interest || '0',
+          market_cap: 0, // Not available in API, placeholder
         };
       });
 

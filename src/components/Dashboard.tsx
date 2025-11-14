@@ -17,6 +17,7 @@ import { TradeAnalysisView } from './TradeAnalysisView';
 import { PatternRecognition } from './PatternRecognition';
 import { FundingHistory } from './FundingHistory';
 import { LiquidationMonitor } from './LiquidationMonitor';
+import { RealtimeLiquidationMonitor } from './RealtimeLiquidationMonitor';
 import { EmptyWalletState } from './EmptyWalletState';
 import { OpenOrdersTable } from './OpenOrdersTable';
 import { TransactionHistory } from './TransactionHistory';
@@ -523,6 +524,11 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       </div>
 
       <LiquidationMonitor positions={positions} accountValue={accountValue} />
+
+      <RealtimeLiquidationMonitor 
+        accountIndex={accountIndex} 
+        walletAddress={walletAddress} 
+      />
 
       <FundingHistory fundingHistories={fundingHistories} />
 

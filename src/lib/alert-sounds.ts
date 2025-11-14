@@ -197,6 +197,86 @@ class AlertSoundManager {
     noise.stop(now + 0.1);
   }
 
+  async playMarginAlert() {
+    if (!this.soundEnabled) return;
+
+    const context = this.getContext();
+    const now = context.currentTime;
+    const duration = 0.8;
+
+    // Rising urgent tone
+    const osc = context.createOscillator();
+    const gain = context.createGain();
+    
+    osc.connect(gain);
+    gain.connect(context.destination);
+    
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.exponentialRampToValueAtTime(800, now + duration);
+    
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(this.volume * 0.7, now + 0.05);
+    gain.gain.setValueAtTime(this.volume * 0.7, now + duration - 0.1);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  async playLiquidationAlert() {
+    if (!this.soundEnabled) return;
+
+    const context = this.getContext();
+    const now = context.currentTime;
+    const duration = 1.5;
+
+    // Dramatic alarm with multiple layers
+    // Layer 1: Siren-like sweep
+    const siren = context.createOscillator();
+    const sirenGain = context.createGain();
+    
+    siren.connect(sirenGain);
+    sirenGain.connect(context.destination);
+    
+    siren.type = 'sine';
+    siren.frequency.setValueAtTime(600, now);
+    siren.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
+    siren.frequency.exponentialRampToValueAtTime(600, now + 0.6);
+    siren.frequency.exponentialRampToValueAtTime(1200, now + 0.9);
+    siren.frequency.exponentialRampToValueAtTime(800, now + duration);
+    
+    sirenGain.gain.setValueAtTime(0, now);
+    sirenGain.gain.linearRampToValueAtTime(this.volume * 0.8, now + 0.05);
+    sirenGain.gain.setValueAtTime(this.volume * 0.8, now + duration - 0.2);
+    sirenGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    
+    siren.start(now);
+    siren.stop(now + duration);
+
+    // Layer 2: Urgent pulsing bass
+    const bass = context.createOscillator();
+    const bassGain = context.createGain();
+    const pulse = context.createOscillator();
+    
+    bass.connect(bassGain);
+    bassGain.connect(context.destination);
+    pulse.connect(bassGain.gain);
+    
+    bass.type = 'triangle';
+    bass.frequency.value = 200;
+    pulse.type = 'square';
+    pulse.frequency.value = 6; // 6 Hz pulse
+    
+    bassGain.gain.setValueAtTime(this.volume * 0.3, now);
+    bassGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+    
+    bass.start(now);
+    bass.stop(now + duration);
+    pulse.start(now);
+    pulse.stop(now + duration);
+  }
+
   async playVolumeAlert() {
     // Medium-pitched double beep
     await this.playTone(600, 0.5, 'double');

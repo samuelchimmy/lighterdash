@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, ShieldCheck, AlertOctagon } from "lucide-react";
 import { Position } from "@/types/lighter";
 import { formatCurrency, formatPercentage } from "@/lib/lighter-api";
+import { useToast } from "@/hooks/use-toast";
+import { alertSoundManager } from "@/lib/alert-sounds";
 
 interface LiquidationMonitorProps {
   positions: Position[];
@@ -12,6 +14,12 @@ interface LiquidationMonitorProps {
 }
 
 export function LiquidationMonitor({ positions, accountValue }: LiquidationMonitorProps) {
+  const { toast } = useToast();
+  const previousRiskRef = useRef<{ level: string; highestRisk: number }>({
+    level: 'safe',
+    highestRisk: 0
+  });
+
   const riskAnalysis = useMemo(() => {
     if (positions.length === 0) {
       return {
@@ -53,10 +61,51 @@ export function LiquidationMonitor({ positions, accountValue }: LiquidationMonit
 
     return {
       overallRisk: avgRisk,
+      highestRisk,
       riskLevel,
       atRiskPositions: positionsWithRisk.filter(p => p.riskPercent > 20),
     };
   }, [positions]);
+
+  // Alert on risk level changes
+  useEffect(() => {
+    const prev = previousRiskRef.current;
+    const current = riskAnalysis;
+
+    // Alert when entering warning or critical zones
+    if (prev.level === 'safe' && current.riskLevel === 'warning') {
+      alertSoundManager.playMarginAlert();
+      toast({
+        title: '⚠️ Liquidation Risk Warning',
+        description: `One or more positions approaching liquidation. Highest risk: ${current.highestRisk.toFixed(1)}%`,
+        variant: 'default',
+      });
+    } else if (current.riskLevel === 'critical' && prev.level !== 'critical') {
+      alertSoundManager.playLiquidationAlert();
+      toast({
+        title: '🚨 CRITICAL: Liquidation Imminent!',
+        description: `Positions at extreme risk! Highest risk: ${current.highestRisk.toFixed(1)}%. Add margin or close positions immediately.`,
+        variant: 'destructive',
+      });
+    }
+
+    // Alert on significant risk increases within the same level
+    if (current.riskLevel === prev.level && current.riskLevel !== 'safe') {
+      const riskIncrease = current.highestRisk - prev.highestRisk;
+      if (riskIncrease > 15) {
+        alertSoundManager.playMarginAlert();
+        toast({
+          title: '⚠️ Risk Increasing Rapidly',
+          description: `Liquidation risk jumped by ${riskIncrease.toFixed(1)}%. Monitor positions closely.`,
+        });
+      }
+    }
+
+    previousRiskRef.current = {
+      level: current.riskLevel,
+      highestRisk: current.highestRisk
+    };
+  }, [riskAnalysis, toast]);
 
   const getRiskColor = (risk: number) => {
     if (risk > 70) return 'text-red-500';

@@ -4,6 +4,7 @@ import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
+import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Button } from '@/components/ui/button';
 import { BarChart3, Zap, Wallet, GitCompare, Calculator } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';

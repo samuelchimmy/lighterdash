@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import LighterAnalytics from "./pages/LighterAnalytics";
 import CommunityHub from "./pages/CommunityHub";
 import FuturesCalculator from "./pages/FuturesCalculator";
+import Liquidations from "./pages/Liquidations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/analytics" element={<LighterAnalytics />} />
           <Route path="/calculator" element={<FuturesCalculator />} />
           <Route path="/community" element={<CommunityHub />} />
+          <Route path="/liquidations" element={<Liquidations />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

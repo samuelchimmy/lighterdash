@@ -185,6 +185,48 @@ export type Database = {
         }
         Relationships: []
       }
+      liquidations: {
+        Row: {
+          created_at: string | null
+          event_type: string
+          id: string
+          market_id: number
+          price: number
+          settlement_price: number | null
+          size: number
+          symbol: string | null
+          timestamp: number
+          usdc_amount: number
+          wallet_address: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_type: string
+          id?: string
+          market_id: number
+          price: number
+          settlement_price?: number | null
+          size: number
+          symbol?: string | null
+          timestamp: number
+          usdc_amount: number
+          wallet_address: string
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          market_id?: number
+          price?: number
+          settlement_price?: number | null
+          size?: number
+          symbol?: string | null
+          timestamp?: number
+          usdc_amount?: number
+          wallet_address?: string
+        }
+        Relationships: []
+      }
       trade_comments: {
         Row: {
           comment: string

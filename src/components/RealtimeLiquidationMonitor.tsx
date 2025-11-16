@@ -9,6 +9,7 @@ import { resolveMarketSymbol } from '@/lib/markets';
 import { alertSoundManager } from '@/lib/alert-sounds';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { supabase } from '@/integrations/supabase/client';
 
 interface LiquidationEvent {
   id: string;
@@ -104,9 +105,28 @@ export function RealtimeLiquidationMonitor({
                 const existingIds = new Set(prev.map(e => e.id));
                 const uniqueNew = newEvents.filter(e => !existingIds.has(e.id));
                 
-                // Show notifications for new events
-                uniqueNew.forEach(event => {
+                // Show notifications and store in database for new events
+                uniqueNew.forEach(async (event) => {
                   const symbol = resolveMarketSymbol(event.content.market_index);
+                  
+                  // Store in database
+                  if (walletAddress) {
+                    try {
+                      await supabase.from('liquidations').insert({
+                        wallet_address: walletAddress,
+                        market_id: event.content.market_index || 0,
+                        symbol: symbol,
+                        event_type: event.kind,
+                        price: parseFloat(event.kind === 'liquidation' ? event.content.price : event.content.settlement_price),
+                        size: parseFloat(event.content.size),
+                        usdc_amount: parseFloat(event.content.usdc_amount),
+                        timestamp: event.content.timestamp || Date.now(),
+                        settlement_price: event.kind === 'deleverage' ? parseFloat(event.content.settlement_price) : null,
+                      });
+                    } catch (error) {
+                      console.error('Error storing liquidation:', error);
+                    }
+                  }
                   
                   if (event.kind === 'liquidation') {
                     const side = event.content.is_ask ? 'SHORT' : 'LONG';

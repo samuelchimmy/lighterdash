@@ -6,7 +6,7 @@ import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Button } from '@/components/ui/button';
-import { BarChart3, Zap, Wallet, GitCompare, Calculator } from 'lucide-react';
+import { BarChart3, Zap, Wallet, GitCompare, Calculator, AlertTriangle } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Footer } from '@/components/Footer';
 
@@ -74,6 +74,15 @@ const Index = () => {
               )}
               {!scannedAddress && (
                 <>
+                  <Button
+                    onClick={() => navigate('/liquidations')}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <AlertTriangle className="w-4 h-4" />
+                    <span className="hidden md:inline">Liquidations</span>
+                  </Button>
                   <Button
                     onClick={() => navigate('/calculator')}
                     variant="outline"

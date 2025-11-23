@@ -17,7 +17,7 @@ export const useAnalytics = () => {
   useEffect(() => {
     // Track page views on route change
     if (window.gtag) {
-      window.gtag('config', 'GA_MEASUREMENT_ID', {
+      window.gtag('config', 'G-L9CE5SD95M', {
         page_path: location.pathname + location.search,
       });
     }

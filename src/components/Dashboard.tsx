@@ -38,7 +38,20 @@ import {
 } from './LoadingSkeleton';
 import type { UserStats, Position, LighterTrade, PnlDataPoint } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, RefreshCw, Layers, LineChart, ArrowLeftRight, Activity, BarChart3, Clock, History, ShieldAlert, Trophy, Wallet, BookOpen, TrendingUp } from 'lucide-react';
+import { 
+  ArrowPathIcon, 
+  Square3Stack3DIcon, 
+  ChartBarIcon, 
+  ArrowsRightLeftIcon, 
+  BoltIcon, 
+  ClockIcon, 
+  ShieldExclamationIcon, 
+  TrophyIcon, 
+  WalletIcon, 
+  BookOpenIcon, 
+  ArrowTrendingUpIcon 
+} from '@heroicons/react/24/solid';
+import { Loader2 } from 'lucide-react';
 
 interface DashboardProps {
   walletAddress: string;
@@ -477,7 +490,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-primary/10">
-            <BarChart3 className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+            <ChartBarIcon className="w-5 h-5 text-primary" />
           </div>
           <h2 className="text-xl font-semibold text-foreground">Wallet Dashboard</h2>
         </div>
@@ -489,7 +502,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
             disabled={isRefreshing}
             className="gap-2"
           >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <ArrowPathIcon className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
             <span className="hidden sm:inline">Refresh</span>
           </Button>
           <ExportMenu 
@@ -511,7 +524,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Account Stats */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <Wallet className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <WalletIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Account Overview</h3>
         </div>
         <AccountStats stats={userStats} />
@@ -520,7 +533,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* PnL Chart */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <LineChart className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <ChartBarIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Performance Chart</h3>
         </div>
         <PnlChart 
@@ -532,7 +545,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Positions */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <Layers className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <Square3Stack3DIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Open Positions</h3>
         </div>
         <PositionsTable positions={positions} />
@@ -541,7 +554,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Open Orders */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <Clock className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <ClockIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Open Orders</h3>
         </div>
         <OpenOrdersTable orders={orders} />
@@ -550,7 +563,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Recent Trades */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <ArrowLeftRight className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <ArrowsRightLeftIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Recent Trades</h3>
         </div>
         <TradesHistory trades={trades} />
@@ -559,7 +572,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Performance Metrics */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <Trophy className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <TrophyIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
         </div>
         <PerformanceMetrics trades={trades} positions={positions} />
@@ -569,14 +582,14 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+            <ArrowTrendingUpIcon className="w-4 h-4 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Top Trades</h3>
           </div>
           <BestWorstTrades trades={trades} />
         </section>
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+            <BoltIcon className="w-4 h-4 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Asset Performance</h3>
           </div>
           <AssetPerformance trades={trades} />
@@ -593,7 +606,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {Object.keys(fundingHistories).length > 0 && (
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <History className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+            <ClockIcon className="w-4 h-4 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Funding History</h3>
           </div>
           <FundingHistory fundingHistories={fundingHistories} />
@@ -613,7 +626,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Liquidation Monitor */}
       <section>
         <div className="flex items-center gap-2 mb-4">
-          <ShieldAlert className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <ShieldExclamationIcon className="w-4 h-4 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Risk Monitor</h3>
         </div>
         <LiquidationMonitor positions={positions} accountValue={accountValue} />
@@ -623,7 +636,7 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {user && (
         <section>
           <div className="flex items-center gap-2 mb-4">
-            <BookOpen className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
+            <BookOpenIcon className="w-4 h-4 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Trading Journal</h3>
           </div>
           <TradingJournal 

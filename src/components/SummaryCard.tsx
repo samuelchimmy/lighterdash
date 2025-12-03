@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatAddress } from '@/lib/lighter-api';
-import { TrendingUp, TrendingDown, Wallet, DollarSign } from 'lucide-react';
+import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, WalletIcon, CurrencyDollarIcon } from '@heroicons/react/24/solid';
 import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 import { MetricTooltip, METRIC_TOOLTIPS } from './MetricTooltip';
 
@@ -24,10 +24,10 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <div className={`p-2 rounded-lg ${isProfitable ? 'bg-profit/10' : 'bg-loss/10'}`}>
-                {isProfitable ? (
-                  <TrendingUp className="w-5 h-5 text-profit" fill="currentColor" fillOpacity={0.2} />
+              {isProfitable ? (
+                  <ArrowTrendingUpIcon className="w-5 h-5 text-profit" />
                 ) : (
-                  <TrendingDown className="w-5 h-5 text-loss" fill="currentColor" fillOpacity={0.2} />
+                  <ArrowTrendingDownIcon className="w-5 h-5 text-loss" />
                 )}
               </div>
               <MetricTooltip {...METRIC_TOOLTIPS.totalPnl}>
@@ -52,7 +52,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 rounded-lg bg-primary/10">
-                <Wallet className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+                <WalletIcon className="w-5 h-5 text-primary" />
               </div>
               <p className="text-sm font-medium text-muted-foreground">Wallet Address</p>
             </div>
@@ -69,7 +69,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 rounded-lg bg-primary/10">
-                <DollarSign className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+                <CurrencyDollarIcon className="w-5 h-5 text-primary" />
               </div>
               <MetricTooltip {...METRIC_TOOLTIPS.accountValue}>
                 <p className="text-sm font-medium text-muted-foreground">Total Account Value</p>

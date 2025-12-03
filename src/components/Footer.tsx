@@ -1,4 +1,4 @@
-import { Copy, Check, Heart } from "lucide-react";
+import { ClipboardDocumentIcon, CheckIcon, HeartIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 export function Footer() {
@@ -15,7 +15,7 @@ export function Footer() {
     <footer className="border-t border-border/50 mt-20 bg-card/50" role="contentinfo">
       <div className="container mx-auto px-4 py-8 space-y-4">
         <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1">
-          Built with <Heart className="w-4 h-4 text-primary fill-primary" /> by{' '}
+          Built with <HeartIcon className="w-4 h-4 text-primary" /> by{' '}
           <a
             href="https://x.com/MetisCharter"
             target="_blank"
@@ -39,9 +39,9 @@ export function Footer() {
               title="Copy address"
             >
               {copied ? (
-                <Check className="w-4 h-4 text-profit" />
+                <CheckIcon className="w-4 h-4 text-profit" />
               ) : (
-                <Copy className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
+                <ClipboardDocumentIcon className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
               )}
             </button>
           </div>

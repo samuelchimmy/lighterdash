@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import { formatCurrencySmart, formatNumber } from '@/lib/lighter-api';
 import type { LighterTrade } from '@/types/lighter';
-import { TrendingUp, TrendingDown, ArrowLeftRight } from 'lucide-react';
+import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/solid';
 
 interface TradesHistoryProps {
   trades: LighterTrade[];
@@ -20,7 +20,7 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <ArrowLeftRight className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <ArrowsRightLeftIcon className="w-5 h-5 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Recent Trades</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No trades found</p>
@@ -60,9 +60,9 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
                   <TableCell>
                     <span className={`flex items-center gap-1.5 font-medium ${isBuy ? 'text-profit' : 'text-loss'}`}>
                       {isBuy ? (
-                        <TrendingUp className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
+                        <ArrowTrendingUpIcon className="w-4 h-4" />
                       ) : (
-                        <TrendingDown className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
+                        <ArrowTrendingDownIcon className="w-4 h-4" />
                       )}
                       {isBuy ? 'BUY' : 'SELL'}
                     </span>

@@ -6,6 +6,7 @@ import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Layout } from '@/components/Layout';
+import { FeatureAnnouncement } from '@/components/FeatureAnnouncement';
 import { 
   Wallet, 
   Zap,
@@ -61,6 +62,7 @@ const Index = () => {
       }
     >
       <DonationModal />
+      <FeatureAnnouncement />
       <div className="container mx-auto px-4 py-8" role="main">
         {isScanning ? (
           <ScanningLoader />

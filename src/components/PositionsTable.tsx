@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { formatCurrencySmart, formatNumber, formatPercentage } from '@/lib/lighter-api';
 import type { Position } from '@/types/lighter';
-import { TrendingUp, TrendingDown, Minus, AlertTriangle } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, Layers, ShieldAlert } from 'lucide-react';
 import { Sparkline } from './Sparkline';
 import { useMemo } from 'react';
 
@@ -25,7 +25,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
     const data: number[] = [];
     let price = basePrice;
     for (let i = 0; i < 12; i++) {
-      price += (Math.random() - 0.48) * basePrice * 0.02; // Random walk
+      price += (Math.random() - 0.48) * basePrice * 0.02;
       data.push(price);
     }
     return data;
@@ -33,29 +33,38 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
 
   if (!positions || positions.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Open Positions</h3>
+      <Card className="p-6 bg-card/80 backdrop-blur-sm border-border/50 shadow-card animate-slide-up delay-200">
+        <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
+          <Layers className="w-5 h-5 text-primary" />
+          Open Positions
+        </h3>
         <p className="text-muted-foreground text-center py-8">No open positions</p>
       </Card>
     );
   }
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card hover-glow-card overflow-hidden">
-      <h3 className="text-lg font-semibold mb-4 text-foreground">Open Positions</h3>
-      <div className="overflow-x-auto">
+    <Card className="p-6 bg-card/80 backdrop-blur-sm border-border/50 shadow-card overflow-hidden animate-slide-up delay-200">
+      <h3 className="text-lg font-semibold mb-6 text-foreground flex items-center gap-2">
+        <Layers className="w-5 h-5 text-primary" />
+        Open Positions
+        <Badge variant="outline" className="ml-2 text-xs border-border/50">
+          {positions.length} Active
+        </Badge>
+      </h3>
+      <div className="overflow-x-auto -mx-6 px-6">
         <Table>
           <TableHeader>
-            <TableRow className="border-border hover:bg-secondary/50">
-              <TableHead className="text-muted-foreground">Asset</TableHead>
-              <TableHead className="text-muted-foreground">Price Action</TableHead>
-              <TableHead className="text-muted-foreground">Side</TableHead>
-              <TableHead className="text-muted-foreground">Size</TableHead>
-              <TableHead className="text-muted-foreground">Entry Price</TableHead>
-              <TableHead className="text-muted-foreground">Position Value</TableHead>
-              <TableHead className="text-muted-foreground">Liq. Price</TableHead>
-              <TableHead className="text-muted-foreground">Liq. Distance</TableHead>
-              <TableHead className="text-muted-foreground text-right">Unrealized PnL</TableHead>
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Asset</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Price Action</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Side</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Size</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Entry Price</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Position Value</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Liq. Price</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide">Liq. Distance</TableHead>
+              <TableHead className="text-muted-foreground text-xs font-semibold uppercase tracking-wide text-right">Unrealized PnL</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -78,34 +87,55 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                 : 100;
               
               const riskPercent = Math.max(0, 100 - distanceToLiq);
-              const riskColor = riskPercent > 70 ? 'text-red-500' : riskPercent > 40 ? 'text-yellow-500' : 'text-green-500';
-              const progressColor = riskPercent > 70 ? 'bg-red-500' : riskPercent > 40 ? 'bg-yellow-500' : 'bg-green-500';
+              const getRiskColor = () => {
+                if (riskPercent > 70) return 'loss';
+                if (riskPercent > 40) return 'warning';
+                return 'profit';
+              };
+              const riskColor = getRiskColor();
               
               return (
                 <TableRow 
                   key={index} 
-                  className={`border-border hover:bg-secondary/50 transition-colors ${
-                    riskPercent > 70 ? 'bg-red-500/5' : riskPercent > 40 ? 'bg-yellow-500/5' : ''
+                  className={`border-border/30 transition-all duration-200 hover:bg-secondary/30 ${
+                    riskPercent > 70 ? 'bg-loss/5' : riskPercent > 40 ? 'bg-warning/5' : ''
                   }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <TableCell className="font-medium text-foreground">
-                    <div className="flex items-center gap-2">
-                      {riskPercent > 40 && <AlertTriangle className={`w-4 h-4 ${riskColor}`} />}
-                      {position.symbol}
+                    <div className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${side === 'LONG' ? 'bg-profit/10' : 'bg-loss/10'}`}>
+                        <span className="text-sm font-bold">{position.symbol?.charAt(0) || 'M'}</span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold">{position.symbol}</span>
+                        {riskPercent > 40 && (
+                          <span className={`text-2xs flex items-center gap-1 ${riskColor === 'loss' ? 'text-loss' : 'text-warning'}`}>
+                            <ShieldAlert className="w-3 h-3" /> At Risk
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Sparkline 
-                      data={sparklineData} 
-                      width={60} 
-                      height={24}
-                      color="auto"
-                    />
+                    <div className="p-1 rounded bg-secondary/30">
+                      <Sparkline 
+                        data={sparklineData} 
+                        width={60} 
+                        height={24}
+                        color="auto"
+                      />
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Badge 
-                      variant={side === 'LONG' ? 'default' : side === 'SHORT' ? 'destructive' : 'secondary'}
-                      className="gap-1 hover-glow-badge cursor-default"
+                      className={`gap-1 font-semibold border ${
+                        side === 'LONG' 
+                          ? 'bg-profit/20 text-profit border-profit/30 hover:bg-profit/30' 
+                          : side === 'SHORT'
+                          ? 'bg-loss/20 text-loss border-loss/30 hover:bg-loss/30'
+                          : 'bg-secondary text-muted-foreground border-border'
+                      }`}
                     >
                       {side === 'LONG' ? (
                         <TrendingUp className="w-3 h-3" />
@@ -117,22 +147,47 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                       {side}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-foreground">{formatNumber(Math.abs(size), 4)}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.avg_entry_price || '0'))}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrencySmart(Math.abs(parseFloat(position.position_value || '0')))}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.liquidation_price || '0'))}</TableCell>
+                  <TableCell className="text-foreground font-mono-numbers">
+                    {formatNumber(Math.abs(size), 4)}
+                  </TableCell>
+                  <TableCell className="text-foreground font-mono-numbers">
+                    {formatCurrencySmart(parseFloat(position.avg_entry_price || '0'))}
+                  </TableCell>
+                  <TableCell className="text-foreground font-mono-numbers">
+                    {formatCurrencySmart(Math.abs(parseFloat(position.position_value || '0')))}
+                  </TableCell>
+                  <TableCell className="font-mono-numbers">
+                    <span className={riskPercent > 40 ? (riskColor === 'loss' ? 'text-loss' : 'text-warning') : 'text-foreground'}>
+                      {formatCurrencySmart(parseFloat(position.liquidation_price || '0'))}
+                    </span>
+                  </TableCell>
                   <TableCell>
-                    <div className="w-24 space-y-1">
-                      <div className="relative h-2">
-                        <Progress value={riskPercent} className="h-2" />
+                    <div className="w-24 space-y-1.5">
+                      <div className="relative h-1.5 bg-muted/30 rounded-full overflow-hidden">
+                        <div 
+                          className={`absolute inset-y-0 left-0 rounded-full transition-all duration-500 ${
+                            riskColor === 'loss' ? 'bg-loss' : riskColor === 'warning' ? 'bg-warning' : 'bg-profit'
+                          }`}
+                          style={{ width: `${riskPercent}%` }}
+                        />
                       </div>
-                      <span className={`text-xs font-semibold ${riskColor}`}>
+                      <span className={`text-xs font-semibold ${
+                        riskColor === 'loss' ? 'text-loss' : riskColor === 'warning' ? 'text-warning' : 'text-profit'
+                      }`}>
                         {formatPercentage(distanceToLiq)}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className={`text-right font-semibold ${pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {formatCurrencySmart(pnl)}
+                  <TableCell className="text-right">
+                    <Badge 
+                      className={`font-bold font-mono-numbers ${
+                        pnl >= 0 
+                          ? 'bg-profit/20 text-profit border-profit/30' 
+                          : 'bg-loss/20 text-loss border-loss/30'
+                      } border`}
+                    >
+                      {pnl >= 0 ? '+' : ''}{formatCurrencySmart(pnl)}
+                    </Badge>
                   </TableCell>
                 </TableRow>
               );

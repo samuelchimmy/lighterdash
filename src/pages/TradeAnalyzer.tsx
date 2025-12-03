@@ -99,6 +99,9 @@ const TradeAnalyzer = () => {
                   <strong className="text-foreground">Expected CSV columns:</strong><br />
                   Date, Market, Side, Size, Price, Closed PnL, Fee, Role, Type
                 </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  <strong className="text-foreground">Tip:</strong> Click "Aggregate" on Lighter before exporting your trade history for better results.
+                </p>
               </div>
             </div>
           )}

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { TrendingUp, TrendingDown, DollarSign, Target, Award, BarChart3 } from 'lucide-react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { TrendingUp, TrendingDown, Receipt, Target, Award, LineChart } from 'lucide-react';
+import { LineChart as RechartsLineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { KPIMetrics, CumulativePnLPoint } from '@/lib/csv-trade-analyzer';
 import { AITooltip } from './AITooltip';
 import { useAnimatedCounter } from '@/hooks/use-animated-counter';
@@ -48,15 +48,17 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-card border-border hover-glow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Net Closed PnL</span>
-              {kpis.netPnL >= 0 ? (
-                <TrendingUp className="w-4 h-4 text-profit" />
-              ) : (
-                <TrendingDown className="w-4 h-4 text-loss" />
-              )}
+        <Card className="hover-glow-card">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`p-2 rounded-xl ${kpis.netPnL >= 0 ? 'bg-profit/10' : 'bg-loss/10'}`}>
+                {kpis.netPnL >= 0 ? (
+                  <TrendingUp className="w-5 h-5 text-profit" />
+                ) : (
+                  <TrendingDown className="w-5 h-5 text-loss" />
+                )}
+              </div>
+              <span className="text-sm font-medium text-muted-foreground">Net Closed PnL</span>
             </div>
             <p className={`text-2xl font-bold ${kpis.netPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
               {formatCurrency(animatedNetPnL)}
@@ -64,11 +66,13 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border hover-glow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Total Fees</span>
-              <DollarSign className="w-4 h-4 text-muted-foreground" />
+        <Card className="hover-glow-card">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="p-2 rounded-xl bg-muted">
+                <Receipt className="w-5 h-5 text-muted-foreground" />
+              </div>
+              <span className="text-sm font-medium text-muted-foreground">Total Fees</span>
             </div>
             <p className="text-2xl font-bold text-foreground">
               {formatCurrency(kpis.totalFees)}
@@ -76,11 +80,13 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border hover-glow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Win Rate</span>
-              <Target className="w-4 h-4 text-primary" />
+        <Card className="hover-glow-card">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="p-2 rounded-xl bg-primary/10">
+                <Target className="w-5 h-5 text-primary" />
+              </div>
+              <span className="text-sm font-medium text-muted-foreground">Win Rate</span>
             </div>
             <p className="text-2xl font-bold text-foreground">
               {animatedWinRate.toFixed(1)}%
@@ -91,11 +97,13 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
           </CardContent>
         </Card>
 
-        <Card className="bg-card border-border hover-glow-card">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-muted-foreground">Profit Factor</span>
-              <Award className="w-4 h-4 text-primary" />
+        <Card className="hover-glow-card">
+          <CardContent className="p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`p-2 rounded-xl ${kpis.profitFactor >= 1 ? 'bg-profit/10' : 'bg-loss/10'}`}>
+                <Award className={`w-5 h-5 ${kpis.profitFactor >= 1 ? 'text-profit' : 'text-loss'}`} />
+              </div>
+              <span className="text-sm font-medium text-muted-foreground">Profit Factor</span>
             </div>
             <p className={`text-2xl font-bold ${kpis.profitFactor >= 1 ? 'text-profit' : 'text-loss'}`}>
               {formatNumber(kpis.profitFactor)}
@@ -106,25 +114,25 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
 
       {/* Secondary KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-card border-border">
+        <Card>
           <CardContent className="p-4">
             <span className="text-sm text-muted-foreground">Gross Profit</span>
             <p className="text-lg font-semibold text-profit">{formatCurrency(kpis.grossProfit)}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card>
           <CardContent className="p-4">
             <span className="text-sm text-muted-foreground">Gross Loss</span>
             <p className="text-lg font-semibold text-loss">-{formatCurrency(kpis.grossLoss)}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card>
           <CardContent className="p-4">
             <span className="text-sm text-muted-foreground">Avg Winner</span>
             <p className="text-lg font-semibold text-profit">{formatCurrency(kpis.avgWinningTrade)}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border-border">
+        <Card>
           <CardContent className="p-4">
             <span className="text-sm text-muted-foreground">Avg Loser</span>
             <p className="text-lg font-semibold text-loss">-{formatCurrency(kpis.avgLosingTrade)}</p>
@@ -151,17 +159,19 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Cumulative PnL Chart */}
-        <Card className="bg-card border-border">
+        <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <LineChart className="w-4 h-4 text-primary" />
+              </div>
               Cumulative PnL
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
+                <RechartsLineChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis 
                     dataKey="date" 
@@ -177,8 +187,9 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
-                      color: 'hsl(var(--foreground))'
+                      borderRadius: '12px',
+                      color: 'hsl(var(--foreground))',
+                      boxShadow: 'var(--shadow-card-hover)'
                     }}
                     formatter={(value: number) => [`$${value.toFixed(2)}`, 'PnL']}
                   />
@@ -190,17 +201,19 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                     strokeWidth={2}
                     dot={false}
                   />
-                </LineChart>
+                </RechartsLineChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
         {/* Period PnL Chart */}
-        <Card className="bg-card border-border">
+        <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <LineChart className="w-4 h-4 text-primary" />
+              </div>
               Daily Performance
             </CardTitle>
           </CardHeader>
@@ -223,8 +236,9 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
-                      color: 'hsl(var(--foreground))'
+                      borderRadius: '12px',
+                      color: 'hsl(var(--foreground))',
+                      boxShadow: 'var(--shadow-card-hover)'
                     }}
                     formatter={(value: number) => [`$${value.toFixed(2)}`, 'PnL']}
                   />
@@ -232,7 +246,7 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                   <Bar 
                     dataKey="pnl" 
                     fill="hsl(var(--primary))"
-                    radius={[4, 4, 0, 0]}
+                    radius={[6, 6, 0, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -242,14 +256,14 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
       </div>
 
       {/* Summary Badge */}
-      <div className="flex items-center justify-center gap-2">
-        <Badge variant="outline" className="text-sm">
+      <div className="flex items-center justify-center gap-3 flex-wrap">
+        <Badge variant="outline" className="text-sm px-3 py-1">
           {kpis.totalTrades} Total Trades
         </Badge>
-        <Badge variant={kpis.profitFactor >= 1 ? "default" : "destructive"} className="text-sm">
+        <Badge variant={kpis.profitFactor >= 1 ? "default" : "destructive"} className="text-sm px-3 py-1">
           {kpis.profitFactor >= 2 ? 'Excellent' : kpis.profitFactor >= 1.5 ? 'Good' : kpis.profitFactor >= 1 ? 'Profitable' : 'Needs Work'}
         </Badge>
-        <Badge variant="outline" className="text-sm">
+        <Badge variant="outline" className="text-sm px-3 py-1">
           Payoff Ratio: {formatNumber(kpis.payoffRatio)}
         </Badge>
       </div>

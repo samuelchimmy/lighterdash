@@ -91,7 +91,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                 >
                   <TableCell className="font-medium text-foreground">
                     <div className="flex items-center gap-2">
-                      {riskPercent > 40 && <AlertTriangle className={`w-4 h-4 ${riskColor}`} />}
+                      {riskPercent > 40 && <AlertTriangle className={`w-4 h-4 ${riskColor}`} fill="currentColor" fillOpacity={0.2} />}
                       {position.symbol}
                     </div>
                   </TableCell>
@@ -108,13 +108,13 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                       variant={side === 'LONG' ? 'default' : side === 'SHORT' ? 'destructive' : 'secondary'}
                       className="gap-1"
                     >
-                      {side === 'LONG' ? (
-                        <TrendingUp className="w-3 h-3" />
-                      ) : side === 'SHORT' ? (
-                        <TrendingDown className="w-3 h-3" />
-                      ) : (
-                        <Minus className="w-3 h-3" />
-                      )}
+                    {side === 'LONG' ? (
+                      <TrendingUp className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
+                    ) : side === 'SHORT' ? (
+                      <TrendingDown className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
+                    ) : (
+                      <Minus className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
+                    )}
                       {side}
                     </Badge>
                   </TableCell>

@@ -81,9 +81,9 @@ export function OpenOrdersTable({ orders }: OpenOrdersTableProps) {
                   <TableCell>
                     <Badge variant={order.side === 'buy' ? 'default' : 'destructive'} className="gap-1">
                       {order.side === 'buy' ? (
-                        <TrendingUp className="h-3 w-3" />
+                        <TrendingUp className="h-3 w-3" fill="currentColor" fillOpacity={0.2} />
                       ) : (
-                        <TrendingDown className="h-3 w-3" />
+                        <TrendingDown className="h-3 w-3" fill="currentColor" fillOpacity={0.2} />
                       )}
                       {order.side.toUpperCase()}
                     </Badge>

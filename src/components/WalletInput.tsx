@@ -139,7 +139,7 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
                         className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-destructive/10 rounded-lg transition-all"
                         title="Remove from history"
                       >
-                        <X className="w-3 h-3 text-muted-foreground hover:text-destructive" />
+                        <X className="w-3 h-3 text-muted-foreground hover:text-destructive" fill="currentColor" fillOpacity={0.2} />
                       </button>
                     </button>
                   ))}

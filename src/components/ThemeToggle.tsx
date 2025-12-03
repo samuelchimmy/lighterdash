@@ -14,7 +14,7 @@ export const ThemeToggle = () => {
   if (!mounted) {
     return (
       <Button variant="ghost" size="icon" className="h-9 w-9">
-        <Sun className="h-4 w-4" />
+        <Sun className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
       </Button>
     );
   }
@@ -27,9 +27,9 @@ export const ThemeToggle = () => {
       className="h-9 w-9 hover:bg-secondary"
     >
       {theme === 'dark' ? (
-        <Sun className="h-4 w-4 text-foreground" />
+        <Sun className="h-4 w-4 text-foreground" fill="currentColor" fillOpacity={0.2} />
       ) : (
-        <Moon className="h-4 w-4 text-foreground" />
+        <Moon className="h-4 w-4 text-foreground" fill="currentColor" fillOpacity={0.2} />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

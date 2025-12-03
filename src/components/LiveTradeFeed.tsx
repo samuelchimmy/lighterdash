@@ -60,7 +60,7 @@ export function LiveTradeFeed() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+            <Activity className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             Live Trade Feed
           </CardTitle>
           <Select
@@ -115,9 +115,9 @@ export function LiveTradeFeed() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         {isBuy ? (
-                          <TrendingUp className="h-4 w-4 text-green-500" />
+                          <TrendingUp className="h-4 w-4 text-profit" fill="currentColor" fillOpacity={0.2} />
                         ) : (
-                          <TrendingDown className="h-4 w-4 text-red-500" />
+                          <TrendingDown className="h-4 w-4 text-loss" fill="currentColor" fillOpacity={0.2} />
                         )}
                         <Badge variant={isBuy ? 'default' : 'destructive'} className="text-xs">
                           {isBuy ? 'BUY' : 'SELL'}

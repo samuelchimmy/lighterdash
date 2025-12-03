@@ -60,9 +60,9 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
                   <TableCell>
                     <span className={`flex items-center gap-1.5 font-medium ${isBuy ? 'text-profit' : 'text-loss'}`}>
                       {isBuy ? (
-                        <TrendingUp className="w-4 h-4" />
+                        <TrendingUp className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
                       ) : (
-                        <TrendingDown className="w-4 h-4" />
+                        <TrendingDown className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
                       )}
                       {isBuy ? 'BUY' : 'SELL'}
                     </span>

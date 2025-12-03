@@ -39,7 +39,7 @@ export function AlertHistory({ history, onClear, onRemove }: AlertHistoryProps) 
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <History className="h-5 w-5" />
+            <History className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             Alert History
           </CardTitle>
           {history.length > 0 && (
@@ -81,7 +81,7 @@ export function AlertHistory({ history, onClear, onRemove }: AlertHistoryProps) 
                       className="h-6 w-6"
                       onClick={() => onRemove(item.id)}
                     >
-                      <X className="h-4 w-4" />
+                      <X className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
                     </Button>
                   </div>
                 </div>

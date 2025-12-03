@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { formatCurrencySmart, formatNumber, formatPercentage } from '@/lib/lighter-api';
 import type { Position } from '@/types/lighter';
-import { TrendingUp, TrendingDown, Minus, AlertTriangle, Layers } from 'lucide-react';
+import { ArrowTrendingUpIcon, ArrowTrendingDownIcon, MinusIcon, ExclamationTriangleIcon, Square3Stack3DIcon } from '@heroicons/react/24/solid';
 import { Sparkline } from './Sparkline';
 import { useMemo } from 'react';
 
@@ -35,7 +35,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Layers className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <Square3Stack3DIcon className="w-5 h-5 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Open Positions</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No open positions</p>
@@ -91,7 +91,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                 >
                   <TableCell className="font-medium text-foreground">
                     <div className="flex items-center gap-2">
-                      {riskPercent > 40 && <AlertTriangle className={`w-4 h-4 ${riskColor}`} fill="currentColor" fillOpacity={0.2} />}
+                      {riskPercent > 40 && <ExclamationTriangleIcon className={`w-4 h-4 ${riskColor}`} />}
                       {position.symbol}
                     </div>
                   </TableCell>
@@ -109,11 +109,11 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                       className="gap-1"
                     >
                     {side === 'LONG' ? (
-                      <TrendingUp className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
+                      <ArrowTrendingUpIcon className="w-3 h-3" />
                     ) : side === 'SHORT' ? (
-                      <TrendingDown className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
+                      <ArrowTrendingDownIcon className="w-3 h-3" />
                     ) : (
-                      <Minus className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
+                      <MinusIcon className="w-3 h-3" />
                     )}
                       {side}
                     </Badge>

@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/lighter-api";
-import { ArrowUpRight, ArrowDownRight, History } from "lucide-react";
+import { ArrowUpRightIcon, ArrowDownRightIcon, ClockIcon } from "@heroicons/react/24/solid";
 
 interface Transaction {
   hash: string;
@@ -38,7 +38,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <History className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <ClockIcon className="w-5 h-5 text-primary" />
           <h3 className="text-lg font-semibold text-foreground">Transaction History</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No transactions found</p>
@@ -51,7 +51,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
   return (
     <Card className="p-6 overflow-hidden">
       <div className="flex items-center gap-2 mb-4">
-        <History className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+        <ClockIcon className="w-5 h-5 text-primary" />
         <h3 className="text-lg font-semibold text-foreground">Transaction History</h3>
       </div>
       <div className="overflow-x-auto">
@@ -74,8 +74,8 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                 <TableRow key={tx.hash || index} className="border-border/30 hover:bg-secondary/50 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      {isWithdraw && <ArrowUpRight className="h-4 w-4 text-loss" />}
-                      {isDeposit && <ArrowDownRight className="h-4 w-4 text-profit" />}
+                      {isWithdraw && <ArrowUpRightIcon className="h-4 w-4 text-loss" />}
+                      {isDeposit && <ArrowDownRightIcon className="h-4 w-4 text-profit" />}
                       <span className="font-medium text-foreground">{typeName}</span>
                     </div>
                   </TableCell>

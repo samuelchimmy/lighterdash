@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertCircle, Wallet } from "lucide-react";
+import { ExclamationCircleIcon, WalletIcon } from "@heroicons/react/24/solid";
 
 export function EmptyWalletState() {
   return (
@@ -7,13 +7,13 @@ export function EmptyWalletState() {
       <Card className="border-border">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Wallet className="h-5 w-5" />
+            <WalletIcon className="h-5 w-5" />
             Wallet Dashboard
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-12 space-y-4">
           <div className="rounded-full bg-muted p-4">
-            <AlertCircle className="h-12 w-12 text-muted-foreground" />
+            <ExclamationCircleIcon className="h-12 w-12 text-muted-foreground" />
           </div>
           <div className="text-center space-y-2 max-w-md">
             <h3 className="text-lg font-semibold text-foreground">No Trading Activity</h3>

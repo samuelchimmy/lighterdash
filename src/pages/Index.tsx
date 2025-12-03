@@ -7,11 +7,7 @@ import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Layout } from '@/components/Layout';
 import { FeatureAnnouncement } from '@/components/FeatureAnnouncement';
-import { 
-  Wallet, 
-  Zap,
-  BarChart3 
-} from 'lucide-react';
+import { WalletIcon, BoltIcon, ChartBarIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from 'react-router-dom';
 
 const Index = () => {
@@ -85,7 +81,7 @@ const Index = () => {
             <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in" aria-label="Key features">
               <article className="group bg-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
                 <div className="p-3 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/15 transition-colors">
-                  <Wallet className="w-6 h-6 text-primary" aria-hidden="true" />
+                  <WalletIcon className="w-6 h-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-base md:text-lg font-semibold text-foreground mb-2">Wallet Tracker</h3>
                 <p className="text-muted-foreground text-sm">
@@ -95,7 +91,7 @@ const Index = () => {
 
               <article className="group bg-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
                 <div className="p-3 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/15 transition-colors">
-                  <BarChart3 className="w-6 h-6 text-primary" aria-hidden="true" />
+                  <ChartBarIcon className="w-6 h-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-base md:text-lg font-semibold text-foreground mb-2">Market Analytics</h3>
                 <p className="text-muted-foreground text-sm">
@@ -105,7 +101,7 @@ const Index = () => {
 
               <article className="group bg-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
                 <div className="p-3 rounded-xl bg-primary/10 w-fit mb-4 group-hover:bg-primary/15 transition-colors">
-                  <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
+                  <BoltIcon className="w-6 h-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-base md:text-lg font-semibold text-foreground mb-2">Real-Time Updates</h3>
                 <p className="text-muted-foreground text-sm">
@@ -118,7 +114,7 @@ const Index = () => {
               <article className="group bg-card border border-border/50 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1">
                 <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6 flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-primary/10">
-                    <BarChart3 className="w-6 h-6 text-primary" aria-hidden="true" />
+                    <ChartBarIcon className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   Wallet Analytics
                 </h3>
@@ -153,7 +149,7 @@ const Index = () => {
               <article className="group bg-card border border-border/50 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1">
                 <h3 className="text-xl md:text-2xl font-semibold text-foreground mb-6 flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-primary/10">
-                    <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
+                    <BoltIcon className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                   Advanced Features
                 </h3>

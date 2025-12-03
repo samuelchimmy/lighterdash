@@ -7,7 +7,7 @@ import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Layout } from '@/components/Layout';
 import { FeatureAnnouncement } from '@/components/FeatureAnnouncement';
-import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, SparklesIcon } from '@heroicons/react/24/solid';
+import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, LightBulbIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from 'react-router-dom';
 
 const Index = () => {
@@ -115,8 +115,8 @@ const Index = () => {
               <article className="group bg-gradient-to-br from-primary/5 via-purple-500/5 to-primary/10 border border-primary/20 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1">
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <div className="flex-1">
-                    <h3 className="text-xl md:text-2xl font-medium text-foreground mb-4 flex items-center gap-3">
-                      <SparklesIcon className="w-6 h-6 text-primary" aria-hidden="true" />
+                <h3 className="text-xl md:text-2xl font-medium text-foreground mb-4 flex items-center gap-3">
+                      <LightBulbIcon className="w-6 h-6 text-primary" aria-hidden="true" />
                       AI Trader Insights
                       <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full font-medium">NEW</span>
                     </h3>
@@ -147,7 +147,7 @@ const Index = () => {
                     href="/trade-analyzer" 
                     className="shrink-0 inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl font-medium transition-colors"
                   >
-                    <SparklesIcon className="w-5 h-5" />
+                    <LightBulbIcon className="w-5 h-5" />
                     Try AI Insights
                   </a>
                 </div>

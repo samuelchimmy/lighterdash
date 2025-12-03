@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Squares2X2Icon,
-  SparklesIcon,
+  LightBulbIcon,
   FireIcon,
   ChartBarIcon,
   ScaleIcon,
@@ -26,7 +26,7 @@ interface LayoutProps {
 }
 
 const navItems = [
-  { label: 'AI Trader Insights', path: '/trade-analyzer', icon: SparklesIcon },
+  { label: 'AI Trader Insights', path: '/trade-analyzer', icon: LightBulbIcon },
   { label: 'Liquidations', path: '/liquidations', icon: FireIcon },
   { label: 'Calculator', path: '/calculator', icon: ChartBarIcon },
   { label: 'Compare Wallets', path: '/community', icon: ScaleIcon },

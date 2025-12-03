@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Sparkles } from 'lucide-react';
+import 'lineicons/web-font/lineicons.css';
 
 const ANNOUNCEMENT_KEY = 'lighterdash-ai-insights-announced';
 
@@ -16,7 +16,7 @@ export function FeatureAnnouncement() {
         toast(
           <div className="flex items-start gap-3">
             <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <i className="lni lni-star-fill text-base text-primary" />
             </div>
             <div className="flex-1">
               <p className="font-semibold text-foreground">New Feature: AI Trader Insights</p>

@@ -85,7 +85,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Trophy className="w-5 h-5 text-primary" />
+          <Trophy className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No trading history available</p>
@@ -97,14 +97,14 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
     <div className="space-y-6">
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-6">
-          <BarChart3 className="w-5 h-5 text-primary" />
+          <BarChart3 className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Performance Overview</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
             <div className="flex items-center gap-2 mb-3">
               <div className="p-1.5 rounded-lg bg-primary/10">
-                <TrendingUp className="w-4 h-4 text-primary" />
+                <TrendingUp className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <p className="text-xs font-medium text-muted-foreground">Total Realized PnL</p>
             </div>
@@ -117,7 +117,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-primary/10">
-                  <Target className="w-4 h-4 text-primary" />
+                  <Target className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
                 </div>
                 <p className="text-xs font-medium text-muted-foreground">Win Rate</p>
               </div>
@@ -139,7 +139,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
           <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
             <div className="flex items-center gap-2 mb-3">
               <div className="p-1.5 rounded-lg bg-primary/10">
-                <Award className="w-4 h-4 text-primary" />
+                <Award className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <p className="text-xs font-medium text-muted-foreground">Best Trade Size</p>
             </div>
@@ -151,7 +151,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
           <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
             <div className="flex items-center gap-2 mb-3">
               <div className="p-1.5 rounded-lg bg-primary/10">
-                <Activity className="w-4 h-4 text-primary" />
+                <Activity className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <p className="text-xs font-medium text-muted-foreground">Total Trades</p>
             </div>
@@ -163,7 +163,7 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
       {metrics.performanceByAsset.length > 0 && (
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Trophy className="w-5 h-5 text-primary" />
+            <Trophy className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             <h3 className="text-lg font-semibold text-foreground">Performance by Market</h3>
           </div>
           <div className="space-y-3">

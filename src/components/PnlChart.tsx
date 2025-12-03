@@ -63,7 +63,7 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <LineChartIcon className="w-5 h-5 text-primary" />
+          <LineChartIcon className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No historical data available yet</p>
@@ -111,7 +111,7 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <LineChartIcon className="w-5 h-5 text-primary" />
+            <LineChartIcon className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
             <Button
               variant="ghost"

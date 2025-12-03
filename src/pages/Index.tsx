@@ -71,7 +71,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-xl bg-primary/10">
-                <LayoutDashboard className="w-6 h-6 text-primary" />
+                <LayoutDashboard className="w-6 h-6 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <h1 className="text-xl md:text-2xl font-semibold text-foreground">
                 LighterDash

@@ -25,9 +25,9 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
             <div className="flex items-center gap-2 mb-2">
               <div className={`p-2 rounded-lg ${isProfitable ? 'bg-profit/10' : 'bg-loss/10'}`}>
                 {isProfitable ? (
-                  <TrendingUp className="w-5 h-5 text-profit" />
+                  <TrendingUp className="w-5 h-5 text-profit" fill="currentColor" fillOpacity={0.2} />
                 ) : (
-                  <TrendingDown className="w-5 h-5 text-loss" />
+                  <TrendingDown className="w-5 h-5 text-loss" fill="currentColor" fillOpacity={0.2} />
                 )}
               </div>
               <MetricTooltip {...METRIC_TOOLTIPS.totalPnl}>
@@ -52,7 +52,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 rounded-lg bg-primary/10">
-                <Wallet className="w-5 h-5 text-primary" />
+                <Wallet className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <p className="text-sm font-medium text-muted-foreground">Wallet Address</p>
             </div>
@@ -69,7 +69,7 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-2 rounded-lg bg-primary/10">
-                <DollarSign className="w-5 h-5 text-primary" />
+                <DollarSign className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <MetricTooltip {...METRIC_TOOLTIPS.accountValue}>
                 <p className="text-sm font-medium text-muted-foreground">Total Account Value</p>

@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatAddress } from '@/lib/lighter-api';
-import { TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { TrendingUp, TrendingDown, Wallet, DollarSign } from 'lucide-react';
 import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 import { MetricTooltip, METRIC_TOOLTIPS } from './MetricTooltip';
 
@@ -18,55 +18,69 @@ export const SummaryCard = ({ totalPnl, walletAddress, accountValue }: SummaryCa
   const animatedAccountValue = useAnimatedCounter(accountValue, { duration: 1000 });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <Card className="p-6 hover-glow-card">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className={`p-2 rounded-lg ${isProfitable ? 'bg-profit/10' : 'bg-loss/10'}`}>
+                {isProfitable ? (
+                  <TrendingUp className="w-5 h-5 text-profit" />
+                ) : (
+                  <TrendingDown className="w-5 h-5 text-loss" />
+                )}
+              </div>
               <MetricTooltip {...METRIC_TOOLTIPS.totalPnl}>
-                <p className="text-sm text-muted-foreground">Total PnL</p>
+                <p className="text-sm font-medium text-muted-foreground">Total PnL</p>
               </MetricTooltip>
-              <Badge variant={isProfitable ? 'default' : 'destructive'} className="text-xs hover-glow-badge">
-                {isProfitable ? 'Profit' : 'Loss'}
-              </Badge>
             </div>
             <p className={`text-3xl font-bold ${isProfitable ? 'text-profit' : 'text-loss'}`}>
               {formatCurrencySmart(animatedPnl)}
             </p>
+            <Badge 
+              variant={isProfitable ? 'default' : 'destructive'} 
+              className="mt-2 text-xs"
+            >
+              {isProfitable ? 'Profit' : 'Loss'}
+            </Badge>
           </div>
-          {isProfitable ? (
-            <TrendingUp className="w-8 h-8 text-profit" />
-          ) : (
-            <TrendingDown className="w-8 h-8 text-loss" />
-          )}
         </div>
       </Card>
 
-      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
+      <Card className="p-6 hover-glow-card">
         <div className="flex items-start justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground mb-1">Wallet Address</p>
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Wallet className="w-5 h-5 text-primary" />
+              </div>
+              <p className="text-sm font-medium text-muted-foreground">Wallet Address</p>
+            </div>
             <p className="text-xl font-mono font-semibold text-foreground">
               {formatAddress(walletAddress)}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">{walletAddress}</p>
+            <p className="text-xs text-muted-foreground mt-2 truncate max-w-[200px]">{walletAddress}</p>
           </div>
-          <Wallet className="w-8 h-8 text-primary" />
         </div>
       </Card>
 
-      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
+      <Card className="p-6 hover-glow-card">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <DollarSign className="w-5 h-5 text-primary" />
+              </div>
               <MetricTooltip {...METRIC_TOOLTIPS.accountValue}>
-                <p className="text-sm text-muted-foreground">Total Account Value</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Account Value</p>
               </MetricTooltip>
-              <Badge variant="outline" className="text-xs hover-glow-badge">Live</Badge>
             </div>
             <p className="text-3xl font-bold text-foreground">
               {formatCurrencySmart(animatedAccountValue)}
             </p>
+            <Badge variant="outline" className="mt-2 text-xs border-primary/30 text-primary">
+              Live
+            </Badge>
           </div>
         </div>
       </Card>

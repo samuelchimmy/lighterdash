@@ -120,15 +120,15 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
               className="h-8 px-2 text-muted-foreground hover:text-destructive"
               title="Clear history"
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
             </Button>
           </div>
           <div className="flex items-center gap-2">
             <span className={`flex items-center gap-1 text-sm font-semibold ${chartMetrics.isPositive ? 'text-profit' : 'text-loss'}`}>
               {chartMetrics.isPositive ? (
-                <TrendingUp className="w-4 h-4" />
+                <TrendingUp className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
               ) : (
-                <TrendingDown className="w-4 h-4" />
+                <TrendingDown className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
               )}
               {formatCurrencySmart(Math.abs(chartMetrics.change))}
             </span>

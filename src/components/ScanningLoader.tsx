@@ -8,7 +8,7 @@ export const ScanningLoader = () => {
         <div className="relative inline-block">
           <div className="absolute inset-0 gradient-primary blur-2xl opacity-50 animate-pulse" />
           <div className="relative bg-card border border-primary/50 rounded-2xl p-6">
-            <Loader2 className="w-16 h-16 text-primary mx-auto animate-spin" />
+            <Loader2 className="w-16 h-16 text-primary mx-auto animate-spin" fill="currentColor" fillOpacity={0.1} />
           </div>
         </div>
         <div className="space-y-2">
@@ -36,7 +36,7 @@ export const ScanningLoader = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 rounded-lg blur animate-pulse" />
               <div className="relative w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <item.icon className="w-5 h-5 text-primary" />
+                <item.icon className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
             </div>
             <div className="flex-1">

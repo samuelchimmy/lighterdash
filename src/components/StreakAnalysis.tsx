@@ -75,7 +75,7 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-muted-foreground">Current Streak</span>
               <Badge variant={currentStreak.type === 'win' ? 'default' : 'destructive'}>
-                {currentStreak.type === 'win' ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+                {currentStreak.type === 'win' ? <TrendingUp className="h-3 w-3 mr-1" fill="currentColor" fillOpacity={0.2} /> : <TrendingDown className="h-3 w-3 mr-1" fill="currentColor" fillOpacity={0.2} />}
                 {currentStreak.type.toUpperCase()}
               </Badge>
             </div>
@@ -90,8 +90,8 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
           <div className="p-4 border border-border/50 rounded-lg bg-secondary/30 space-y-2 hover:bg-secondary/50 transition-colors">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold flex items-center gap-2 text-foreground">
-                <TrendingUp className="h-4 w-4 text-profit" />
-                Longest Win Streak
+              <TrendingUp className="h-4 w-4 text-profit" fill="currentColor" fillOpacity={0.2} />
+              Longest Win Streak
               </h4>
               <Badge variant="default">{longestWinStreak.count} wins</Badge>
             </div>
@@ -115,8 +115,8 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
           <div className="p-4 border border-border/50 rounded-lg bg-secondary/30 space-y-2 hover:bg-secondary/50 transition-colors">
             <div className="flex items-center justify-between">
               <h4 className="font-semibold flex items-center gap-2 text-foreground">
-                <TrendingDown className="h-4 w-4 text-loss" />
-                Longest Loss Streak
+              <TrendingDown className="h-4 w-4 text-loss" fill="currentColor" fillOpacity={0.2} />
+              Longest Loss Streak
               </h4>
               <Badge variant="destructive">{longestLossStreak.count} losses</Badge>
             </div>

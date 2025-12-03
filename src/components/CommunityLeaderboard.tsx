@@ -61,7 +61,7 @@ export function CommunityLeaderboard() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-yellow-500" />
+            <Trophy className="w-5 h-5 text-yellow-500" fill="currentColor" fillOpacity={0.2} />
             Community Leaderboard
           </CardTitle>
           <div className="flex gap-2">
@@ -102,13 +102,13 @@ export function CommunityLeaderboard() {
                 <div className="flex gap-2">
                   {entry.total_pnl > 10000 && (
                     <Badge variant="secondary">
-                      <TrendingUp className="w-3 h-3 mr-1" />
+                      <TrendingUp className="w-3 h-3 mr-1" fill="currentColor" fillOpacity={0.2} />
                       High Roller
                     </Badge>
                   )}
                   {(entry.win_rate || 0) > 70 && (
                     <Badge variant="secondary">
-                      <Target className="w-3 h-3 mr-1" />
+                      <Target className="w-3 h-3 mr-1" fill="currentColor" fillOpacity={0.2} />
                       Sharpshooter
                     </Badge>
                   )}
@@ -140,7 +140,7 @@ export function CommunityLeaderboard() {
 
           {entries.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
-              <Trophy className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <Trophy className="w-12 h-12 mx-auto mb-4 opacity-50" fill="currentColor" fillOpacity={0.2} />
               <p>No leaderboard entries yet</p>
               <p className="text-sm mt-2">Be the first to join!</p>
             </div>

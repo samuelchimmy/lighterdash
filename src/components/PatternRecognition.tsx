@@ -109,7 +109,7 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
     <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <Sparkles className="w-6 h-6 text-primary" />
+          <Sparkles className="w-6 h-6 text-primary" fill="currentColor" fillOpacity={0.2} />
           <div>
             <h2 className="text-2xl font-bold text-foreground">AI Pattern Recognition</h2>
             <p className="text-sm text-muted-foreground">
@@ -124,12 +124,12 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
         >
           {isAnalyzing ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" fill="currentColor" fillOpacity={0.1} />
               Analyzing...
             </>
           ) : (
             <>
-              <Sparkles className="w-4 h-4" />
+              <Sparkles className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
               Analyze Patterns
             </>
           )}
@@ -138,7 +138,7 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
 
       {trades.length < 10 && (
         <Alert className="mb-4">
-          <AlertCircle className="w-4 h-4" />
+          <AlertCircle className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           <AlertDescription>
             Need at least 10 trades to perform pattern analysis. You currently have {trades.length} trades.
           </AlertDescription>
@@ -150,7 +150,7 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
           {/* Summary */}
           <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
             <div className="flex items-start gap-3">
-              <Lightbulb className="w-5 h-5 text-primary mt-0.5" />
+              <Lightbulb className="w-5 h-5 text-primary mt-0.5" fill="currentColor" fillOpacity={0.2} />
               <div>
                 <h3 className="font-semibold text-foreground mb-2">Analysis Summary</h3>
                 <p className="text-sm text-foreground">{analysis.summary}</p>
@@ -162,13 +162,13 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
           {analysis.topRecommendations.length > 0 && (
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-success" />
+                <TrendingUp className="w-5 h-5 text-success" fill="currentColor" fillOpacity={0.2} />
                 Top Recommendations
               </h3>
               <div className="space-y-2">
                 {analysis.topRecommendations.map((rec, idx) => (
                   <div key={idx} className="flex items-start gap-2 p-3 bg-secondary/30 rounded-lg border border-border/50">
-                    <CheckCircle2 className="w-4 h-4 text-success mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-success mt-0.5 flex-shrink-0" fill="currentColor" fillOpacity={0.2} />
                     <span className="text-sm text-foreground">{rec}</span>
                   </div>
                 ))}
@@ -222,7 +222,7 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
                   {/* Recommendation */}
                   <div className="p-3 bg-background/50 rounded border border-border/50">
                     <div className="flex items-start gap-2">
-                      <Lightbulb className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                      <Lightbulb className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" fill="currentColor" fillOpacity={0.2} />
                       <div>
                         <h5 className="text-xs font-medium text-muted-foreground uppercase mb-1">
                           Recommendation
@@ -245,7 +245,7 @@ export const PatternRecognition = ({ trades, positions }: PatternRecognitionProp
 
       {!analysis && !isAnalyzing && trades.length >= 10 && (
         <div className="text-center py-12">
-          <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" fill="currentColor" fillOpacity={0.2} />
           <p className="text-muted-foreground mb-4">
             Click "Analyze Patterns" to discover high-probability trading setups
           </p>

@@ -26,7 +26,7 @@ export function ActiveAlertsPanel({
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Bell className="h-5 w-5" />
+          <Bell className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           Active Alerts
         </CardTitle>
       </CardHeader>
@@ -59,7 +59,7 @@ export function ActiveAlertsPanel({
                         className="h-8 w-8"
                         onClick={() => onEdit(marketId)}
                       >
-                        <Edit className="h-4 w-4" />
+                        <Edit className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
                       </Button>
                       <Button
                         variant="ghost"
@@ -67,7 +67,7 @@ export function ActiveAlertsPanel({
                         className="h-8 w-8"
                         onClick={() => onDelete(marketId)}
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
                       </Button>
                     </div>
                   </div>

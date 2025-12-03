@@ -114,9 +114,9 @@ export function LiquidationMonitor({ positions, accountValue }: LiquidationMonit
   };
 
   const getRiskIcon = () => {
-    if (riskAnalysis.riskLevel === 'critical') return <AlertOctagon className="h-5 w-5 text-red-500" />;
-    if (riskAnalysis.riskLevel === 'warning') return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    return <ShieldCheck className="h-5 w-5 text-green-500" />;
+    if (riskAnalysis.riskLevel === 'critical') return <AlertOctagon className="h-5 w-5 text-red-500" fill="currentColor" fillOpacity={0.2} />;
+    if (riskAnalysis.riskLevel === 'warning') return <AlertTriangle className="h-5 w-5 text-yellow-500" fill="currentColor" fillOpacity={0.2} />;
+    return <ShieldCheck className="h-5 w-5 text-green-500" fill="currentColor" fillOpacity={0.2} />;
   };
 
   if (positions.length === 0) {
@@ -124,7 +124,7 @@ export function LiquidationMonitor({ positions, accountValue }: LiquidationMonit
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <ShieldCheck className="h-5 w-5" />
+            <ShieldCheck className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             Liquidation Risk Monitor
           </CardTitle>
         </CardHeader>
@@ -217,7 +217,7 @@ export function LiquidationMonitor({ positions, accountValue }: LiquidationMonit
         {/* Safe Positions Summary */}
         {riskAnalysis.atRiskPositions.length === 0 && (
           <div className="flex items-center gap-3 p-4 rounded-lg bg-green-500/10 border border-green-500/20">
-            <ShieldCheck className="h-6 w-6 text-green-500 flex-shrink-0" />
+            <ShieldCheck className="h-6 w-6 text-green-500 flex-shrink-0" fill="currentColor" fillOpacity={0.2} />
             <div>
               <p className="text-sm font-semibold text-green-500">All Positions Safe</p>
               <p className="text-xs text-muted-foreground">

@@ -78,22 +78,22 @@ export const ExportMenu = ({ positions, trades, stats, walletAddress }: ExportMe
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2">
-          <Download className="w-4 h-4" />
+          <Download className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           <span className="hidden md:inline">Export</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuItem onClick={() => exportPositionsToCSV(positions)} className="gap-2">
-          <Sheet className="w-4 h-4" />
+          <Sheet className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           Export Positions (CSV)
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => exportTradesToCSV(trades)} className="gap-2">
-          <Sheet className="w-4 h-4" />
+          <Sheet className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           Export Trades (CSV)
         </DropdownMenuItem>
         {stats && (
           <DropdownMenuItem onClick={() => exportAccountStatsToCSV(stats)} className="gap-2">
-            <Sheet className="w-4 h-4" />
+            <Sheet className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
             Export Account Stats (CSV)
           </DropdownMenuItem>
         )}
@@ -101,19 +101,19 @@ export const ExportMenu = ({ positions, trades, stats, walletAddress }: ExportMe
           onClick={() => exportAllData(positions, trades, stats, walletAddress)}
           className="gap-2"
         >
-          <Sheet className="w-4 h-4" />
+          <Sheet className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           Export All Data (CSV)
         </DropdownMenuItem>
         
         <DropdownMenuSeparator />
         
         <DropdownMenuItem onClick={handlePDFExport} className="gap-2">
-          <FileText className="w-4 h-4" />
+          <FileText className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           Generate PDF Report
         </DropdownMenuItem>
         
         <DropdownMenuItem onClick={handleShareableImage} className="gap-2">
-          <Image className="w-4 h-4" />
+          <Image className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
           Create Share Card
         </DropdownMenuItem>
       </DropdownMenuContent>

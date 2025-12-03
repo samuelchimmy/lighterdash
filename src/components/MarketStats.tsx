@@ -410,7 +410,7 @@ export function MarketStats() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
+            <Activity className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             Market Overview
           </CardTitle>
         </CardHeader>

@@ -69,7 +69,7 @@ export function OrderBookDepth() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
+            <BookOpen className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
             Order Book Depth
           </CardTitle>
           <Select

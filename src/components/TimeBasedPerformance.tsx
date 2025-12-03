@@ -52,11 +52,11 @@ export function TimeBasedPerformance({ trades, accountId }: TimeBasedPerformance
       <Tabs defaultValue="hourly" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-4">
           <TabsTrigger value="hourly" className="gap-2">
-            <Clock className="h-4 w-4" />
+            <Clock className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
             Hourly
           </TabsTrigger>
           <TabsTrigger value="daily" className="gap-2">
-            <Calendar className="h-4 w-4" />
+            <Calendar className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
             Daily
           </TabsTrigger>
         </TabsList>

@@ -79,7 +79,7 @@ export function BestWorstTrades({ trades, accountId }: BestWorstTradesProps) {
         {/* Best Trades */}
         <div className="space-y-3">
           <h4 className="text-sm font-semibold flex items-center gap-2 text-foreground">
-            <TrendingUp className="h-4 w-4 text-profit" />
+            <TrendingUp className="h-4 w-4 text-profit" fill="currentColor" fillOpacity={0.2} />
             Top 5 Winning Trades
           </h4>
           <div className="space-y-2">
@@ -92,7 +92,7 @@ export function BestWorstTrades({ trades, accountId }: BestWorstTradesProps) {
         {/* Worst Trades */}
         <div className="space-y-3">
           <h4 className="text-sm font-semibold flex items-center gap-2 text-foreground">
-            <TrendingDown className="h-4 w-4 text-loss" />
+            <TrendingDown className="h-4 w-4 text-loss" fill="currentColor" fillOpacity={0.2} />
             Top 5 Losing Trades
           </h4>
           <div className="space-y-2">

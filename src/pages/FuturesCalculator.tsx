@@ -18,16 +18,18 @@ export default function FuturesCalculator() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-card/80 backdrop-blur-sm">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-3">
-            <Calculator className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <div className="p-2 rounded-xl bg-primary/10">
+              <Calculator className="h-5 w-5 text-primary" />
+            </div>
+            <h1 className="text-xl font-bold text-foreground">
               Lighter Futures Calculator
             </h1>
           </div>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => navigate(-1)}
             className="gap-2"
@@ -49,34 +51,34 @@ export default function FuturesCalculator() {
         </div>
 
         <Tabs defaultValue="pnl" className="w-full">
-          <TabsList className="w-full justify-start mb-8 bg-transparent border-b border-border rounded-none p-0 h-auto">
+          <TabsList className="w-full justify-start mb-8 bg-secondary/30 border border-border/50 p-1 rounded-xl h-auto flex-wrap">
             <TabsTrigger 
               value="pnl"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+              className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm px-4 py-2"
             >
               PnL
             </TabsTrigger>
             <TabsTrigger 
               value="target"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+              className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm px-4 py-2"
             >
               Target Price
             </TabsTrigger>
             <TabsTrigger 
               value="liquidation"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+              className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm px-4 py-2"
             >
               Liquidation Price
             </TabsTrigger>
             <TabsTrigger 
               value="maxopen"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+              className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm px-4 py-2"
             >
               Max Open
             </TabsTrigger>
             <TabsTrigger 
               value="openprice"
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent"
+              className="rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm px-4 py-2"
             >
               Open Price
             </TabsTrigger>

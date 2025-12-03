@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table';
 import { formatCurrencySmart, formatNumber, formatPercentage } from '@/lib/lighter-api';
 import type { Position } from '@/types/lighter';
-import { TrendingUp, TrendingDown, Minus, AlertTriangle } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, AlertTriangle, Layers } from 'lucide-react';
 import { Sparkline } from './Sparkline';
 import { useMemo } from 'react';
 
@@ -33,29 +33,31 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
 
   if (!positions || positions.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border shadow-card hover-glow-card">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Open Positions</h3>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Layers className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Open Positions</h3>
+        </div>
         <p className="text-muted-foreground text-center py-8">No open positions</p>
       </Card>
     );
   }
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card hover-glow-card overflow-hidden">
-      <h3 className="text-lg font-semibold mb-4 text-foreground">Open Positions</h3>
+    <Card className="p-6 overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-border hover:bg-secondary/50">
-              <TableHead className="text-muted-foreground">Asset</TableHead>
-              <TableHead className="text-muted-foreground">Price Action</TableHead>
-              <TableHead className="text-muted-foreground">Side</TableHead>
-              <TableHead className="text-muted-foreground">Size</TableHead>
-              <TableHead className="text-muted-foreground">Entry Price</TableHead>
-              <TableHead className="text-muted-foreground">Position Value</TableHead>
-              <TableHead className="text-muted-foreground">Liq. Price</TableHead>
-              <TableHead className="text-muted-foreground">Liq. Distance</TableHead>
-              <TableHead className="text-muted-foreground text-right">Unrealized PnL</TableHead>
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="text-muted-foreground font-medium">Asset</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Price Action</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Side</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Size</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Entry Price</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Position Value</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Liq. Price</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Liq. Distance</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-right">Unrealized PnL</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -78,14 +80,13 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                 : 100;
               
               const riskPercent = Math.max(0, 100 - distanceToLiq);
-              const riskColor = riskPercent > 70 ? 'text-red-500' : riskPercent > 40 ? 'text-yellow-500' : 'text-green-500';
-              const progressColor = riskPercent > 70 ? 'bg-red-500' : riskPercent > 40 ? 'bg-yellow-500' : 'bg-green-500';
+              const riskColor = riskPercent > 70 ? 'text-loss' : riskPercent > 40 ? 'text-amber-500' : 'text-profit';
               
               return (
                 <TableRow 
                   key={index} 
-                  className={`border-border hover:bg-secondary/50 transition-colors ${
-                    riskPercent > 70 ? 'bg-red-500/5' : riskPercent > 40 ? 'bg-yellow-500/5' : ''
+                  className={`border-border/30 hover:bg-secondary/50 transition-colors ${
+                    riskPercent > 70 ? 'bg-loss/5' : riskPercent > 40 ? 'bg-amber-500/5' : ''
                   }`}
                 >
                   <TableCell className="font-medium text-foreground">
@@ -105,7 +106,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                   <TableCell>
                     <Badge 
                       variant={side === 'LONG' ? 'default' : side === 'SHORT' ? 'destructive' : 'secondary'}
-                      className="gap-1 hover-glow-badge cursor-default"
+                      className="gap-1"
                     >
                       {side === 'LONG' ? (
                         <TrendingUp className="w-3 h-3" />
@@ -123,8 +124,11 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
                   <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(position.liquidation_price || '0'))}</TableCell>
                   <TableCell>
                     <div className="w-24 space-y-1">
-                      <div className="relative h-2">
-                        <Progress value={riskPercent} className="h-2" />
+                      <div className="relative h-2 bg-secondary rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full ${riskPercent > 70 ? 'bg-loss' : riskPercent > 40 ? 'bg-amber-500' : 'bg-profit'}`}
+                          style={{ width: `${riskPercent}%` }}
+                        />
                       </div>
                       <span className={`text-xs font-semibold ${riskColor}`}>
                         {formatPercentage(distanceToLiq)}

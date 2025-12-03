@@ -32,19 +32,19 @@ export function CSVUploader({ onFileUpload, isLoading, fileName, error, onClear 
 
   if (fileName && !error) {
     return (
-      <Card className="bg-card border-border">
+      <Card>
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10">
-                <FileSpreadsheet className="w-6 h-6 text-primary" />
+              <div className="p-2 rounded-xl bg-profit/10">
+                <FileSpreadsheet className="w-6 h-6 text-profit" />
               </div>
               <div>
                 <p className="font-medium text-foreground">{fileName}</p>
                 <p className="text-sm text-muted-foreground">File loaded successfully</p>
               </div>
             </div>
-            <Button variant="ghost" size="icon" onClick={onClear}>
+            <Button variant="ghost" size="icon" onClick={onClear} className="hover:bg-destructive/10 hover:text-destructive">
               <X className="w-5 h-5" />
             </Button>
           </div>
@@ -54,7 +54,7 @@ export function CSVUploader({ onFileUpload, isLoading, fileName, error, onClear 
   }
 
   return (
-    <Card className="bg-card border-border">
+    <Card>
       <CardContent className="p-6">
         <div
           {...getRootProps()}
@@ -62,7 +62,7 @@ export function CSVUploader({ onFileUpload, isLoading, fileName, error, onClear 
             "border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200",
             isDragActive ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-secondary/30",
             isLoading && "opacity-50 cursor-not-allowed",
-            error && "border-destructive"
+            error && "border-destructive bg-destructive/5"
           )}
         >
           <input {...getInputProps()} />
@@ -98,7 +98,7 @@ export function CSVUploader({ onFileUpload, isLoading, fileName, error, onClear 
                   Drag & drop or click to select
                 </p>
               </div>
-              <div className="text-xs text-muted-foreground bg-secondary/50 rounded-lg px-4 py-2">
+              <div className="text-xs text-muted-foreground bg-secondary/50 rounded-lg px-4 py-2 border border-border/50">
                 Required columns: Date, Market, Side, Closed PnL, Fee, Role, Type
               </div>
             </div>

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3 } from 'lucide-react';
+import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3, ShieldAlert, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { lighterApi } from '@/lib/lighter-api';
 import { formatCurrency, formatNumber } from '@/lib/lighter-api';
@@ -14,6 +14,7 @@ import { toast } from '@/hooks/use-toast';
 import { exportToCSV } from '@/lib/export-utils';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { resolveMarketSymbol } from '@/lib/markets';
+import { Footer } from '@/components/Footer';
 
 interface LiquidationEvent {
   id: string;
@@ -240,66 +241,71 @@ const Liquidations = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Button variant="ghost" onClick={() => navigate('/')}>
-                <BarChart3 className="w-8 h-8 text-primary" />
-                <span className="ml-2 text-xl font-semibold">LighterDash</span>
+              <Button variant="ghost" onClick={() => navigate('/')} className="gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">Back</span>
               </Button>
-              <div className="flex items-center gap-2 ml-4">
-                <div className={`w-2 h-2 rounded-full ${platformLiquidations.length > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-                <span className="text-sm text-muted-foreground">
-                  {platformLiquidations.length > 0 ? 'Live' : 'Waiting for events'}
-                </span>
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-destructive/10">
+                  <ShieldAlert className="w-5 h-5 text-destructive" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-foreground">Platform Liquidations</h1>
+                  <div className="flex items-center gap-2">
+                    <div className={`w-2 h-2 rounded-full ${platformLiquidations.length > 0 ? 'bg-profit animate-pulse' : 'bg-muted-foreground'}`} />
+                    <span className="text-xs text-muted-foreground">
+                      {platformLiquidations.length > 0 ? 'Live' : 'Waiting for events'}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-            <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
-              Platform Liquidations
-              <Badge variant="secondary" className="ml-2">
-                {platformLiquidations.length} Live
-              </Badge>
-            </h1>
+            <Badge variant="outline" className="border-primary/30 text-primary">
+              {platformLiquidations.length} Live
+            </Badge>
           </div>
         </nav>
       </header>
 
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main className="container mx-auto px-4 py-8 space-y-6">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium">Total Events</CardTitle>
-              <Activity className="h-3 w-3 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Events</CardTitle>
+              <Activity className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-xl font-bold">{totalEvents}</div>
-              <p className="text-[10px] text-muted-foreground">Last 100 liquidations</p>
+              <div className="text-2xl font-bold text-foreground">{totalEvents}</div>
+              <p className="text-xs text-muted-foreground">Last 100 liquidations</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium">Total Volume</CardTitle>
-              <TrendingDown className="h-3 w-3 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Volume</CardTitle>
+              <TrendingDown className="h-4 w-4 text-destructive" />
             </CardHeader>
             <CardContent>
-              <div className="text-xl font-bold">{formatCurrency(totalVolume)}</div>
-              <p className="text-[10px] text-muted-foreground">Liquidated value</p>
+              <div className="text-2xl font-bold text-foreground">{formatCurrency(totalVolume)}</div>
+              <p className="text-xs text-muted-foreground">Liquidated value</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-xs font-medium">Avg. Liquidation</CardTitle>
-              <AlertTriangle className="h-3 w-3 text-muted-foreground" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Avg. Liquidation</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-amber-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-xl font-bold">
+              <div className="text-2xl font-bold text-foreground">
                 {totalEvents > 0 ? formatCurrency(totalVolume / totalEvents) : '$0'}
               </div>
-              <p className="text-[10px] text-muted-foreground">Per event</p>
+              <p className="text-xs text-muted-foreground">Per event</p>
             </CardContent>
           </Card>
         </div>
@@ -309,34 +315,36 @@ const Liquidations = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
-                <Activity className="h-4 w-4 text-green-500 animate-pulse" />
+                <Activity className="h-4 w-4 text-profit animate-pulse" />
                 Live Platform Feed
               </CardTitle>
-              <CardDescription className="text-xs">
+              <CardDescription>
                 Real-time liquidations detected across major markets
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+              <div className="space-y-2 max-h-[400px] overflow-y-auto">
                 {platformLiquidations.map((pliq, idx) => (
                   <div
                     key={`${pliq.event.id}-${idx}`}
-                    className="flex items-center justify-between p-3 rounded-lg border bg-card/50 hover:bg-card transition-colors"
+                    className="flex items-center justify-between p-4 rounded-xl border border-border/50 bg-secondary/20 hover:bg-secondary/30 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <AlertTriangle className="h-3 w-3 text-destructive" />
+                      <div className="p-2 rounded-lg bg-destructive/10">
+                        <AlertTriangle className="h-4 w-4 text-destructive" />
+                      </div>
                       <div>
-                        <div className="font-medium text-sm">{pliq.event.symbol}</div>
-                        <div className="text-[10px] text-muted-foreground">
+                        <div className="font-medium text-foreground">{pliq.event.symbol}</div>
+                        <div className="text-xs text-muted-foreground">
                           {new Date(pliq.event.timestamp).toLocaleTimeString()}
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-mono font-semibold text-destructive text-sm">
+                      <div className="font-mono font-semibold text-destructive">
                         {formatCurrency(pliq.event.usdc_amount)}
                       </div>
-                      <div className="text-[10px] text-muted-foreground">
+                      <div className="text-xs text-muted-foreground">
                         @ {formatCurrency(pliq.event.price)}
                       </div>
                     </div>
@@ -348,41 +356,42 @@ const Liquidations = () => {
         )}
 
         {/* Liquidation Heatmap */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <AlertTriangle className="h-4 w-4 text-destructive" />
-                Liquidation Heatmap
-              </CardTitle>
-              <CardDescription className="text-xs">
-                Price levels where liquidations are concentrated
-              </CardDescription>
-            </CardHeader>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-primary" />
+              Liquidation Heatmap
+            </CardTitle>
+            <CardDescription>
+              Price levels where liquidations are concentrated
+            </CardDescription>
+          </CardHeader>
           <CardContent>
             {heatmapData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={heatmapData}>
                   <defs>
                     <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="hsl(var(--destructive))" stopOpacity={0.6}/>
+                      <stop offset="95%" stopColor="hsl(var(--destructive))" stopOpacity={0.05}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
                   <XAxis 
                     dataKey="price" 
                     stroke="hsl(var(--muted-foreground))"
                     tickFormatter={(value) => `$${value}`}
+                    style={{ fontSize: '11px' }}
                   />
                   <YAxis 
                     stroke="hsl(var(--muted-foreground))"
-                    label={{ value: 'Liquidation Count', angle: -90, position: 'insideLeft' }}
+                    style={{ fontSize: '11px' }}
                   />
                   <Tooltip 
                     contentStyle={{ 
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px'
+                      borderRadius: '12px'
                     }}
                     formatter={(value: any, name: string) => {
                       if (name === 'volume') return [formatCurrency(value), 'Volume'];
@@ -394,6 +403,7 @@ const Liquidations = () => {
                     type="monotone" 
                     dataKey="count" 
                     stroke="hsl(var(--destructive))" 
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#volumeGradient)" 
                   />
@@ -408,14 +418,14 @@ const Liquidations = () => {
         </Card>
 
         {/* Liquidation History Table */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div>
-                  <CardTitle className="text-base">Liquidation History</CardTitle>
-                  <CardDescription className="text-xs">Recent liquidation events across the platform</CardDescription>
-                </div>
-              <Button onClick={handleExport} size="sm" className="gap-2">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <CardTitle>Liquidation History</CardTitle>
+                <CardDescription>Recent liquidation events across the platform</CardDescription>
+              </div>
+              <Button onClick={handleExport} size="sm" variant="outline" className="gap-2">
                 <Download className="h-4 w-4" />
                 Export CSV
               </Button>
@@ -455,67 +465,57 @@ const Liquidations = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Wallet</TableHead>
-                    <TableHead>Symbol</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead className="text-right">Price</TableHead>
-                    <TableHead className="text-right">Size</TableHead>
-                    <TableHead className="text-right">USD Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                        Loading liquidations...
-                      </TableCell>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : filteredLiquidations.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No liquidation events found
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-border/50">
+                      <TableHead className="text-muted-foreground">Time</TableHead>
+                      <TableHead className="text-muted-foreground">Symbol</TableHead>
+                      <TableHead className="text-muted-foreground">Type</TableHead>
+                      <TableHead className="text-muted-foreground">Price</TableHead>
+                      <TableHead className="text-muted-foreground">Size</TableHead>
+                      <TableHead className="text-muted-foreground text-right">USD Amount</TableHead>
                     </TableRow>
-                  ) : filteredLiquidations.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                        No liquidations found
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    filteredLiquidations.map((liq) => (
-                      <TableRow key={liq.id}>
-                        <TableCell className="font-mono text-xs">
+                  </TableHeader>
+                  <TableBody>
+                    {filteredLiquidations.slice(0, 50).map((liq) => (
+                      <TableRow key={liq.id} className="border-border/30 hover:bg-secondary/50">
+                        <TableCell className="text-foreground">
                           {new Date(liq.timestamp).toLocaleString()}
                         </TableCell>
-                        <TableCell className="font-mono text-xs">
-                          {liq.wallet_address.slice(0, 6)}...{liq.wallet_address.slice(-4)}
-                        </TableCell>
                         <TableCell>
-                          <Badge variant="outline">{liq.symbol || 'Unknown'}</Badge>
+                          <Badge variant="outline">{liq.symbol || 'N/A'}</Badge>
                         </TableCell>
                         <TableCell>
                           <Badge variant={liq.event_type === 'liquidation' ? 'destructive' : 'secondary'}>
                             {liq.event_type}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right font-mono">
-                          {formatCurrency(Number(liq.price))}
-                        </TableCell>
-                        <TableCell className="text-right font-mono">
-                          {formatNumber(Number(liq.size))}
-                        </TableCell>
-                        <TableCell className="text-right font-mono text-destructive font-semibold">
+                        <TableCell className="text-foreground">{formatCurrency(Number(liq.price))}</TableCell>
+                        <TableCell className="text-foreground">{formatNumber(Number(liq.size))}</TableCell>
+                        <TableCell className="text-right font-semibold text-destructive">
                           {formatCurrency(Number(liq.usdc_amount))}
                         </TableCell>
                       </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </CardContent>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 };

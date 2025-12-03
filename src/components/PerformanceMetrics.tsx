@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatPercentage } from '@/lib/lighter-api';
 import type { LighterTrade, Position } from '@/types/lighter';
-import { TrendingUp, Target, Award, PieChart } from 'lucide-react';
+import { TrendingUp, Target, Award, Activity, Trophy, BarChart3 } from 'lucide-react';
 import { useMemo } from 'react';
 import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 
@@ -83,36 +83,46 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
 
   if (!trades || trades.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border shadow-card">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Performance Metrics</h3>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Trophy className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
+        </div>
         <p className="text-muted-foreground text-center py-8">No trading history available</p>
       </Card>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="p-6 bg-card border-border shadow-card">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Performance Overview</h3>
+    <div className="space-y-6">
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-6">
+          <BarChart3 className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Performance Overview</h3>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-secondary/50 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="w-4 h-4 text-primary" />
-              <p className="text-xs text-muted-foreground">Total Realized PnL</p>
+          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <TrendingUp className="w-4 h-4 text-primary" />
+              </div>
+              <p className="text-xs font-medium text-muted-foreground">Total Realized PnL</p>
             </div>
             <p className={`text-2xl font-bold ${metrics.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
               {formatCurrencySmart(animatedTotalPnL)}
             </p>
           </div>
 
-          <div className="bg-secondary/50 rounded-lg p-4 border border-border/50">
-            <div className="flex items-center justify-between mb-2">
+          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Target className="w-4 h-4 text-primary" />
-                <p className="text-xs text-muted-foreground">Win Rate</p>
+                <div className="p-1.5 rounded-lg bg-primary/10">
+                  <Target className="w-4 h-4 text-primary" />
+                </div>
+                <p className="text-xs font-medium text-muted-foreground">Win Rate</p>
               </div>
               {metrics.winRate >= 70 && (
-                <Badge className="text-xs bg-primary text-primary-foreground">Excellent</Badge>
+                <Badge className="text-xs bg-profit/10 text-profit border-0">Excellent</Badge>
               )}
               {metrics.winRate >= 50 && metrics.winRate < 70 && (
                 <Badge variant="secondary" className="text-xs">Good</Badge>
@@ -126,20 +136,24 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
             </p>
           </div>
 
-          <div className="bg-secondary/50 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Award className="w-4 h-4 text-primary" />
-              <p className="text-xs text-muted-foreground">Best Trade Size</p>
+          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <Award className="w-4 h-4 text-primary" />
+              </div>
+              <p className="text-xs font-medium text-muted-foreground">Best Trade Size</p>
             </div>
             <p className="text-2xl font-bold text-foreground">
               {formatCurrencySmart(animatedBestTradeSize)}
             </p>
           </div>
 
-          <div className="bg-secondary/50 rounded-lg p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <PieChart className="w-4 h-4 text-primary" />
-              <p className="text-xs text-muted-foreground">Total Trades</p>
+          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <Activity className="w-4 h-4 text-primary" />
+              </div>
+              <p className="text-xs font-medium text-muted-foreground">Total Trades</p>
             </div>
             <p className="text-2xl font-bold text-foreground">{trades.length}</p>
           </div>
@@ -147,13 +161,16 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
       </Card>
 
       {metrics.performanceByAsset.length > 0 && (
-        <Card className="p-6 bg-card border-border shadow-card">
-          <h3 className="text-lg font-semibold mb-4 text-foreground">Performance by Market</h3>
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Trophy className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Performance by Market</h3>
+          </div>
           <div className="space-y-3">
             {metrics.performanceByAsset.slice(0, 5).map((asset) => {
               const position = positions.find(p => p.market_id === asset.market_id);
               return (
-                <div key={asset.market_id} className="bg-secondary/30 rounded-lg p-4 border border-border/50">
+                <div key={asset.market_id} className="bg-secondary/20 rounded-xl p-4 border border-border/30 hover:bg-secondary/30 transition-colors">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-foreground">

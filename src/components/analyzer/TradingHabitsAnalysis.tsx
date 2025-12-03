@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Cell } from 'recharts';
-import { ArrowUpRight, ArrowDownRight, Clock, Calendar } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Clock, Calendar, TrendingUp, TrendingDown } from 'lucide-react';
 import { SideAnalysis, RoleAnalysis, TypeAnalysis, HourlyPattern, DailyPattern } from '@/lib/csv-trade-analyzer';
 import { AITooltip } from './AITooltip';
 
@@ -38,12 +38,14 @@ export function TradingHabitsAnalysis({
   return (
     <div className="space-y-6">
       {/* Side Analysis */}
-      <Card className="bg-card border-border">
-        <CardHeader className="pb-2">
+      <Card>
+        <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
-              <ArrowUpRight className="w-4 h-4 text-profit" />
-              <ArrowDownRight className="w-4 h-4 text-loss" />
+              <div className="flex items-center gap-1">
+                <TrendingUp className="w-4 h-4 text-profit" />
+                <TrendingDown className="w-4 h-4 text-loss" />
+              </div>
               Long vs Short Analysis
             </CardTitle>
             <AITooltip
@@ -64,36 +66,36 @@ export function TradingHabitsAnalysis({
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Side</TableHead>
-                <TableHead className="text-right">PnL</TableHead>
-                <TableHead className="text-right">Win Rate</TableHead>
-                <TableHead className="text-right">Profit Factor</TableHead>
-                <TableHead className="text-right">Trades</TableHead>
+              <TableRow className="border-border/50">
+                <TableHead className="text-muted-foreground font-medium">Side</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium">PnL</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium">Win Rate</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium">Profit Factor</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium">Trades</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
+              <TableRow className="border-border/30 hover:bg-secondary/50">
                 <TableCell>
                   <Badge variant="outline" className="bg-profit/10 text-profit border-profit/30">Long</Badge>
                 </TableCell>
                 <TableCell className={`text-right font-medium ${sideAnalysis.long.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                   {formatCurrency(sideAnalysis.long.pnl)}
                 </TableCell>
-                <TableCell className="text-right">{sideAnalysis.long.winRate.toFixed(1)}%</TableCell>
-                <TableCell className="text-right">{formatNumber(sideAnalysis.long.profitFactor)}</TableCell>
-                <TableCell className="text-right">{sideAnalysis.long.trades}</TableCell>
+                <TableCell className="text-right text-foreground">{sideAnalysis.long.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground">{formatNumber(sideAnalysis.long.profitFactor)}</TableCell>
+                <TableCell className="text-right text-foreground">{sideAnalysis.long.trades}</TableCell>
               </TableRow>
-              <TableRow>
+              <TableRow className="border-border/30 hover:bg-secondary/50">
                 <TableCell>
                   <Badge variant="outline" className="bg-loss/10 text-loss border-loss/30">Short</Badge>
                 </TableCell>
                 <TableCell className={`text-right font-medium ${sideAnalysis.short.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                   {formatCurrency(sideAnalysis.short.pnl)}
                 </TableCell>
-                <TableCell className="text-right">{sideAnalysis.short.winRate.toFixed(1)}%</TableCell>
-                <TableCell className="text-right">{formatNumber(sideAnalysis.short.profitFactor)}</TableCell>
-                <TableCell className="text-right">{sideAnalysis.short.trades}</TableCell>
+                <TableCell className="text-right text-foreground">{sideAnalysis.short.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground">{formatNumber(sideAnalysis.short.profitFactor)}</TableCell>
+                <TableCell className="text-right text-foreground">{sideAnalysis.short.trades}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -103,8 +105,8 @@ export function TradingHabitsAnalysis({
       {/* Role & Type Analysis */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Maker vs Taker */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-2">
+        <Card>
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">Maker vs Taker</CardTitle>
               <AITooltip
@@ -123,29 +125,29 @@ export function TradingHabitsAnalysis({
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="text-right">PnL</TableHead>
-                  <TableHead className="text-right">Win Rate</TableHead>
-                  <TableHead className="text-right">Trades</TableHead>
+                <TableRow className="border-border/50">
+                  <TableHead className="text-muted-foreground font-medium">Role</TableHead>
+                  <TableHead className="text-right text-muted-foreground font-medium">PnL</TableHead>
+                  <TableHead className="text-right text-muted-foreground font-medium">Win Rate</TableHead>
+                  <TableHead className="text-right text-muted-foreground font-medium">Trades</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
+                <TableRow className="border-border/30 hover:bg-secondary/50">
                   <TableCell><Badge variant="secondary">Maker</Badge></TableCell>
                   <TableCell className={`text-right font-medium ${roleAnalysis.maker.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrency(roleAnalysis.maker.pnl)}
                   </TableCell>
-                  <TableCell className="text-right">{roleAnalysis.maker.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right">{roleAnalysis.maker.trades}</TableCell>
+                  <TableCell className="text-right text-foreground">{roleAnalysis.maker.winRate.toFixed(1)}%</TableCell>
+                  <TableCell className="text-right text-foreground">{roleAnalysis.maker.trades}</TableCell>
                 </TableRow>
-                <TableRow>
+                <TableRow className="border-border/30 hover:bg-secondary/50">
                   <TableCell><Badge variant="secondary">Taker</Badge></TableCell>
                   <TableCell className={`text-right font-medium ${roleAnalysis.taker.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrency(roleAnalysis.taker.pnl)}
                   </TableCell>
-                  <TableCell className="text-right">{roleAnalysis.taker.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right">{roleAnalysis.taker.trades}</TableCell>
+                  <TableCell className="text-right text-foreground">{roleAnalysis.taker.winRate.toFixed(1)}%</TableCell>
+                  <TableCell className="text-right text-foreground">{roleAnalysis.taker.trades}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -153,8 +155,8 @@ export function TradingHabitsAnalysis({
         </Card>
 
         {/* Limit vs Market */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-2">
+        <Card>
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base">Limit vs Market Orders</CardTitle>
               <AITooltip
@@ -173,29 +175,29 @@ export function TradingHabitsAnalysis({
           <CardContent>
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Type</TableHead>
-                  <TableHead className="text-right">PnL</TableHead>
-                  <TableHead className="text-right">Win Rate</TableHead>
-                  <TableHead className="text-right">Trades</TableHead>
+                <TableRow className="border-border/50">
+                  <TableHead className="text-muted-foreground font-medium">Type</TableHead>
+                  <TableHead className="text-right text-muted-foreground font-medium">PnL</TableHead>
+                  <TableHead className="text-right text-muted-foreground font-medium">Win Rate</TableHead>
+                  <TableHead className="text-right text-muted-foreground font-medium">Trades</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
+                <TableRow className="border-border/30 hover:bg-secondary/50">
                   <TableCell><Badge variant="outline">Limit</Badge></TableCell>
                   <TableCell className={`text-right font-medium ${typeAnalysis.limit.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrency(typeAnalysis.limit.pnl)}
                   </TableCell>
-                  <TableCell className="text-right">{typeAnalysis.limit.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right">{typeAnalysis.limit.trades}</TableCell>
+                  <TableCell className="text-right text-foreground">{typeAnalysis.limit.winRate.toFixed(1)}%</TableCell>
+                  <TableCell className="text-right text-foreground">{typeAnalysis.limit.trades}</TableCell>
                 </TableRow>
-                <TableRow>
+                <TableRow className="border-border/30 hover:bg-secondary/50">
                   <TableCell><Badge variant="outline">Market</Badge></TableCell>
                   <TableCell className={`text-right font-medium ${typeAnalysis.market.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrency(typeAnalysis.market.pnl)}
                   </TableCell>
-                  <TableCell className="text-right">{typeAnalysis.market.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right">{typeAnalysis.market.trades}</TableCell>
+                  <TableCell className="text-right text-foreground">{typeAnalysis.market.winRate.toFixed(1)}%</TableCell>
+                  <TableCell className="text-right text-foreground">{typeAnalysis.market.trades}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -206,8 +208,8 @@ export function TradingHabitsAnalysis({
       {/* Time Patterns */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Hourly Performance */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-2">
+        <Card>
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2">
                 <Clock className="w-4 h-4 text-primary" />
@@ -231,21 +233,25 @@ export function TradingHabitsAnalysis({
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={filteredHourlyPatterns}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
                   <XAxis 
                     dataKey="hour" 
                     tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                     tickFormatter={(h) => `${h}:00`}
+                    axisLine={false}
+                    tickLine={false}
                   />
                   <YAxis 
                     tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                     tickFormatter={(v) => `$${v}`}
+                    axisLine={false}
+                    tickLine={false}
                   />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
+                      borderRadius: '12px',
                       color: 'hsl(var(--foreground))'
                     }}
                     formatter={(value: number, name: string) => [
@@ -254,7 +260,7 @@ export function TradingHabitsAnalysis({
                     ]}
                     labelFormatter={(h) => `Hour: ${h}:00`}
                   />
-                  <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
+                  <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" opacity={0.5} />
                   <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
                     {filteredHourlyPatterns.map((entry, index) => (
                       <Cell key={index} fill={entry.pnl >= 0 ? 'hsl(var(--profit))' : 'hsl(var(--loss))'} />
@@ -267,8 +273,8 @@ export function TradingHabitsAnalysis({
         </Card>
 
         {/* Daily Performance */}
-        <Card className="bg-card border-border">
-          <CardHeader className="pb-2">
+        <Card>
+          <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-primary" />
@@ -292,21 +298,25 @@ export function TradingHabitsAnalysis({
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={filteredDailyPatterns}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
                   <XAxis 
                     dataKey="day" 
                     tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                     tickFormatter={(d) => d.slice(0, 3)}
+                    axisLine={false}
+                    tickLine={false}
                   />
                   <YAxis 
                     tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 10 }}
                     tickFormatter={(v) => `$${v}`}
+                    axisLine={false}
+                    tickLine={false}
                   />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: 'hsl(var(--card))',
                       border: '1px solid hsl(var(--border))',
-                      borderRadius: '8px',
+                      borderRadius: '12px',
                       color: 'hsl(var(--foreground))'
                     }}
                     formatter={(value: number, name: string) => [
@@ -314,7 +324,7 @@ export function TradingHabitsAnalysis({
                       name === 'pnl' ? 'PnL' : 'Win Rate'
                     ]}
                   />
-                  <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
+                  <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" opacity={0.5} />
                   <Bar dataKey="pnl" radius={[4, 4, 0, 0]}>
                     {filteredDailyPatterns.map((entry, index) => (
                       <Cell key={index} fill={entry.pnl >= 0 ? 'hsl(var(--profit))' : 'hsl(var(--loss))'} />

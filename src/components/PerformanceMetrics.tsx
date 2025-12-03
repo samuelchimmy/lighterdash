@@ -2,7 +2,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrencySmart, formatPercentage } from '@/lib/lighter-api';
 import type { LighterTrade, Position } from '@/types/lighter';
-import { TrendingUp, Target, Award, PieChart, Trophy, Flame, BarChart3, Sparkles } from 'lucide-react';
+import { TrendingUp, Target, Award, PieChart } from 'lucide-react';
 import { useMemo } from 'react';
 import { useAnimatedCounter } from '@/hooks/use-animated-counter';
 
@@ -81,145 +81,97 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
     { duration: 800 }
   );
 
-  const getWinRateBadge = () => {
-    if (metrics.winRate >= 70) return { label: 'Excellent', color: 'bg-profit/20 text-profit border-profit/30' };
-    if (metrics.winRate >= 50) return { label: 'Good', color: 'bg-primary/20 text-primary border-primary/30' };
-    if (metrics.winRate >= 30) return { label: 'Fair', color: 'bg-warning/20 text-warning border-warning/30' };
-    return { label: 'Low', color: 'bg-loss/20 text-loss border-loss/30' };
-  };
-
   if (!trades || trades.length === 0) {
     return (
-      <Card className="p-6 bg-card/80 backdrop-blur-sm border-border/50 shadow-card animate-slide-up">
-        <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-primary" />
-          Performance Overview
-        </h3>
+      <Card className="p-6 bg-card border-border shadow-card">
+        <h3 className="text-lg font-semibold mb-4 text-foreground">Performance Metrics</h3>
         <p className="text-muted-foreground text-center py-8">No trading history available</p>
       </Card>
     );
   }
 
-  const winRateBadge = getWinRateBadge();
-
   return (
     <div className="space-y-4">
-      <Card className="p-6 bg-card/80 backdrop-blur-sm border-border/50 shadow-card animate-slide-up delay-200">
-        <h3 className="text-lg font-semibold mb-6 text-foreground flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-primary" />
-          Performance Overview
-        </h3>
+      <Card className="p-6 bg-card border-border shadow-card">
+        <h3 className="text-lg font-semibold mb-4 text-foreground">Performance Overview</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Total Realized PnL */}
-          <div className="stat-card group">
-            <div className="flex items-center gap-2 mb-3">
-              <div className={`p-2 rounded-lg ${metrics.totalPnL >= 0 ? 'bg-profit/10' : 'bg-loss/10'} group-hover:scale-110 transition-transform`}>
-                <TrendingUp className={`w-4 h-4 ${metrics.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`} />
-              </div>
-              <p className="text-xs text-muted-foreground font-medium">Total Realized PnL</p>
+          <div className="bg-secondary/50 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <TrendingUp className="w-4 h-4 text-primary" />
+              <p className="text-xs text-muted-foreground">Total Realized PnL</p>
             </div>
-            <p className={`text-3xl font-bold font-mono-numbers ${metrics.totalPnL >= 0 ? 'text-profit text-glow-profit' : 'text-loss text-glow-loss'}`}>
+            <p className={`text-2xl font-bold ${metrics.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
               {formatCurrencySmart(animatedTotalPnL)}
             </p>
           </div>
 
-          {/* Win Rate */}
-          <div className="stat-card group">
-            <div className="flex items-center justify-between mb-3">
+          <div className="bg-secondary/50 rounded-lg p-4 border border-border/50">
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-lg bg-primary/10 group-hover:scale-110 transition-transform">
-                  <Target className="w-4 h-4 text-primary" />
-                </div>
-                <p className="text-xs text-muted-foreground font-medium">Win Rate</p>
+                <Target className="w-4 h-4 text-primary" />
+                <p className="text-xs text-muted-foreground">Win Rate</p>
               </div>
-              <Badge className={`text-2xs ${winRateBadge.color} border`}>
-                {winRateBadge.label}
-              </Badge>
+              {metrics.winRate >= 70 && (
+                <Badge className="text-xs bg-primary text-primary-foreground">Excellent</Badge>
+              )}
+              {metrics.winRate >= 50 && metrics.winRate < 70 && (
+                <Badge variant="secondary" className="text-xs">Good</Badge>
+              )}
             </div>
-            <p className="text-3xl font-bold text-foreground font-mono-numbers">
-              {animatedWinRate.toFixed(1)}
-              <span className="text-lg text-muted-foreground ml-1">%</span>
+            <p className="text-2xl font-bold text-foreground">
+              {animatedWinRate.toFixed(1)}%
             </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              {metrics.winningTrades} / {metrics.totalTrades} winning markets
+            <p className="text-xs text-muted-foreground mt-1">
+              {metrics.winningTrades} / {metrics.totalTrades} winning
             </p>
           </div>
 
-          {/* Best Trade */}
-          <div className="stat-card group">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 rounded-lg bg-accent/10 group-hover:scale-110 transition-transform">
-                <Trophy className="w-4 h-4 text-accent" />
-              </div>
-              <p className="text-xs text-muted-foreground font-medium">Best Trade Size</p>
+          <div className="bg-secondary/50 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Award className="w-4 h-4 text-primary" />
+              <p className="text-xs text-muted-foreground">Best Trade Size</p>
             </div>
-            <p className="text-3xl font-bold text-foreground font-mono-numbers">
+            <p className="text-2xl font-bold text-foreground">
               {formatCurrencySmart(animatedBestTradeSize)}
             </p>
           </div>
 
-          {/* Total Trades */}
-          <div className="stat-card group">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-2 rounded-lg bg-primary/10 group-hover:scale-110 transition-transform">
-                <Flame className="w-4 h-4 text-primary" />
-              </div>
-              <p className="text-xs text-muted-foreground font-medium">Total Trades</p>
+          <div className="bg-secondary/50 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <PieChart className="w-4 h-4 text-primary" />
+              <p className="text-xs text-muted-foreground">Total Trades</p>
             </div>
-            <p className="text-3xl font-bold text-foreground font-mono-numbers">{trades.length}</p>
-            <p className="text-xs text-muted-foreground mt-2">
-              Across {metrics.totalTrades} markets
-            </p>
+            <p className="text-2xl font-bold text-foreground">{trades.length}</p>
           </div>
         </div>
       </Card>
 
       {metrics.performanceByAsset.length > 0 && (
-        <Card className="p-6 bg-card/80 backdrop-blur-sm border-border/50 shadow-card animate-slide-up delay-300">
-          <h3 className="text-lg font-semibold mb-6 text-foreground flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            Performance by Market
-          </h3>
+        <Card className="p-6 bg-card border-border shadow-card">
+          <h3 className="text-lg font-semibold mb-4 text-foreground">Performance by Market</h3>
           <div className="space-y-3">
-            {metrics.performanceByAsset.slice(0, 5).map((asset, index) => {
+            {metrics.performanceByAsset.slice(0, 5).map((asset) => {
               const position = positions.find(p => p.market_id === asset.market_id);
-              const isProfitable = asset.pnl >= 0;
-              
               return (
-                <div 
-                  key={asset.market_id} 
-                  className="relative overflow-hidden rounded-xl p-4 bg-secondary/30 border border-border/50 hover:border-primary/30 transition-all duration-300 group"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  {/* Subtle gradient based on PnL */}
-                  <div className={`absolute inset-0 opacity-5 ${isProfitable ? 'bg-gradient-to-r from-profit to-transparent' : 'bg-gradient-to-r from-loss to-transparent'}`} />
-                  
-                  <div className="relative flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isProfitable ? 'bg-profit/10' : 'bg-loss/10'}`}>
-                        <span className="text-lg font-bold">{(position?.symbol || `M${asset.market_id}`).charAt(0)}</span>
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-foreground">
-                            {position?.symbol || `Market ${asset.market_id}`}
-                          </span>
-                          <Badge variant="outline" className="text-2xs border-border/50">
-                            {asset.count} trades
-                          </Badge>
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          Fees: {formatCurrencySmart(asset.fees)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <Badge 
-                        className={`font-bold font-mono-numbers ${isProfitable ? 'bg-profit/20 text-profit border-profit/30' : 'bg-loss/20 text-loss border-loss/30'} border`}
-                      >
-                        {formatCurrencySmart(asset.pnl)}
+                <div key={asset.market_id} className="bg-secondary/30 rounded-lg p-4 border border-border/50">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-foreground">
+                        {position?.symbol || `Market ${asset.market_id}`}
+                      </span>
+                      <Badge variant="outline" className="text-xs">
+                        {asset.count} trades
                       </Badge>
                     </div>
+                    <Badge 
+                      variant={asset.pnl >= 0 ? 'default' : 'destructive'}
+                      className="font-bold"
+                    >
+                      {formatCurrencySmart(asset.pnl)}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <span>Fees: {formatCurrencySmart(asset.fees)}</span>
                   </div>
                 </div>
               );

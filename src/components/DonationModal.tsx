@@ -8,9 +8,26 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Heart, Copy, Check, ExternalLink } from 'lucide-react';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 const STORAGE_KEY = 'lighterdash_donation_seen';
 const DONATION_ADDRESS = '0xfa2B8eD012f756E22E780B772d604af4575d5fcf';
+
+// Animated checkmark component
+const AnimatedCheck = ({ delay = 0 }: { delay?: number }) => {
+  const [show, setShow] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setShow(true), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
+  
+  return (
+    <div className={`transition-all duration-500 ${show ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
+      <CheckCircleIcon className="w-4 h-4 text-success shrink-0" />
+    </div>
+  );
+};
 
 export const DonationModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,10 +66,10 @@ export const DonationModal = () => {
             </div>
             
             <DialogHeader>
-              <DialogTitle className="text-xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
+              <DialogTitle className="text-xl sm:text-3xl font-medium text-white mb-1 sm:mb-2">
                 Support LighterDash
               </DialogTitle>
-              <DialogDescription className="text-white/90 text-xs sm:text-base">
+              <DialogDescription className="text-white/90 text-xs sm:text-base font-medium">
                 Help us keep the lights on and build more amazing features!
               </DialogDescription>
             </DialogHeader>
@@ -62,7 +79,7 @@ export const DonationModal = () => {
         {/* Content */}
         <div className="p-3 sm:p-6 space-y-3 sm:space-y-6">
           <div className="space-y-2 sm:space-y-3">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-medium text-muted-foreground">
               LighterDash is a community-built project created with <span className="text-purple-400">💜</span> by{' '}
               <a
                 href="https://x.com/MetisCharter"
@@ -75,7 +92,7 @@ export const DonationModal = () => {
               </a>
             </p>
             
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-medium text-muted-foreground">
               Your donations help cover hosting costs and development time. Every contribution, 
               no matter how small, keeps this tool free and accessible for everyone!
             </p>
@@ -83,7 +100,7 @@ export const DonationModal = () => {
 
           {/* Donation Address Card */}
           <div className="bg-secondary/50 rounded-xl p-3 sm:p-4 border border-border">
-            <p className="text-xs text-muted-foreground mb-1.5 sm:mb-2 font-medium">Donation Address:</p>
+            <p className="text-xs font-medium text-muted-foreground mb-1.5 sm:mb-2">Donation Address:</p>
             <div className="flex items-center gap-2">
               <code className="flex-1 text-xs font-mono bg-background px-3 py-2 rounded-lg text-foreground break-all border border-border">
                 {DONATION_ADDRESS}
@@ -107,21 +124,21 @@ export const DonationModal = () => {
             </div>
           </div>
 
-          {/* Features Preview */}
+          {/* What's New Section */}
           <div className="bg-gradient-to-br from-primary/5 to-purple-500/5 rounded-xl p-2.5 sm:p-4 border border-primary/20">
-            <p className="text-xs sm:text-sm font-medium text-foreground mb-1.5 sm:mb-2">What's Coming Next:</p>
-            <ul className="space-y-0.5 sm:space-y-1 text-xs text-muted-foreground">
+            <p className="text-xs sm:text-sm font-medium text-foreground mb-1.5 sm:mb-2">What's New:</p>
+            <ul className="space-y-1.5 sm:space-y-2 text-xs font-medium text-muted-foreground">
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                AI-powered trading insights & pattern recognition
+                <AnimatedCheck delay={300} />
+                <span>AI-powered trading insights & pattern recognition</span>
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                Real-time price alerts & notifications
+                <AnimatedCheck delay={600} />
+                <span>Real-time price alerts & notifications</span>
               </li>
               <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                Community leaderboards & competitions
+                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 ml-1" />
+                <span>Community leaderboards & competitions</span>
               </li>
             </ul>
           </div>
@@ -131,7 +148,7 @@ export const DonationModal = () => {
             <Button
               onClick={handleClose}
               variant="outline"
-              className="flex-1"
+              className="flex-1 font-medium"
             >
               Maybe Later
             </Button>
@@ -140,14 +157,14 @@ export const DonationModal = () => {
                 copyToClipboard();
                 setTimeout(handleClose, 1500);
               }}
-              className="flex-1 gap-2 bg-gradient-to-r from-primary to-primary-glow hover:opacity-90"
+              className="flex-1 gap-2 bg-gradient-to-r from-primary to-primary-glow hover:opacity-90 font-medium"
             >
               <Heart className="w-4 h-4" />
               Copy & Support
             </Button>
           </div>
 
-          <p className="text-xs text-center text-muted-foreground">
+          <p className="text-xs font-medium text-center text-muted-foreground">
             This message will only show once. You can find the donation address in the footer anytime.
           </p>
         </div>

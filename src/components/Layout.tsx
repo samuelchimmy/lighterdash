@@ -1,5 +1,15 @@
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LineIcon } from 'lineicons-react';
+import { 
+  LayoutDashboard, 
+  LineChart, 
+  GitCompare, 
+  Calculator, 
+  ShieldAlert, 
+  BarChart3,
+  Menu,
+  X
+} from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -18,11 +28,11 @@ interface LayoutProps {
 }
 
 const navItems = [
-  { label: 'AI Trader Insights', path: '/trade-analyzer', icon: 'bar-chart' },
-  { label: 'Liquidations', path: '/liquidations', icon: 'shield' },
-  { label: 'Calculator', path: '/calculator', icon: 'calculator' },
-  { label: 'Compare Wallets', path: '/community', icon: 'users' },
-  { label: 'Analytics', path: '/analytics', icon: 'stats-up' },
+  { label: 'AI Trader Insights', path: '/trade-analyzer', icon: LineChart },
+  { label: 'Liquidations', path: '/liquidations', icon: ShieldAlert },
+  { label: 'Calculator', path: '/calculator', icon: Calculator },
+  { label: 'Compare Wallets', path: '/community', icon: GitCompare },
+  { label: 'Analytics', path: '/analytics', icon: BarChart3 },
 ];
 
 export function Layout({ children, showNav = true, headerContent }: LayoutProps) {
@@ -40,7 +50,7 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
               onClick={() => navigate('/')}
             >
               <div className="p-2 rounded-xl bg-primary/10">
-                <LineIcon name="dashboard" size={20} className="text-primary" />
+                <LayoutDashboard className="w-6 h-6 text-primary" fill="currentColor" fillOpacity={0.2} />
               </div>
               <h1 className="text-xl md:text-2xl font-semibold text-foreground">
                 LighterDash
@@ -62,7 +72,7 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                         size="sm"
                         className="gap-2"
                       >
-                        <LineIcon name={item.icon} size={14} />
+                        <item.icon className="w-4 h-4" />
                         <span>{item.label}</span>
                       </Button>
                     ))}
@@ -73,7 +83,7 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" size="icon" className="md:hidden">
-                          <LineIcon name="menu" size={18} />
+                          <Menu className="w-5 h-5" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-56">
@@ -85,7 +95,7 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                               location.pathname === item.path ? 'bg-primary/10 text-primary' : ''
                             }`}
                           >
-                            <LineIcon name={item.icon} size={14} />
+                            <item.icon className="w-4 h-4" />
                             <span>{item.label}</span>
                           </DropdownMenuItem>
                         ))}

@@ -44,33 +44,35 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
         <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
           <div className="flex items-center justify-between">
             <div 
-              className="flex items-center gap-3 cursor-pointer" 
+              className="flex items-center gap-2 cursor-pointer" 
               onClick={() => navigate('/')}
             >
-              <div className="p-2 rounded-xl bg-primary/10">
-                <Squares2X2Icon className="w-6 h-6 text-primary" />
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <Squares2X2Icon className="w-5 h-5 text-primary" />
               </div>
-              <h1 className="text-xl md:text-2xl font-semibold text-foreground">
+              <h1 className="text-lg md:text-xl font-medium text-foreground">
                 LighterDash
               </h1>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               {headerContent}
+              
+              <ThemeToggle />
               
               {showNav && (
                 <>
                   {/* Desktop Navigation */}
-                  <div className="hidden md:flex items-center gap-2">
+                  <div className="hidden md:flex items-center gap-1">
                     {navItems.map((item) => (
                       <Button
                         key={item.path}
                         onClick={() => navigate(item.path)}
                         variant={location.pathname === item.path ? 'default' : 'outline'}
                         size="sm"
-                        className="gap-1.5"
+                        className="gap-1 h-8 px-2.5 text-xs"
                       >
-                        <item.icon className="w-3.5 h-3.5" />
+                        <item.icon className="w-3 h-3" />
                         <span>{item.label}</span>
                       </Button>
                     ))}
@@ -80,8 +82,8 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                   {isMobile && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="icon" className="md:hidden">
-                          <Bars3Icon className="w-5 h-5" />
+                        <Button variant="outline" size="icon" className="md:hidden h-8 w-8">
+                          <Bars3Icon className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-56">
@@ -89,7 +91,7 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                           <DropdownMenuItem
                             key={item.path}
                             onClick={() => navigate(item.path)}
-                            className={`gap-2.5 cursor-pointer ${
+                            className={`gap-2 cursor-pointer text-sm ${
                               location.pathname === item.path ? 'bg-primary/10 text-primary' : ''
                             }`}
                           >
@@ -102,8 +104,6 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                   )}
                 </>
               )}
-              
-              <ThemeToggle />
             </div>
           </div>
         </nav>

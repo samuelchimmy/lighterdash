@@ -13,7 +13,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-border/50 mt-20 bg-card/50" role="contentinfo">
-      <div className="container mx-auto px-4 py-8 space-y-4">
+      <div className="container mx-auto px-4 py-6 space-y-2.5">
         <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1">
           Built with <HeartIcon className="w-4 h-4 text-primary" /> by{' '}
           <a
@@ -25,12 +25,12 @@ export function Footer() {
             Jadeofwallstreet
           </a>
         </p>
-        <div className="flex flex-col items-center gap-3">
-          <p className="text-center text-sm text-muted-foreground">
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-center text-xs text-muted-foreground">
             Support LighterDash development:
           </p>
-          <div className="flex items-center gap-2 bg-muted/50 border border-border/50 rounded-xl px-4 py-2">
-            <code className="text-xs md:text-sm font-mono text-primary break-all">
+          <div className="flex items-center gap-1.5 bg-muted/50 border border-border/50 rounded-lg px-3 py-1.5">
+            <code className="text-[10px] sm:text-xs font-mono text-primary">
               {donationAddress}
             </code>
             <button

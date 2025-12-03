@@ -145,9 +145,9 @@ const Index = () => {
                   </div>
                   <a 
                     href="/trade-analyzer" 
-                    className="shrink-0 inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl font-medium transition-colors"
+                    className="shrink-0 inline-flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   >
-                    <LightBulbIcon className="w-5 h-5" />
+                    <LightBulbIcon className="w-4 h-4" />
                     Try AI Insights
                   </a>
                 </div>

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, TrendingDown } from "lucide-react";
+import { TrendingUp, TrendingDown, Trophy, Frown } from "lucide-react";
 import { LighterTrade } from "@/types/lighter";
 import { formatCurrency, formatNumber } from "@/lib/lighter-api";
 import { calculateTradePnL } from "@/lib/trade-analysis";
@@ -32,13 +32,12 @@ export function BestWorstTrades({ trades, accountId }: BestWorstTradesProps) {
 
   if (trades.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Best & Worst Trades</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">No trades available</p>
-        </CardContent>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Trophy className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Best & Worst Trades</h3>
+        </div>
+        <p className="text-muted-foreground text-center py-8">No trades available</p>
       </Card>
     );
   }
@@ -47,15 +46,15 @@ export function BestWorstTrades({ trades, accountId }: BestWorstTradesProps) {
     const symbol = MARKET_SYMBOLS[trade.market_id] || `Market ${trade.market_id}`;
     
     return (
-      <div className="p-3 border rounded-lg bg-card/50 space-y-2">
+      <div className="p-3 border border-border/50 rounded-lg bg-secondary/30 space-y-2 hover:bg-secondary/50 transition-colors">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-semibold">{symbol}</span>
+            <span className="font-semibold text-foreground">{symbol}</span>
             <Badge variant={isBest ? 'default' : 'destructive'} className="text-xs">
               {isBest ? 'WIN' : 'LOSS'}
             </Badge>
           </div>
-          <span className={`font-bold ${isBest ? 'text-green-500' : 'text-red-500'}`}>
+          <span className={`font-bold ${isBest ? 'text-profit' : 'text-loss'}`}>
             {isBest ? '+' : ''}{formatCurrency(trade.pnl)}
           </span>
         </div>
@@ -71,19 +70,20 @@ export function BestWorstTrades({ trades, accountId }: BestWorstTradesProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Best & Worst Trades</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className="p-6">
+      <div className="flex items-center gap-2 mb-6">
+        <Trophy className="w-5 h-5 text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">Best & Worst Trades</h3>
+      </div>
+      <div className="space-y-6">
         {/* Best Trades */}
         <div className="space-y-3">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-green-500" />
+          <h4 className="text-sm font-semibold flex items-center gap-2 text-foreground">
+            <TrendingUp className="h-4 w-4 text-profit" />
             Top 5 Winning Trades
           </h4>
           <div className="space-y-2">
-            {bestTrades.map((trade, idx) => (
+            {bestTrades.map((trade) => (
               <TradeCard key={trade.trade_id} trade={trade} isBest={true} />
             ))}
           </div>
@@ -91,17 +91,17 @@ export function BestWorstTrades({ trades, accountId }: BestWorstTradesProps) {
 
         {/* Worst Trades */}
         <div className="space-y-3">
-          <h4 className="text-sm font-semibold flex items-center gap-2">
-            <TrendingDown className="h-4 w-4 text-red-500" />
+          <h4 className="text-sm font-semibold flex items-center gap-2 text-foreground">
+            <TrendingDown className="h-4 w-4 text-loss" />
             Top 5 Losing Trades
           </h4>
           <div className="space-y-2">
-            {worstTrades.map((trade, idx) => (
+            {worstTrades.map((trade) => (
               <TradeCard key={trade.trade_id} trade={trade} isBest={false} />
             ))}
           </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 }

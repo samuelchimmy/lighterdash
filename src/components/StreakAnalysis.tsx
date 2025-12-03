@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Zap, TrendingUp, TrendingDown } from "lucide-react";
 import { LighterTrade } from "@/types/lighter";
@@ -48,35 +48,29 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
 
   if (trades.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5" />
-            Win/Loss Streaks
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">No trading data available</p>
-        </CardContent>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Zap className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Win/Loss Streaks</h3>
+        </div>
+        <p className="text-muted-foreground text-center py-8">No trading data available</p>
       </Card>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Zap className="h-5 w-5" />
-          Win/Loss Streaks
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <Card className="p-6">
+      <div className="flex items-center gap-2 mb-6">
+        <Zap className="w-5 h-5 text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">Win/Loss Streaks</h3>
+      </div>
+      <div className="space-y-4">
         {/* Current Streak */}
         {currentStreak && (
-          <div className={`p-4 rounded-lg border-2 ${
+          <div className={`p-4 rounded-xl border-2 ${
             currentStreak.type === 'win' 
-              ? 'bg-green-500/10 border-green-500/30' 
-              : 'bg-red-500/10 border-red-500/30'
+              ? 'bg-profit/10 border-profit/30' 
+              : 'bg-loss/10 border-loss/30'
           }`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-semibold text-muted-foreground">Current Streak</span>
@@ -85,7 +79,7 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
                 {currentStreak.type.toUpperCase()}
               </Badge>
             </div>
-            <p className={`text-3xl font-bold ${currentStreak.type === 'win' ? 'text-green-500' : 'text-red-500'}`}>
+            <p className={`text-3xl font-bold ${currentStreak.type === 'win' ? 'text-profit' : 'text-loss'}`}>
               {currentStreak.count} {currentStreak.count === 1 ? 'trade' : 'trades'}
             </p>
           </div>
@@ -93,10 +87,10 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
 
         {/* Longest Win Streak */}
         {longestWinStreak && (
-          <div className="p-4 border rounded-lg bg-card/50 space-y-2">
+          <div className="p-4 border border-border/50 rounded-lg bg-secondary/30 space-y-2 hover:bg-secondary/50 transition-colors">
             <div className="flex items-center justify-between">
-              <h4 className="font-semibold flex items-center gap-2">
-                <TrendingUp className="h-4 w-4 text-green-500" />
+              <h4 className="font-semibold flex items-center gap-2 text-foreground">
+                <TrendingUp className="h-4 w-4 text-profit" />
                 Longest Win Streak
               </h4>
               <Badge variant="default">{longestWinStreak.count} wins</Badge>
@@ -104,7 +98,7 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-xs text-muted-foreground">Total PnL</p>
-                <p className="font-bold text-green-500">+{formatCurrency(longestWinStreak.totalPnL)}</p>
+                <p className="font-bold text-profit">+{formatCurrency(longestWinStreak.totalPnL)}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Period</p>
@@ -118,10 +112,10 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
 
         {/* Longest Loss Streak */}
         {longestLossStreak && (
-          <div className="p-4 border rounded-lg bg-card/50 space-y-2">
+          <div className="p-4 border border-border/50 rounded-lg bg-secondary/30 space-y-2 hover:bg-secondary/50 transition-colors">
             <div className="flex items-center justify-between">
-              <h4 className="font-semibold flex items-center gap-2">
-                <TrendingDown className="h-4 w-4 text-red-500" />
+              <h4 className="font-semibold flex items-center gap-2 text-foreground">
+                <TrendingDown className="h-4 w-4 text-loss" />
                 Longest Loss Streak
               </h4>
               <Badge variant="destructive">{longestLossStreak.count} losses</Badge>
@@ -129,7 +123,7 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-xs text-muted-foreground">Total PnL</p>
-                <p className="font-bold text-red-500">{formatCurrency(longestLossStreak.totalPnL)}</p>
+                <p className="font-bold text-loss">{formatCurrency(longestLossStreak.totalPnL)}</p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Period</p>
@@ -146,7 +140,7 @@ export function StreakAnalysis({ trades, accountId }: StreakAnalysisProps) {
             Need more trading data to analyze streaks
           </p>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 }

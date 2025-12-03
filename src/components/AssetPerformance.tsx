@@ -1,11 +1,11 @@
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { LighterTrade } from "@/types/lighter";
 import { formatCurrency, formatPercentage } from "@/lib/lighter-api";
 import { calculateTradePnL } from "@/lib/trade-analysis";
-import { BarChart3 } from "lucide-react";
+import { PieChart } from "lucide-react";
 
 interface AssetPerformanceProps {
   trades: LighterTrade[];
@@ -58,43 +58,37 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
 
   if (assetStats.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            Performance by Asset
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">No trading data available</p>
-        </CardContent>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <PieChart className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Performance by Asset</h3>
+        </div>
+        <p className="text-muted-foreground text-center py-8">No trading data available</p>
       </Card>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="h-5 w-5" />
-          Performance by Asset
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <Card className="p-6">
+      <div className="flex items-center gap-2 mb-6">
+        <PieChart className="w-5 h-5 text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">Performance by Asset</h3>
+      </div>
+      <div className="space-y-4">
         {assetStats.map((stat, index) => {
           const winRate = (stat.wins / stat.trades) * 100;
           const isProfitable = stat.totalPnl >= 0;
 
           return (
-            <div key={index} className="p-4 border rounded-lg bg-card/50 space-y-3">
+            <div key={index} className="p-4 border border-border/50 rounded-lg bg-secondary/30 space-y-3 hover:bg-secondary/50 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg">{stat.symbol}</span>
+                  <span className="font-bold text-lg text-foreground">{stat.symbol}</span>
                   <Badge variant={isProfitable ? 'default' : 'destructive'}>
                     {stat.trades} trades
                   </Badge>
                 </div>
-                <span className={`text-xl font-bold ${isProfitable ? 'text-green-500' : 'text-red-500'}`}>
+                <span className={`text-xl font-bold ${isProfitable ? 'text-profit' : 'text-loss'}`}>
                   {isProfitable ? '+' : ''}{formatCurrency(stat.totalPnl)}
                 </span>
               </div>
@@ -102,7 +96,7 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">Win Rate</span>
-                  <span className="font-semibold">{formatPercentage(winRate)}</span>
+                  <span className="font-semibold text-foreground">{formatPercentage(winRate)}</span>
                 </div>
                 <Progress value={winRate} className="h-2" />
               </div>
@@ -110,15 +104,15 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
               <div className="grid grid-cols-3 gap-4 text-sm">
                 <div>
                   <p className="text-xs text-muted-foreground">Wins</p>
-                  <p className="font-semibold text-green-500">{stat.wins}</p>
+                  <p className="font-semibold text-profit">{stat.wins}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Losses</p>
-                  <p className="font-semibold text-red-500">{stat.trades - stat.wins}</p>
+                  <p className="font-semibold text-loss">{stat.trades - stat.wins}</p>
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground">Volume</p>
-                  <p className="font-semibold">{formatCurrency(stat.totalVolume)}</p>
+                  <p className="font-semibold text-foreground">{formatCurrency(stat.totalVolume)}</p>
                 </div>
               </div>
 
@@ -129,7 +123,7 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
             </div>
           );
         })}
-      </CardContent>
+      </div>
     </Card>
   );
 }

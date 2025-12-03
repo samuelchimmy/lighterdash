@@ -5,6 +5,7 @@ import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { 
   LayoutDashboard, 
@@ -129,6 +130,7 @@ const Index = () => {
                   </Button>
                 </>
               )}
+              <ThemeToggle />
             </div>
           </div>
         </nav>

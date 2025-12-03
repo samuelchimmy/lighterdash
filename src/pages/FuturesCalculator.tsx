@@ -1,8 +1,6 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/Footer";
+import { Calculator } from "lucide-react";
+import { Layout } from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssetSelector, MARKETS, type Market } from "@/components/calculators/AssetSelector";
 import { PnLCalculator } from "@/components/calculators/PnLCalculator";
@@ -12,36 +10,21 @@ import { MaxOpenCalculator } from "@/components/calculators/MaxOpenCalculator";
 import { OpenPriceCalculator } from "@/components/calculators/OpenPriceCalculator";
 
 export default function FuturesCalculator() {
-  const navigate = useNavigate();
   const [selectedMarket, setSelectedMarket] = useState<Market>(MARKETS[0]);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-card/80 backdrop-blur-sm">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-primary/10">
-              <Calculator className="h-5 w-5 text-primary" />
-            </div>
-            <h1 className="text-xl font-bold text-foreground">
-              Lighter Futures Calculator
-            </h1>
+    <Layout showNav={false}>
+      <div className="container py-8 px-4 max-w-6xl mx-auto">
+        {/* Page Header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-2 rounded-xl bg-primary/10">
+            <Calculator className="h-5 w-5 text-primary" />
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate(-1)}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
+          <h1 className="text-xl font-bold text-foreground">
+            Lighter Futures Calculator
+          </h1>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="container py-8 px-4 max-w-6xl mx-auto">
         {/* Asset Selector */}
         <div className="mb-6">
           <AssetSelector 
@@ -104,9 +87,7 @@ export default function FuturesCalculator() {
             <OpenPriceCalculator selectedMarket={selectedMarket} />
           </TabsContent>
         </Tabs>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 }

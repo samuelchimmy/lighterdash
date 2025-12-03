@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-import { LineChart, ArrowLeft, Upload, BarChart3, Activity } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { LineChart, Upload, BarChart3, Activity } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Footer } from '@/components/Footer';
+import { Layout } from '@/components/Layout';
 import { CSVUploader } from '@/components/analyzer/CSVUploader';
 import { PerformanceOverview } from '@/components/analyzer/PerformanceOverview';
 import { TradingHabitsAnalysis } from '@/components/analyzer/TradingHabitsAnalysis';
@@ -10,42 +8,22 @@ import { MarketBreakdown } from '@/components/analyzer/MarketBreakdown';
 import { useTradeAnalysis } from '@/hooks/use-trade-analysis';
 
 const TradeAnalyzer = () => {
-  const navigate = useNavigate();
   const { trades, analysis, isLoading, error, fileName, handleFileUpload, clearData } = useTradeAnalysis();
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-primary/10">
-                <LineChart className="w-6 h-6 text-primary" />
-              </div>
-              <h1 className="text-xl md:text-2xl font-semibold text-foreground">
-                Trader Insights
-              </h1>
-            </div>
-            <Button
-              onClick={() => navigate('/')}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="hidden md:inline">Back to Dashboard</span>
-            </Button>
-          </div>
-        </nav>
-      </header>
-
-      <main className="container mx-auto px-4 py-8">
+    <Layout showNav={false}>
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Hero Section */}
           <section className="text-center mb-8">
-            <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-3">
-              AI-Powered Trading Journal
-            </h2>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="p-2 rounded-xl bg-primary/10">
+                <LineChart className="w-6 h-6 text-primary" />
+              </div>
+              <h1 className="text-2xl md:text-3xl font-semibold text-foreground">
+                AI Trader Insights
+              </h1>
+            </div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Upload your trade history CSV to unlock comprehensive analytics, behavioral insights, 
               and AI-powered recommendations to improve your trading performance.
@@ -125,10 +103,8 @@ const TradeAnalyzer = () => {
             </div>
           )}
         </div>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

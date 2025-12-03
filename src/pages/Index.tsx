@@ -5,26 +5,17 @@ import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { Button } from '@/components/ui/button';
+import { Layout } from '@/components/Layout';
 import { 
-  LayoutDashboard, 
-  LineChart, 
   Wallet, 
-  GitCompare, 
-  Calculator, 
-  ShieldAlert, 
   Zap,
   BarChart3 
 } from 'lucide-react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Footer } from '@/components/Footer';
+import { useSearchParams } from 'react-router-dom';
 
 const Index = () => {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [scannedAddress, setScannedAddress] = useState<string | null>(() => {
-    // Initialize from URL params or localStorage
     const urlAddress = searchParams.get('wallet');
     const storedAddress = localStorage.getItem('lighterdash-wallet');
     return urlAddress || storedAddress;
@@ -42,17 +33,14 @@ const Index = () => {
 
   const handleScan = async (address: string) => {
     setIsScanning(true);
-    // Simulate a realistic delay for scanning and data fetching (1.5-2 seconds)
     setTimeout(() => {
       setScannedAddress(address);
-      // Persist to localStorage and URL
       localStorage.setItem('lighterdash-wallet', address);
       setSearchParams({ wallet: address });
       setIsScanning(false);
     }, 1800);
   };
 
-  // Sync scannedAddress changes to localStorage and URL
   useEffect(() => {
     if (scannedAddress) {
       localStorage.setItem('lighterdash-wallet', scannedAddress);
@@ -64,79 +52,16 @@ const Index = () => {
   }, [scannedAddress, setSearchParams]);
 
   return (
-    <div className="min-h-screen">
+    <Layout 
+      showNav={!scannedAddress}
+      headerContent={
+        scannedAddress ? (
+          <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
+        ) : null
+      }
+    >
       <DonationModal />
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-        <nav className="container mx-auto px-4 py-4" aria-label="Main navigation">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-primary/10">
-                <LayoutDashboard className="w-6 h-6 text-primary" fill="currentColor" fillOpacity={0.2} />
-              </div>
-              <h1 className="text-xl md:text-2xl font-semibold text-foreground">
-                LighterDash
-              </h1>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              {scannedAddress && (
-                <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
-              )}
-              {!scannedAddress && (
-                <>
-                  <Button
-                    onClick={() => navigate('/trade-analyzer')}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <LineChart className="w-4 h-4" />
-                    <span className="hidden md:inline">Trader Insights</span>
-                  </Button>
-                  <Button
-                    onClick={() => navigate('/liquidations')}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <ShieldAlert className="w-4 h-4" />
-                    <span className="hidden md:inline">Liquidations</span>
-                  </Button>
-                  <Button
-                    onClick={() => navigate('/calculator')}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <Calculator className="w-4 h-4" />
-                    <span className="hidden md:inline">Calculator</span>
-                  </Button>
-                  <Button
-                    onClick={() => navigate('/community')}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <GitCompare className="w-4 h-4" />
-                    <span className="hidden md:inline">Compare Wallets</span>
-                  </Button>
-                  <Button
-                    onClick={() => navigate('/analytics')}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
-                    <BarChart3 className="w-4 h-4" />
-                    <span className="hidden md:inline">Analytics</span>
-                  </Button>
-                </>
-              )}
-              <ThemeToggle />
-            </div>
-          </div>
-        </nav>
-      </header>
-
-      <main className="container mx-auto px-4 py-8" role="main">
+      <div className="container mx-auto px-4 py-8" role="main">
         {isScanning ? (
           <ScanningLoader />
         ) : !scannedAddress ? (
@@ -293,10 +218,8 @@ const Index = () => {
             <RealtimeLiquidationMonitor accountIndex={null} walletAddress={scannedAddress} />
           </section>
         )}
-      </main>
-      
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

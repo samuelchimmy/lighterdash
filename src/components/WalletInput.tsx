@@ -103,7 +103,7 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
                 setError('');
               }}
               onFocus={() => previousWallets.length > 0 && setShowDropdown(true)}
-              className="h-12 bg-card border-border text-foreground placeholder:text-muted-foreground text-sm rounded-xl shadow-card pl-4 pr-4"
+              className="h-10 bg-card border-border text-foreground placeholder:text-muted-foreground text-sm rounded-lg shadow-card pl-3 pr-3"
               disabled={isLoading}
             />
             
@@ -145,9 +145,9 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-card gap-2"
+            className="h-10 px-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg shadow-card gap-1.5 text-sm"
           >
-            <MagnifyingGlassIcon className="w-5 h-5" />
+            <MagnifyingGlassIcon className="w-4 h-4" />
             <span className="hidden sm:inline">Scan</span>
           </Button>
         </div>

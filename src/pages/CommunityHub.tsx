@@ -1,36 +1,48 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/Footer";
 import { MultiWalletComparison } from "@/components/MultiWalletComparison";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, GitCompare } from "lucide-react";
 
 export default function CommunityHub() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/')}
-            className="gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Button>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-primary/10">
+                <GitCompare className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">
+                  Multi-Wallet Comparison
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Compare trading performance across wallets
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back
+            </Button>
+          </div>
         </div>
+      </header>
 
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-            Multi-Wallet Comparison
-          </h1>
-          <p className="text-muted-foreground">
-            Compare trading performance across multiple wallets
-          </p>
-        </div>
-
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
         <MultiWalletComparison />
-      </div>
+      </main>
+
       <Footer />
     </div>
   );

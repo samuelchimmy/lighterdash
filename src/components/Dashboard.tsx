@@ -38,7 +38,7 @@ import {
 } from './LoadingSkeleton';
 import type { UserStats, Position, LighterTrade, PnlDataPoint } from '@/types/lighter';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCw, Layers, LineChart, ArrowLeftRight, Activity, BarChart3, Clock, History, ShieldAlert, Trophy, Wallet, BookOpen, TrendingUp } from 'lucide-react';
 
 interface DashboardProps {
   walletAddress: string;
@@ -130,8 +130,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     }
   };
 
-// Keyboard shortcuts disabled: auto-updating via WebSocket
-
   // Save PnL history to localStorage whenever it changes
   useEffect(() => {
     if (pnlHistory.length > 0) {
@@ -162,8 +160,6 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
         
         // Phase 1: Fetch account index
         const index = await lighterApi.getAccountIndex(walletAddress);
-        
-        // Points system check removed
         
         if (!index) {
           toast({
@@ -463,120 +459,193 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
     );
   }
 
+  const clearPnlHistory = () => {
+    setPnlHistory([]);
+    localStorage.removeItem(`pnl-history-${walletAddress}`);
+    toast({
+      title: "History cleared",
+      description: "PnL chart history has been reset",
+    });
+  };
+
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in duration-500">
+      {/* Success Animation Overlay */}
       <SuccessAnimation {...animation} onComplete={reset} />
-      <AlertMonitor stats={userStats} positions={positions} currentPnL={totalPnl} />
       
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl md:text-2xl font-semibold text-foreground">Wallet Dashboard</h2>
+      {/* Header Actions */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-primary/10">
+            <BarChart3 className="w-5 h-5 text-primary" />
+          </div>
+          <h2 className="text-xl font-semibold text-foreground">Wallet Dashboard</h2>
         </div>
-        <div className="flex gap-2">
-          <ExportMenu
-            positions={positions}
-            trades={trades}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={refreshWalletData}
+            disabled={isRefreshing}
+            className="gap-2"
+          >
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </Button>
+          <ExportMenu 
+            trades={trades} 
+            positions={positions} 
             stats={userStats}
             walletAddress={walletAddress}
           />
-          {!user && (
-            <Button onClick={() => setShowAuthForm(true)} variant="outline" size="sm" className="text-xs md:text-sm px-2 md:px-4">
-              Sign In for Journal
-            </Button>
-          )}
         </div>
       </div>
 
+      {/* Summary Cards */}
       <SummaryCard
         totalPnl={totalPnl}
         walletAddress={walletAddress}
         accountValue={accountValue}
       />
-
-      <AccountStats stats={userStats} />
-
-      <PnlChart 
-        data={pnlHistory} 
-        onClearHistory={() => {
-          setPnlHistory([]);
-          localStorage.removeItem(`pnl-history-${walletAddress}`);
-          toast({
-            title: "History cleared",
-            description: "PnL chart history has been reset",
-          });
-        }}
-      />
-
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      {/* Account Stats */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Wallet className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Account Overview</h3>
+        </div>
+        <AccountStats stats={userStats} />
+      </section>
+      
+      {/* PnL Chart */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <LineChart className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Performance Chart</h3>
+        </div>
+        <PnlChart 
+          data={pnlHistory} 
+          onClearHistory={clearPnlHistory}
+        />
+      </section>
+      
+      {/* Positions */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Layers className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Open Positions</h3>
+        </div>
         <PositionsTable positions={positions} />
-        <PortfolioChart positions={positions} />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <ComparisonCard
-          winRate={calculateWinRate()}
-          leverage={parseFloat(userStats?.leverage || '0')}
-          totalPnL={totalPnl}
-          totalTrades={trades.length}
-        />
-        <PerformanceMetrics trades={trades} positions={positions} />
-      </div>
-
-      <LiquidationMonitor positions={positions} accountValue={accountValue} />
-
-      <RealtimeLiquidationMonitor 
-        accountIndex={accountIndex} 
-        walletAddress={walletAddress} 
-      />
-
-      <FundingHistory fundingHistories={fundingHistories} />
-
+      </section>
+      
       {/* Open Orders */}
-      <OpenOrdersTable orders={orders} />
-
-      {/* Pool Shares */}
-      {poolShares.length > 0 && <PoolShares shares={poolShares} />}
-
-      {/* Advanced Analytics */}
-      {trades.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <BestWorstTrades trades={trades} accountId={accountIndex ?? undefined} />
-            <StreakAnalysis trades={trades} accountId={accountIndex ?? undefined} />
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Clock className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Open Orders</h3>
+        </div>
+        <OpenOrdersTable orders={orders} />
+      </section>
+      
+      {/* Recent Trades */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <ArrowLeftRight className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Recent Trades</h3>
+        </div>
+        <TradesHistory trades={trades} />
+      </section>
+      
+      {/* Performance Metrics */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Trophy className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
+        </div>
+        <PerformanceMetrics trades={trades} positions={positions} />
+      </section>
+      
+      {/* Best/Worst Trades & Asset Performance */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="w-4 h-4 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Top Trades</h3>
           </div>
-
-          <AssetPerformance trades={trades} accountId={accountIndex ?? undefined} />
-
-          <TimeBasedPerformance trades={trades} accountId={accountIndex ?? undefined} />
-
-          {/* Pattern Recognition */}
-          <PatternRecognition 
-            trades={trades}
-            positions={positions}
-          />
-
-          {/* Trade Analysis */}
-          <TradeAnalysisView 
-            trades={trades}
-            accountIndex={accountIndex ?? undefined}
-          />
-        </>
+          <BestWorstTrades trades={trades} />
+        </section>
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <Activity className="w-4 h-4 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Asset Performance</h3>
+          </div>
+          <AssetPerformance trades={trades} />
+        </section>
+      </div>
+      
+      {/* Streak Analysis & Time-Based Performance */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <StreakAnalysis trades={trades} />
+        <TimeBasedPerformance trades={trades} />
+      </div>
+      
+      {/* Funding History */}
+      {Object.keys(fundingHistories).length > 0 && (
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <History className="w-4 h-4 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Funding History</h3>
+          </div>
+          <FundingHistory fundingHistories={fundingHistories} />
+        </section>
       )}
-
-      {/* Trading Journal */}
-      {user && (
-        <TradingJournal 
-          trades={trades} 
-          walletAddress={walletAddress}
-          userId={user.id}
-        />
+      
+      {/* Pool Shares */}
+      {poolShares.length > 0 && (
+        <PoolShares shares={poolShares} />
       )}
-
-      <TradesHistory trades={trades} />
-
+      
       {/* Transaction History */}
-      <TransactionHistory transactions={transactions} />
+      {transactions.length > 0 && (
+        <TransactionHistory transactions={transactions} />
+      )}
+      
+      {/* Liquidation Monitor */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <ShieldAlert className="w-4 h-4 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Risk Monitor</h3>
+        </div>
+        <LiquidationMonitor positions={positions} accountValue={accountValue} />
+      </section>
+      
+      {/* Trading Journal (requires auth) */}
+      {user && (
+        <section>
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="w-4 h-4 text-primary" />
+            <h3 className="text-lg font-semibold text-foreground">Trading Journal</h3>
+          </div>
+          <TradingJournal 
+            trades={trades} 
+            walletAddress={walletAddress}
+            userId={user.id}
+          />
+        </section>
+      )}
+      
+      {/* Auth Prompt */}
+      {!user && (
+        <div className="bg-card border border-border/50 rounded-xl p-6 text-center">
+          <h3 className="text-lg font-semibold text-foreground mb-2">Unlock More Features</h3>
+          <p className="text-muted-foreground mb-4">
+            Sign in to access trading journal, alerts, and wallet comparison tools.
+          </p>
+          <Button onClick={() => setShowAuthForm(true)} className="gap-2">
+            Sign In
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

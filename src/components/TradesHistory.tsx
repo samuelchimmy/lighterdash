@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import { formatCurrencySmart, formatNumber } from '@/lib/lighter-api';
 import type { LighterTrade } from '@/types/lighter';
-import { TrendingUp, TrendingDown } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowLeftRight } from 'lucide-react';
 
 interface TradesHistoryProps {
   trades: LighterTrade[];
@@ -18,8 +18,11 @@ interface TradesHistoryProps {
 export const TradesHistory = ({ trades }: TradesHistoryProps) => {
   if (!trades || trades.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border shadow-card">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Recent Trades</h3>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <ArrowLeftRight className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Recent Trades</h3>
+        </div>
         <p className="text-muted-foreground text-center py-8">No trades found</p>
       </Card>
     );
@@ -29,18 +32,17 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
   const recentTrades = trades.slice(0, 20);
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card overflow-hidden">
-      <h3 className="text-lg font-semibold mb-4 text-foreground">Recent Trades</h3>
+    <Card className="p-6 overflow-hidden">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-border hover:bg-secondary/50">
-              <TableHead className="text-muted-foreground">Date</TableHead>
-              <TableHead className="text-muted-foreground">Type</TableHead>
-              <TableHead className="text-muted-foreground">Size</TableHead>
-              <TableHead className="text-muted-foreground">Price</TableHead>
-              <TableHead className="text-muted-foreground">USD Amount</TableHead>
-              <TableHead className="text-muted-foreground text-right">Fee</TableHead>
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="text-muted-foreground font-medium">Date</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Type</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Size</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Price</TableHead>
+              <TableHead className="text-muted-foreground font-medium">USD Amount</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-right">Fee</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -51,12 +53,12 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
               const isBuy = size > 0;
               
               return (
-                <TableRow key={trade.trade_id} className="border-border hover:bg-secondary/50">
+                <TableRow key={trade.trade_id} className="border-border/30 hover:bg-secondary/50 transition-colors">
                   <TableCell className="text-foreground">
                     {new Date(trade.timestamp).toLocaleDateString()} {new Date(trade.timestamp).toLocaleTimeString()}
                   </TableCell>
                   <TableCell>
-                    <span className={`flex items-center gap-1 ${isBuy ? 'text-profit' : 'text-loss'}`}>
+                    <span className={`flex items-center gap-1.5 font-medium ${isBuy ? 'text-profit' : 'text-loss'}`}>
                       {isBuy ? (
                         <TrendingUp className="w-4 h-4" />
                       ) : (
@@ -65,7 +67,7 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
                       {isBuy ? 'BUY' : 'SELL'}
                     </span>
                   </TableCell>
-                  <TableCell className="text-foreground">{formatNumber(Math.abs(size), 4)}</TableCell>
+                  <TableCell className="text-foreground font-mono">{formatNumber(Math.abs(size), 4)}</TableCell>
                   <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(trade.price || '0'))}</TableCell>
                   <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(trade.usd_amount || '0'))}</TableCell>
                   <TableCell className="text-right text-muted-foreground">

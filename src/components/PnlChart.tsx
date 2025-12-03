@@ -4,7 +4,7 @@ import { formatCurrencySmart } from '@/lib/lighter-api';
 import type { PnlDataPoint } from '@/types/lighter';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Area, AreaChart } from 'recharts';
 import { useState, useMemo } from 'react';
-import { TrendingUp, TrendingDown, Trash2, RefreshCw } from 'lucide-react';
+import { TrendingUp, TrendingDown, Trash2, LineChart as LineChartIcon } from 'lucide-react';
 
 interface PnlChartProps {
   data: PnlDataPoint[];
@@ -61,8 +61,11 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="p-6 bg-card border-border shadow-card">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Account Value Chart</h3>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <LineChartIcon className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
+        </div>
         <p className="text-muted-foreground text-center py-8">No historical data available yet</p>
         <p className="text-xs text-muted-foreground text-center">Data will be collected as you use the dashboard</p>
       </Card>
@@ -84,7 +87,7 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+        <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
           <p className="text-xs text-muted-foreground mb-2">
             {new Date(data.timestamp).toLocaleString()}
           </p>
@@ -104,10 +107,11 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
   };
 
   return (
-    <Card className="p-6 bg-card border-border shadow-card">
+    <Card className="p-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
+            <LineChartIcon className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
             <Button
               variant="ghost"
@@ -134,14 +138,14 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
           </div>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-1 bg-secondary/50 p-1 rounded-lg">
           {(['24h', '1W', '1M', 'All'] as TimeRange[]).map((range) => (
             <Button
               key={range}
-              variant={timeRange === range ? 'default' : 'outline'}
+              variant={timeRange === range ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setTimeRange(range)}
-              className="text-xs"
+              className="text-xs px-3"
             >
               {range}
             </Button>
@@ -157,35 +161,37 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
           >
             <defs>
               <linearGradient id="gradientAccountValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
-                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
+                <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity={0.15} />
+                <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
               </linearGradient>
               <linearGradient id="gradientPnlPositive" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--profit))" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(var(--profit))" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="hsl(var(--profit))" stopOpacity={0.2} />
+                <stop offset="100%" stopColor="hsl(var(--profit))" stopOpacity={0.02} />
               </linearGradient>
               <linearGradient id="gradientPnlNegative" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="hsl(var(--loss))" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="hsl(var(--loss))" stopOpacity={0.05} />
+                <stop offset="0%" stopColor="hsl(var(--loss))" stopOpacity={0.2} />
+                <stop offset="100%" stopColor="hsl(var(--loss))" stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.3} />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis
               dataKey="timestamp"
               tickFormatter={formatXAxis}
               stroke="hsl(var(--muted-foreground))"
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '11px' }}
               tickLine={false}
+              axisLine={false}
             />
             <YAxis
               tickFormatter={(value) => `$${value.toFixed(0)}`}
               stroke="hsl(var(--muted-foreground))"
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '11px' }}
               tickLine={false}
+              axisLine={false}
             />
             <Tooltip content={<CustomTooltip />} />
-            <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
+            <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" opacity={0.5} />
             <Area
               type="monotone"
               dataKey="accountValue"
@@ -193,7 +199,7 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
               strokeWidth={2}
               fill="url(#gradientAccountValue)"
               dot={false}
-              activeDot={{ r: 4, fill: "hsl(var(--primary))" }}
+              activeDot={{ r: 4, fill: "hsl(var(--primary))", strokeWidth: 0 }}
             />
             <Area
               type="monotone"
@@ -210,11 +216,11 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
 
       <div className="flex items-center justify-center gap-6 mt-4 text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-0.5 bg-primary"></div>
+          <div className="w-4 h-0.5 bg-primary rounded-full"></div>
           <span>Account Value</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className={`w-4 h-0.5 ${chartMetrics.isPositive ? 'bg-profit' : 'bg-loss'}`} style={{ borderTop: '2px dashed' }}></div>
+          <div className={`w-4 h-0.5 ${chartMetrics.isPositive ? 'bg-profit' : 'bg-loss'} rounded-full`} style={{ borderTop: '2px dashed' }}></div>
           <span>PnL</span>
         </div>
       </div>

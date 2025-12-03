@@ -5,7 +5,7 @@ import { PlatformVolume } from "@/components/PlatformVolume";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { BarChart3, ArrowLeft, Calculator } from "lucide-react";
+import { BarChart3, ArrowLeft, Calculator, Activity } from "lucide-react";
 
 const LighterAnalytics = () => {
   const navigate = useNavigate();
@@ -13,16 +13,15 @@ const LighterAnalytics = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="relative">
-                <div className="absolute inset-0 glow-primary rounded-lg" />
-                <BarChart3 className="w-8 h-8 text-primary relative" />
+              <div className="p-2 rounded-xl bg-primary/10">
+                <Activity className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">
+                <h1 className="text-xl font-bold text-foreground">
                   Lighter Analytics
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -42,11 +41,12 @@ const LighterAnalytics = () => {
               </Button>
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => navigate("/")}
                 className="gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />
-                Back to Home
+                Back
               </Button>
             </div>
           </div>
@@ -57,10 +57,13 @@ const LighterAnalytics = () => {
       <main className="container mx-auto px-4 py-8">
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {/* Info Card */}
-          <div className="bg-card border border-border rounded-xl p-6 shadow-card">
-            <h3 className="text-lg font-semibold text-foreground mb-2">
-              About Lighter Analytics
-            </h3>
+          <div className="bg-card border border-border/50 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <BarChart3 className="w-5 h-5 text-primary" />
+              <h3 className="text-lg font-semibold text-foreground">
+                About Lighter Analytics
+              </h3>
+            </div>
             <p className="text-muted-foreground text-sm">
               Track real-time market data across all Lighter perpetual markets. View live order books, 
               recent trades, funding rates, and comprehensive market statistics. All data is streamed 

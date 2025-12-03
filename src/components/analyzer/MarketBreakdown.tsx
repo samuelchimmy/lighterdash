@@ -62,8 +62,8 @@ export function MarketBreakdown({ marketBreakdown }: MarketBreakdownProps) {
   };
 
   return (
-    <Card className="bg-card border-border">
-      <CardHeader className="pb-2">
+    <Card>
+      <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <Layers className="w-4 h-4 text-primary" />
           Per-Market Performance
@@ -73,48 +73,48 @@ export function MarketBreakdown({ marketBreakdown }: MarketBreakdownProps) {
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="border-border/50">
                 <TableHead>
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('market')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('market')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Market <SortIcon column="market" />
                   </Button>
                 </TableHead>
                 <TableHead className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('netPnL')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('netPnL')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Net PnL <SortIcon column="netPnL" />
                   </Button>
                 </TableHead>
                 <TableHead className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('winRate')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('winRate')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Win Rate <SortIcon column="winRate" />
                   </Button>
                 </TableHead>
                 <TableHead className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('profitFactor')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('profitFactor')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Profit Factor <SortIcon column="profitFactor" />
                   </Button>
                 </TableHead>
                 <TableHead className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('totalFees')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('totalFees')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Fees <SortIcon column="totalFees" />
                   </Button>
                 </TableHead>
                 <TableHead className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('totalTrades')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('totalTrades')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Trades <SortIcon column="totalTrades" />
                   </Button>
                 </TableHead>
                 <TableHead className="text-right">
-                  <Button variant="ghost" size="sm" onClick={() => handleSort('avgPnLPerTrade')} className="h-auto p-0 font-medium hover:bg-transparent">
+                  <Button variant="ghost" size="sm" onClick={() => handleSort('avgPnLPerTrade')} className="h-auto p-0 font-medium hover:bg-transparent text-muted-foreground">
                     Avg PnL <SortIcon column="avgPnLPerTrade" />
                   </Button>
                 </TableHead>
-                <TableHead className="text-right">Insight</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium">Insight</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedData.map((market) => (
-                <TableRow key={market.market}>
+                <TableRow key={market.market} className="border-border/30 hover:bg-secondary/50">
                   <TableCell>
                     <Badge variant="outline" className="font-mono">
                       {market.market}
@@ -136,7 +136,7 @@ export function MarketBreakdown({ marketBreakdown }: MarketBreakdownProps) {
                   <TableCell className="text-right text-muted-foreground">
                     {formatCurrency(market.totalFees)}
                   </TableCell>
-                  <TableCell className="text-right">{market.totalTrades}</TableCell>
+                  <TableCell className="text-right text-foreground">{market.totalTrades}</TableCell>
                   <TableCell className={`text-right font-medium ${market.avgPnLPerTrade >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatCurrency(market.avgPnLPerTrade)}
                   </TableCell>
@@ -168,14 +168,14 @@ export function MarketBreakdown({ marketBreakdown }: MarketBreakdownProps) {
 
         {/* Summary stats */}
         {sortedData.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-border flex flex-wrap gap-4 justify-center">
+          <div className="mt-4 pt-4 border-t border-border/50 flex flex-wrap gap-3 justify-center">
             <Badge variant="secondary" className="text-sm">
               {sortedData.length} Markets Traded
             </Badge>
-            <Badge variant="secondary" className="text-sm">
+            <Badge className="text-sm bg-profit/10 text-profit border-0">
               Best: {sortedData[0]?.market} ({formatCurrency(sortedData[0]?.netPnL || 0)})
             </Badge>
-            <Badge variant="secondary" className="text-sm">
+            <Badge variant="destructive" className="text-sm bg-loss/10 text-loss border-0">
               Worst: {sortedData[sortedData.length - 1]?.market} ({formatCurrency(sortedData[sortedData.length - 1]?.netPnL || 0)})
             </Badge>
           </div>

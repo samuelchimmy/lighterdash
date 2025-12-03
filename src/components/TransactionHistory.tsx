@@ -38,7 +38,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <History className="w-5 h-5 text-primary" />
+          <History className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Transaction History</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No transactions found</p>
@@ -51,7 +51,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
   return (
     <Card className="p-6 overflow-hidden">
       <div className="flex items-center gap-2 mb-4">
-        <History className="w-5 h-5 text-primary" />
+        <History className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
         <h3 className="text-lg font-semibold text-foreground">Transaction History</h3>
       </div>
       <div className="overflow-x-auto">

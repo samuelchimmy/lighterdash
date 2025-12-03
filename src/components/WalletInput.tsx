@@ -4,6 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { validateEthereumAddress } from '@/lib/lighter-api';
 
+// Helper component for filled icons
+const FilledIcon = ({ Icon, className }: { Icon: any; className?: string }) => (
+  <Icon className={className} fill="currentColor" fillOpacity={0.2} />
+);
+
 interface WalletInputProps {
   onScan: (address: string) => void;
   isLoading?: boolean;
@@ -124,7 +129,7 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
                       className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-muted/50 rounded-lg text-sm group transition-colors"
                     >
                       <div className="p-1.5 rounded-lg bg-muted">
-                        <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+                        <Clock className="w-3.5 h-3.5 text-muted-foreground" fill="currentColor" fillOpacity={0.2} />
                       </div>
                       <span className="text-foreground truncate flex-1 text-left font-mono text-xs">
                         {wallet}
@@ -147,7 +152,7 @@ export const WalletInput = ({ onScan, isLoading = false }: WalletInputProps) => 
             disabled={isLoading}
             className="h-12 px-6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-xl shadow-card gap-2"
           >
-            <Search className="w-5 h-5" />
+            <Search className="w-5 h-5" fill="currentColor" fillOpacity={0.2} />
             <span className="hidden sm:inline">Scan</span>
           </Button>
         </div>

@@ -26,7 +26,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4 text-foreground flex items-center gap-2">
           <div className="p-2 rounded-lg bg-primary/10">
-            <Activity className="w-5 h-5 text-primary" />
+            <Activity className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           </div>
           Account Stats
         </h3>
@@ -39,7 +39,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
     <Card className="p-6 hover-glow-card">
       <h3 className="text-lg font-semibold mb-6 text-foreground flex items-center gap-2">
         <div className="p-2 rounded-lg bg-primary/10">
-          <Activity className="w-5 h-5 text-primary" />
+          <Activity className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
         </div>
         Account Stats
       </h3>
@@ -51,7 +51,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 rounded-lg bg-primary/10">
-                      <Gauge className="w-4 h-4 text-primary" />
+                      <Gauge className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
                     </div>
                     <p className="text-sm text-muted-foreground">Leverage</p>
                   </div>
@@ -76,7 +76,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 rounded-lg bg-primary/10">
-                      <PieChart className="w-4 h-4 text-primary" />
+                      <PieChart className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
                     </div>
                     <p className="text-sm text-muted-foreground">Margin Usage</p>
                   </div>
@@ -100,7 +100,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
               <div className="bg-muted/30 rounded-xl p-4 border border-border/30 cursor-help hover:bg-muted/50 transition-colors">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="p-1.5 rounded-lg bg-profit/10">
-                    <Wallet className="w-4 h-4 text-profit" />
+                    <Wallet className="w-4 h-4 text-profit" fill="currentColor" fillOpacity={0.2} />
                   </div>
                   <p className="text-sm text-muted-foreground">Available Balance</p>
                 </div>
@@ -121,7 +121,7 @@ export const AccountStats = ({ stats }: AccountStatsProps) => {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 rounded-lg bg-primary/10">
-                      <Activity className="w-4 h-4 text-primary" />
+                      <Activity className="w-4 h-4 text-primary" fill="currentColor" fillOpacity={0.2} />
                     </div>
                     <p className="text-sm text-muted-foreground">Collateral</p>
                   </div>

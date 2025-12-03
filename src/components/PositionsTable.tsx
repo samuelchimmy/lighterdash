@@ -35,7 +35,7 @@ export const PositionsTable = ({ positions }: PositionsTableProps) => {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Layers className="w-5 h-5 text-primary" />
+          <Layers className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Open Positions</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No open positions</p>

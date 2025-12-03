@@ -29,7 +29,7 @@ export function TimeBasedPerformance({ trades, accountId }: TimeBasedPerformance
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Clock className="w-5 h-5 text-primary" />
+          <Clock className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Time-Based Performance</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No trading data available</p>
@@ -46,7 +46,7 @@ export function TimeBasedPerformance({ trades, accountId }: TimeBasedPerformance
   return (
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
-        <Clock className="w-5 h-5 text-primary" />
+        <Clock className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
         <h3 className="text-lg font-semibold text-foreground">Time-Based Performance</h3>
       </div>
       <Tabs defaultValue="hourly" className="w-full">

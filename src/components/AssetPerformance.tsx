@@ -60,7 +60,7 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
     return (
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <PieChart className="w-5 h-5 text-primary" />
+          <PieChart className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
           <h3 className="text-lg font-semibold text-foreground">Performance by Asset</h3>
         </div>
         <p className="text-muted-foreground text-center py-8">No trading data available</p>
@@ -71,7 +71,7 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
   return (
     <Card className="p-6">
       <div className="flex items-center gap-2 mb-6">
-        <PieChart className="w-5 h-5 text-primary" />
+        <PieChart className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
         <h3 className="text-lg font-semibold text-foreground">Performance by Asset</h3>
       </div>
       <div className="space-y-4">

@@ -5,16 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3, ShieldAlert, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3, ShieldAlert } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { lighterApi } from '@/lib/lighter-api';
 import { formatCurrency, formatNumber } from '@/lib/lighter-api';
-import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import { exportToCSV } from '@/lib/export-utils';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { resolveMarketSymbol } from '@/lib/markets';
-import { Footer } from '@/components/Footer';
+import { Layout } from '@/components/Layout';
 
 interface LiquidationEvent {
   id: string;
@@ -37,7 +36,6 @@ interface PlatformLiquidation {
 }
 
 const Liquidations = () => {
-  const navigate = useNavigate();
   const [liquidations, setLiquidations] = useState<LiquidationEvent[]>([]);
   const [platformLiquidations, setPlatformLiquidations] = useState<PlatformLiquidation[]>([]);
   const [heatmapData, setHeatmapData] = useState<any[]>([]);
@@ -96,11 +94,10 @@ const Liquidations = () => {
   useEffect(() => {
     if (liquidations.length === 0) return;
 
-    // Group liquidations by price ranges
     const priceRanges = new Map<number, { count: number; volume: number }>();
     
     liquidations.forEach(liq => {
-      const priceLevel = Math.floor(Number(liq.price) / 100) * 100; // Group by $100 increments
+      const priceLevel = Math.floor(Number(liq.price) / 100) * 100;
       const existing = priceRanges.get(priceLevel) || { count: 0, volume: 0 };
       priceRanges.set(priceLevel, {
         count: existing.count + 1,
@@ -126,8 +123,7 @@ const Liquidations = () => {
     ws.onopen = () => {
       console.log('🔌 Connected to Lighter trade stream');
       
-      // Subscribe to trades across multiple major markets
-      const majorMarkets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // BTC, SOL, ETH, etc.
+      const majorMarkets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       majorMarkets.forEach(marketId => {
         ws.send(JSON.stringify({
           type: 'subscribe',
@@ -140,17 +136,14 @@ const Liquidations = () => {
       try {
         const data = JSON.parse(event.data);
         
-        // Look for liquidation indicators in trade data
         if (data.type === 'update/trade' && data.trades) {
           for (const trade of data.trades) {
-            // Detect potential liquidations (large sudden trades, specific patterns)
             const isLiquidation = trade.type === 'liquidation' || 
                                  (trade.usd_amount && parseFloat(trade.usd_amount) > 10000);
             
             if (isLiquidation && trade.market_id && trade.price) {
               const marketSymbol = resolveMarketSymbol(trade.market_id);
               
-              // Add to platform liquidations list
               setPlatformLiquidations(prev => {
                 const newLiq: PlatformLiquidation = {
                   accountIndex: trade.bid_account_id || trade.ask_account_id || 0,
@@ -172,7 +165,6 @@ const Liquidations = () => {
                 return [newLiq, ...prev].slice(0, 50);
               });
 
-              // Store in database for history
               try {
                 await supabase.from('liquidations').insert({
                   wallet_address: 'Platform',
@@ -240,38 +232,29 @@ const Liquidations = () => {
   const totalEvents = filteredLiquidations.length;
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" onClick={() => navigate('/')} className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-destructive/10">
-                  <ShieldAlert className="w-5 h-5 text-destructive" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-foreground">Platform Liquidations</h1>
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${platformLiquidations.length > 0 ? 'bg-profit animate-pulse' : 'bg-muted-foreground'}`} />
-                    <span className="text-xs text-muted-foreground">
-                      {platformLiquidations.length > 0 ? 'Live' : 'Waiting for events'}
-                    </span>
-                  </div>
-                </div>
+    <Layout showNav={false}>
+      <div className="container mx-auto px-4 py-8 space-y-6">
+        {/* Page Header */}
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-destructive/10">
+              <ShieldAlert className="w-5 h-5 text-destructive" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">Platform Liquidations</h1>
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${platformLiquidations.length > 0 ? 'bg-profit animate-pulse' : 'bg-muted-foreground'}`} />
+                <span className="text-xs text-muted-foreground">
+                  {platformLiquidations.length > 0 ? 'Live' : 'Waiting for events'}
+                </span>
               </div>
             </div>
-            <Badge variant="outline" className="border-primary/30 text-primary">
-              {platformLiquidations.length} Live
-            </Badge>
           </div>
-        </nav>
-      </header>
+          <Badge variant="outline" className="border-primary/30 text-primary">
+            {platformLiquidations.length} Live
+          </Badge>
+        </div>
 
-      <main className="container mx-auto px-4 py-8 space-y-6">
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
@@ -441,9 +424,10 @@ const Liquidations = () => {
                   className="w-full"
                 />
               </div>
-              <Select value={filterType} onValueChange={(value: any) => setFilterType(value)}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Event Type" />
+              <Select value={filterType} onValueChange={(v) => setFilterType(v as any)}>
+                <SelectTrigger className="w-[150px]">
+                  <Filter className="h-4 w-4 mr-2" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
@@ -452,7 +436,7 @@ const Liquidations = () => {
                 </SelectContent>
               </Select>
               <Select value={filterSymbol} onValueChange={setFilterSymbol}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[150px]">
                   <SelectValue placeholder="Symbol" />
                 </SelectTrigger>
                 <SelectContent>
@@ -466,8 +450,8 @@ const Liquidations = () => {
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="text-center py-8 text-muted-foreground">
+                Loading liquidation history...
               </div>
             ) : filteredLiquidations.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -477,32 +461,42 @@ const Liquidations = () => {
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-border/50">
-                      <TableHead className="text-muted-foreground">Time</TableHead>
-                      <TableHead className="text-muted-foreground">Symbol</TableHead>
-                      <TableHead className="text-muted-foreground">Type</TableHead>
-                      <TableHead className="text-muted-foreground">Price</TableHead>
-                      <TableHead className="text-muted-foreground">Size</TableHead>
-                      <TableHead className="text-muted-foreground text-right">USD Amount</TableHead>
+                    <TableRow>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Wallet</TableHead>
+                      <TableHead>Symbol</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead className="text-right">Price</TableHead>
+                      <TableHead className="text-right">Size</TableHead>
+                      <TableHead className="text-right">USD Amount</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredLiquidations.slice(0, 50).map((liq) => (
-                      <TableRow key={liq.id} className="border-border/30 hover:bg-secondary/50">
-                        <TableCell className="text-foreground">
+                      <TableRow key={liq.id}>
+                        <TableCell className="text-muted-foreground text-sm">
                           {new Date(liq.timestamp).toLocaleString()}
+                        </TableCell>
+                        <TableCell className="font-mono text-xs">
+                          {liq.wallet_address.slice(0, 6)}...{liq.wallet_address.slice(-4)}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{liq.symbol || 'N/A'}</Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={liq.event_type === 'liquidation' ? 'destructive' : 'secondary'}>
+                          <Badge 
+                            variant={liq.event_type === 'liquidation' ? 'destructive' : 'secondary'}
+                          >
                             {liq.event_type}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-foreground">{formatCurrency(Number(liq.price))}</TableCell>
-                        <TableCell className="text-foreground">{formatNumber(Number(liq.size))}</TableCell>
-                        <TableCell className="text-right font-semibold text-destructive">
+                        <TableCell className="text-right font-mono">
+                          {formatCurrency(Number(liq.price))}
+                        </TableCell>
+                        <TableCell className="text-right font-mono">
+                          {formatNumber(Number(liq.size))}
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-destructive font-semibold">
                           {formatCurrency(Number(liq.usdc_amount))}
                         </TableCell>
                       </TableRow>
@@ -513,10 +507,8 @@ const Liquidations = () => {
             )}
           </CardContent>
         </Card>
-      </main>
-
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 

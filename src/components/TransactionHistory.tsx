@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/lighter-api";
@@ -36,16 +36,12 @@ const TX_TYPES: Record<number, string> = {
 export function TransactionHistory({ transactions }: TransactionHistoryProps) {
   if (transactions.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <History className="h-5 w-5" />
-            Transaction History
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">No transactions found</p>
-        </CardContent>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <History className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Transaction History</h3>
+        </div>
+        <p className="text-muted-foreground text-center py-8">No transactions found</p>
       </Card>
     );
   }
@@ -53,21 +49,19 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
   const recentTransactions = transactions.slice(0, 20);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <History className="h-5 w-5" />
-          Transaction History
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+    <Card className="p-6 overflow-hidden">
+      <div className="flex items-center gap-2 mb-4">
+        <History className="w-5 h-5 text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">Transaction History</h3>
+      </div>
+      <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Type</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Hash</TableHead>
+            <TableRow className="border-border/50 hover:bg-transparent">
+              <TableHead className="text-muted-foreground font-medium">Type</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Date</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Status</TableHead>
+              <TableHead className="text-muted-foreground font-medium">Hash</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -77,15 +71,15 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
               const isDeposit = tx.type === 12;
               
               return (
-                <TableRow key={tx.hash || index}>
+                <TableRow key={tx.hash || index} className="border-border/30 hover:bg-secondary/50 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      {isWithdraw && <ArrowUpRight className="h-4 w-4 text-red-500" />}
-                      {isDeposit && <ArrowDownRight className="h-4 w-4 text-green-500" />}
-                      <span className="font-medium">{typeName}</span>
+                      {isWithdraw && <ArrowUpRight className="h-4 w-4 text-loss" />}
+                      {isDeposit && <ArrowDownRight className="h-4 w-4 text-profit" />}
+                      <span className="font-medium text-foreground">{typeName}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
+                  <TableCell className="text-muted-foreground">
                     {new Date(tx.executed_at || tx.timestamp).toLocaleString()}
                   </TableCell>
                   <TableCell>
@@ -93,7 +87,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
                       {tx.status === 2 ? 'Executed' : tx.status === 1 ? 'Pending' : 'Failed'}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-xs text-muted-foreground font-mono">
+                  <TableCell className="text-muted-foreground font-mono">
                     {tx.hash.slice(0, 10)}...{tx.hash.slice(-8)}
                   </TableCell>
                 </TableRow>
@@ -101,7 +95,7 @@ export function TransactionHistory({ transactions }: TransactionHistoryProps) {
             })}
           </TableBody>
         </Table>
-      </CardContent>
+      </div>
     </Card>
   );
 }

@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { FundingHistory as FundingHistoryType } from "@/types/lighter";
 import { formatCurrency } from "@/lib/lighter-api";
-import { Clock } from "lucide-react";
+import { Percent } from "lucide-react";
 
 interface FundingHistoryProps {
   fundingHistories: Record<string, FundingHistoryType[]>;
@@ -19,11 +19,11 @@ const MARKET_SYMBOLS: Record<number, string> = {
 };
 
 const CHART_COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
+  "hsl(var(--primary))",
+  "hsl(var(--profit))",
+  "hsl(var(--loss))",
+  "hsl(270 70% 60%)",
+  "hsl(200 70% 50%)",
 ];
 
 export function FundingHistory({ fundingHistories }: FundingHistoryProps) {
@@ -83,29 +83,23 @@ export function FundingHistory({ fundingHistories }: FundingHistoryProps) {
 
   if (summaryData.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5" />
-            Funding History
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground text-sm">No funding history available</p>
-        </CardContent>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Percent className="w-5 h-5 text-primary" />
+          <h3 className="text-lg font-semibold text-foreground">Funding History</h3>
+        </div>
+        <p className="text-muted-foreground text-center py-8">No funding history available</p>
       </Card>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Clock className="h-5 w-5" />
-          Funding History
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <Card className="p-6">
+      <div className="flex items-center gap-2 mb-6">
+        <Percent className="w-5 h-5 text-primary" />
+        <h3 className="text-lg font-semibold text-foreground">Funding History</h3>
+      </div>
+      <div className="space-y-6">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {summaryData.map((data, idx) => {
@@ -113,17 +107,17 @@ export function FundingHistory({ fundingHistories }: FundingHistoryProps) {
             return (
               <div 
                 key={data.marketId}
-                className="p-4 rounded-lg border bg-card"
+                className="p-4 rounded-xl border border-border/50 bg-secondary/30 hover:bg-secondary/50 transition-colors"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold">{data.symbol}</span>
+                  <span className="font-semibold text-foreground">{data.symbol}</span>
                   <Badge variant={isPositive ? "default" : "destructive"}>
                     {data.count} events
                   </Badge>
                 </div>
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground">Total Funding Paid/Received</p>
-                  <p className={`text-xl font-bold ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-xl font-bold ${isPositive ? 'text-profit' : 'text-loss'}`}>
                     {isPositive ? '+' : ''}{formatCurrency(data.total)}
                   </p>
                 </div>
@@ -141,17 +135,21 @@ export function FundingHistory({ fundingHistories }: FundingHistoryProps) {
                   dataKey="date" 
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
                 />
                 <YAxis 
                   stroke="hsl(var(--muted-foreground))"
                   fontSize={12}
                   tickFormatter={(value) => `$${value.toFixed(0)}`}
+                  tickLine={false}
+                  axisLine={false}
                 />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "hsl(var(--card))",
                     border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
+                    borderRadius: "12px",
                   }}
                   formatter={(value: number) => [`$${value.toFixed(2)}`, "Cumulative"]}
                 />
@@ -170,7 +168,7 @@ export function FundingHistory({ fundingHistories }: FundingHistoryProps) {
             </ResponsiveContainer>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 }

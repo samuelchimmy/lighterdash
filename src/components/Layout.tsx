@@ -1,14 +1,12 @@
-import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
-  LineChart, 
-  GitCompare, 
-  Calculator, 
-  ShieldAlert, 
-  BarChart3,
+  BrainCircuit, 
+  Scale, 
+  Gauge, 
+  ChartPie, 
   Menu,
-  X
+  Flame
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Footer } from '@/components/Footer';
@@ -28,11 +26,11 @@ interface LayoutProps {
 }
 
 const navItems = [
-  { label: 'AI Trader Insights', path: '/trade-analyzer', icon: LineChart },
-  { label: 'Liquidations', path: '/liquidations', icon: ShieldAlert },
-  { label: 'Calculator', path: '/calculator', icon: Calculator },
-  { label: 'Compare Wallets', path: '/community', icon: GitCompare },
-  { label: 'Analytics', path: '/analytics', icon: BarChart3 },
+  { label: 'AI Trader Insights', path: '/trade-analyzer', icon: BrainCircuit },
+  { label: 'Liquidations', path: '/liquidations', icon: Flame },
+  { label: 'Calculator', path: '/calculator', icon: Gauge },
+  { label: 'Compare Wallets', path: '/community', icon: Scale },
+  { label: 'Analytics', path: '/analytics', icon: ChartPie },
 ];
 
 export function Layout({ children, showNav = true, headerContent }: LayoutProps) {
@@ -70,9 +68,9 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                         onClick={() => navigate(item.path)}
                         variant={location.pathname === item.path ? 'default' : 'outline'}
                         size="sm"
-                        className="gap-2"
+                        className="gap-1.5"
                       >
-                        <item.icon className="w-4 h-4" />
+                        <item.icon className="w-3.5 h-3.5" fill="currentColor" fillOpacity={0.2} />
                         <span>{item.label}</span>
                       </Button>
                     ))}
@@ -91,11 +89,11 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
                           <DropdownMenuItem
                             key={item.path}
                             onClick={() => navigate(item.path)}
-                            className={`gap-3 cursor-pointer ${
+                            className={`gap-2.5 cursor-pointer ${
                               location.pathname === item.path ? 'bg-primary/10 text-primary' : ''
                             }`}
                           >
-                            <item.icon className="w-4 h-4" />
+                            <item.icon className="w-3.5 h-3.5" fill="currentColor" fillOpacity={0.2} />
                             <span>{item.label}</span>
                           </DropdownMenuItem>
                         ))}

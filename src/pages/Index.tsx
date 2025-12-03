@@ -81,7 +81,7 @@ const Index = () => {
                     className="gap-2"
                   >
                     <FileSpreadsheet className="w-4 h-4" />
-                    <span className="hidden md:inline">Analyzer</span>
+                    <span className="hidden md:inline">Trader Insights</span>
                   </Button>
                   <Button
                     onClick={() => navigate('/liquidations')}

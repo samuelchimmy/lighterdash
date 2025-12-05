@@ -8,35 +8,34 @@ import { BarChart3, Activity } from "lucide-react";
 const LighterAnalytics = () => {
   return (
     <Layout showNav={false}>
-      <div className="container mx-auto px-4 py-8">
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="container mx-auto px-4 py-6">
+        <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {/* Page Header */}
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-xl bg-primary/10">
-              <Activity className="w-5 h-5 text-primary" />
+          <div className="flex items-center gap-2.5 mb-1">
+            <div className="p-1.5 rounded-lg bg-primary/10">
+              <Activity className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-base font-semibold text-foreground">
                 Lighter Analytics
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Real-time market data and analytics
               </p>
             </div>
           </div>
 
           {/* Info Card */}
-          <div className="bg-card border border-border/50 rounded-xl p-6">
-            <div className="flex items-center gap-2 mb-2">
-              <BarChart3 className="w-5 h-5 text-primary" />
-              <h3 className="text-lg font-semibold text-foreground">
-                About Lighter Analytics
+          <div className="bg-gradient-to-br from-card via-card to-primary/5 border border-border/50 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
+            <div className="flex items-center gap-2 mb-1.5">
+              <BarChart3 className="w-4 h-4 text-primary" />
+              <h3 className="text-sm font-semibold text-foreground">
+                About Analytics
               </h3>
             </div>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-xs leading-relaxed">
               Track real-time market data across all Lighter perpetual markets. View live order books, 
-              recent trades, funding rates, and comprehensive market statistics. All data is streamed 
-              directly from Lighter's WebSocket API for instant updates.
+              recent trades, funding rates, and comprehensive market statistics.
             </p>
           </div>
 
@@ -47,7 +46,7 @@ const LighterAnalytics = () => {
           <MarketStats />
 
           {/* Order Book & Live Trades Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             <OrderBookDepth />
             <LiveTradeFeed />
           </div>

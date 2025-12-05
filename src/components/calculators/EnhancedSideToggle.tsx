@@ -7,15 +7,15 @@ interface EnhancedSideToggleProps {
 
 export function EnhancedSideToggle({ side, onSideChange }: EnhancedSideToggleProps) {
   return (
-    <div className="grid grid-cols-2 gap-1 p-1 rounded-lg bg-muted/30 border border-border/50">
+    <div className="grid grid-cols-2 gap-0.5 p-0.5 rounded-lg bg-muted/30 border border-border/50">
       <button
         type="button"
         onClick={() => onSideChange('long')}
         className={cn(
-          "px-4 py-2 rounded-md text-sm font-medium transition-all",
+          "px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200",
           side === 'long'
             ? "bg-profit text-profit-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
         )}
       >
         Long
@@ -24,10 +24,10 @@ export function EnhancedSideToggle({ side, onSideChange }: EnhancedSideTogglePro
         type="button"
         onClick={() => onSideChange('short')}
         className={cn(
-          "px-4 py-2 rounded-md text-sm font-medium transition-all",
+          "px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200",
           side === 'short'
             ? "bg-loss text-loss-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
         )}
       >
         Short

@@ -24,17 +24,17 @@ export function EnhancedCalculatorInput({
   };
 
   return (
-    <div className="space-y-2">
-      <label className="text-sm text-muted-foreground">{label}</label>
+    <div className="space-y-1.5">
+      <label className="text-xs text-muted-foreground font-medium">{label}</label>
       <div className="relative">
         <Input
           type="text"
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
-          className="pr-16 h-10 bg-background border-border"
+          className="pr-14 h-9 text-sm bg-background border-border/50 focus:border-primary/50 transition-colors"
         />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground font-medium">
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground font-medium uppercase">
           {suffix}
         </span>
       </div>

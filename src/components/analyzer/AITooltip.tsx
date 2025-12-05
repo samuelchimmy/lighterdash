@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { LightBulbIcon } from '@heroicons/react/24/solid';
 import { Button } from '@/components/ui/button';
 import {
   Popover,
@@ -31,7 +32,7 @@ export function AITooltip({ metricType, data, className }: AITooltipProps) {
     queryKey: ['trade-insight', metricType, JSON.stringify(data)],
     queryFn: () => fetchInsight(metricType, data),
     enabled: isOpen,
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    staleTime: 5 * 60 * 1000,
     retry: 1
   });
 
@@ -41,33 +42,72 @@ export function AITooltip({ metricType, data, className }: AITooltipProps) {
         <Button
           variant="ghost"
           size="sm"
-          className={`gap-1.5 text-primary hover:text-primary hover:bg-primary/10 ${className}`}
+          className={`gap-1.5 text-primary hover:text-primary hover:bg-primary/10 transition-all duration-300 group ${className}`}
         >
-          <Sparkles className="w-4 h-4" />
-          <span className="text-xs">AI Insight</span>
+          <LightBulbIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-medium">AI Insight</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 bg-card border-border" align="start">
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 text-primary">
-            <Sparkles className="w-4 h-4" />
-            <span className="font-medium text-sm">AI Analysis</span>
+      <PopoverContent 
+        className="w-96 bg-gradient-to-br from-card via-card to-primary/5 border-primary/20 shadow-xl" 
+        align="end"
+      >
+        <div className="space-y-4">
+          {/* Header */}
+          <div className="flex items-center gap-3 pb-3 border-b border-border/50">
+            <div className="p-2 rounded-xl bg-primary/10">
+              <LightBulbIcon className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h4 className="font-semibold text-foreground text-sm">AI Analysis</h4>
+              <p className="text-xs text-muted-foreground">Powered by AI insights</p>
+            </div>
           </div>
           
+          {/* Content */}
           {isLoading ? (
-            <div className="flex items-center justify-center py-4">
-              <Loader2 className="w-5 h-5 animate-spin text-primary" />
-              <span className="ml-2 text-sm text-muted-foreground">Analyzing...</span>
+            <div className="flex flex-col items-center justify-center py-8 gap-3">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full bg-primary/10 animate-pulse" />
+                <Loader2 className="w-6 h-6 animate-spin text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm font-medium text-foreground">Analyzing your data...</p>
+                <p className="text-xs text-muted-foreground mt-1">This may take a few seconds</p>
+              </div>
             </div>
           ) : error ? (
-            <div className="text-sm text-destructive">
-              <p>Failed to generate insight.</p>
-              <Button variant="link" size="sm" onClick={() => refetch()} className="p-0 h-auto">
+            <div className="py-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-destructive/10 mx-auto mb-3 flex items-center justify-center">
+                <span className="text-destructive text-lg">!</span>
+              </div>
+              <p className="text-sm text-destructive font-medium mb-2">Failed to generate insight</p>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => refetch()} 
+                className="text-xs hover:bg-primary/10 hover:text-primary hover:border-primary/50"
+              >
                 Try again
               </Button>
             </div>
           ) : (
-            <p className="text-sm text-foreground leading-relaxed">{insight}</p>
+            <div className="space-y-3">
+              <div className="bg-background/50 rounded-xl p-4 border border-border/30">
+                <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{insight}</p>
+              </div>
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-[10px] text-muted-foreground/70">AI-generated insight • Results may vary</span>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => refetch()}
+                  className="text-xs h-7 px-2 hover:bg-primary/10 hover:text-primary"
+                >
+                  Regenerate
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </PopoverContent>

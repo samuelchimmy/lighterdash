@@ -482,27 +482,27 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-5 animate-in fade-in duration-500">
       {/* Success Animation Overlay */}
       <SuccessAnimation {...animation} onComplete={reset} />
       
       {/* Header Actions */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-primary/10">
-            <ChartBarIcon className="w-5 h-5 text-primary" />
-          </div>
-          <h2 className="text-xl font-semibold text-foreground">Wallet Dashboard</h2>
-        </div>
         <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-primary/10">
+            <ChartBarIcon className="w-3.5 h-3.5 text-primary" />
+          </div>
+          <h2 className="text-sm font-semibold text-foreground">Wallet Dashboard</h2>
+        </div>
+        <div className="flex items-center gap-1.5">
           <Button
             variant="outline"
             size="sm"
             onClick={refreshWalletData}
             disabled={isRefreshing}
-            className="gap-2"
+            className="gap-1.5 h-7 px-2 text-[10px]"
           >
-            <ArrowPathIcon className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <ArrowPathIcon className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
             <span className="hidden sm:inline">Refresh</span>
           </Button>
           <ExportMenu 
@@ -523,18 +523,18 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       
       {/* Account Stats */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <WalletIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Account Overview</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <WalletIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Account Overview</h3>
         </div>
         <AccountStats stats={userStats} />
       </section>
       
       {/* PnL Chart */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <ChartBarIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Performance Chart</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <ChartBarIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Performance Chart</h3>
         </div>
         <PnlChart 
           data={pnlHistory} 
@@ -544,60 +544,60 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       
       {/* Positions */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <Square3Stack3DIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Open Positions</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <Square3Stack3DIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Open Positions</h3>
         </div>
         <PositionsTable positions={positions} />
       </section>
       
       {/* Open Orders */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <ClockIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Open Orders</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <ClockIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Open Orders</h3>
         </div>
         <OpenOrdersTable orders={orders} />
       </section>
       
       {/* Recent Trades */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <ArrowsRightLeftIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Recent Trades</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <ArrowsRightLeftIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Recent Trades</h3>
         </div>
         <TradesHistory trades={trades} />
       </section>
       
       {/* Performance Metrics */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <TrophyIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <TrophyIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Performance Metrics</h3>
         </div>
         <PerformanceMetrics trades={trades} positions={positions} />
       </section>
       
       {/* Best/Worst Trades & Asset Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <ArrowTrendingUpIcon className="w-4 h-4 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Top Trades</h3>
+          <div className="flex items-center gap-1.5 mb-3">
+            <ArrowTrendingUpIcon className="w-3 h-3 text-primary" />
+            <h3 className="text-xs font-semibold text-foreground">Top Trades</h3>
           </div>
           <BestWorstTrades trades={trades} />
         </section>
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <BoltIcon className="w-4 h-4 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Asset Performance</h3>
+          <div className="flex items-center gap-1.5 mb-3">
+            <BoltIcon className="w-3 h-3 text-primary" />
+            <h3 className="text-xs font-semibold text-foreground">Asset Performance</h3>
           </div>
           <AssetPerformance trades={trades} />
         </section>
       </div>
       
       {/* Streak Analysis & Time-Based Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <StreakAnalysis trades={trades} />
         <TimeBasedPerformance trades={trades} />
       </div>
@@ -605,9 +605,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Funding History */}
       {Object.keys(fundingHistories).length > 0 && (
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <ClockIcon className="w-4 h-4 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Funding History</h3>
+          <div className="flex items-center gap-1.5 mb-3">
+            <ClockIcon className="w-3 h-3 text-primary" />
+            <h3 className="text-xs font-semibold text-foreground">Funding History</h3>
           </div>
           <FundingHistory fundingHistories={fundingHistories} />
         </section>
@@ -625,9 +625,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       
       {/* Liquidation Monitor */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <ShieldExclamationIcon className="w-4 h-4 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Risk Monitor</h3>
+        <div className="flex items-center gap-1.5 mb-3">
+          <ShieldExclamationIcon className="w-3 h-3 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Risk Monitor</h3>
         </div>
         <LiquidationMonitor positions={positions} accountValue={accountValue} />
       </section>
@@ -635,9 +635,9 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       {/* Trading Journal (requires auth) */}
       {user && (
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <BookOpenIcon className="w-4 h-4 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Trading Journal</h3>
+          <div className="flex items-center gap-1.5 mb-3">
+            <BookOpenIcon className="w-3 h-3 text-primary" />
+            <h3 className="text-xs font-semibold text-foreground">Trading Journal</h3>
           </div>
           <TradingJournal 
             trades={trades} 
@@ -649,12 +649,12 @@ export const Dashboard = ({ walletAddress, onConnectionStatusChange }: Dashboard
       
       {/* Auth Prompt */}
       {!user && (
-        <div className="bg-card border border-border/50 rounded-xl p-6 text-center">
-          <h3 className="text-lg font-semibold text-foreground mb-2">Unlock More Features</h3>
-          <p className="text-muted-foreground mb-4">
+        <div className="bg-gradient-to-br from-card via-card to-primary/5 border border-border/50 rounded-xl p-4 text-center shadow-lg">
+          <h3 className="text-xs font-semibold text-foreground mb-1">Unlock More Features</h3>
+          <p className="text-[10px] text-muted-foreground mb-3">
             Sign in to access trading journal, alerts, and wallet comparison tools.
           </p>
-          <Button onClick={() => setShowAuthForm(true)} className="gap-2">
+          <Button onClick={() => setShowAuthForm(true)} size="sm" className="gap-1.5 h-7 text-[10px]">
             Sign In
           </Button>
         </div>

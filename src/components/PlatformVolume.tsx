@@ -119,55 +119,55 @@ export function PlatformVolume() {
         </div>
       </CardHeader>
       <CardContent className="px-4 pb-4">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <DollarSign className="h-3 w-3 text-primary" />
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">24h Volume</p>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          <div className="p-2 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1 mb-0.5">
+              <DollarSign className="h-2.5 w-2.5 text-primary" />
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">24h Volume</p>
             </div>
-            <p className="text-base font-bold text-foreground">
+            <p className="text-xs font-bold text-foreground truncate">
               {formatCurrencySmart(volumeStats.total24h)}
             </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Activity className="h-3 w-3 text-primary" />
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">7d Volume</p>
+          <div className="p-2 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1 mb-0.5">
+              <Activity className="h-2.5 w-2.5 text-primary" />
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">7d Volume</p>
             </div>
-            <p className="text-base font-bold text-foreground">
+            <p className="text-xs font-bold text-foreground truncate">
               {formatCurrencySmart(volumeStats.total7d)}
             </p>
-            <p className="text-[9px] text-muted-foreground italic">Est.</p>
+            <p className="text-[8px] text-muted-foreground italic">Est.</p>
           </div>
 
-          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <BarChart3 className="h-3 w-3 text-primary" />
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">30d Volume</p>
+          <div className="p-2 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1 mb-0.5">
+              <BarChart3 className="h-2.5 w-2.5 text-primary" />
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">30d Volume</p>
             </div>
-            <p className="text-base font-bold text-foreground">
+            <p className="text-xs font-bold text-foreground truncate">
               {formatCurrencySmart(volumeStats.total30d)}
             </p>
-            <p className="text-[9px] text-muted-foreground italic">Est.</p>
+            <p className="text-[8px] text-muted-foreground italic">Est.</p>
           </div>
 
-          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Layers className="h-3 w-3 text-primary" />
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Open Interest</p>
+          <div className="p-2 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1 mb-0.5">
+              <Layers className="h-2.5 w-2.5 text-primary" />
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Open Interest</p>
             </div>
-            <p className="text-base font-bold text-foreground">
+            <p className="text-xs font-bold text-foreground truncate">
               {formatCurrencySmart(volumeStats.totalOpenInterest)}
             </p>
           </div>
 
-          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
-            <div className="flex items-center gap-1.5 mb-1">
-              <TrendingUp className="h-3 w-3 text-primary" />
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Active Markets</p>
+          <div className="p-2 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1 mb-0.5">
+              <TrendingUp className="h-2.5 w-2.5 text-primary" />
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Markets</p>
             </div>
-            <p className="text-base font-bold text-foreground">
+            <p className="text-xs font-bold text-foreground">
               {volumeStats.totalMarkets}
             </p>
           </div>

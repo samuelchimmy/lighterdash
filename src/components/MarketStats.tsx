@@ -822,49 +822,49 @@ export function MarketStats() {
             return (
               <div 
                 key={market.market_id}
-                className="p-3 rounded-lg border border-border/30 bg-secondary/20 hover:bg-secondary/30 transition-colors relative"
+                className="p-2 rounded-lg border border-border/30 bg-secondary/20 hover:bg-secondary/30 transition-colors relative"
               >
-                <div className="absolute top-2 right-2 flex gap-0.5">
+                <div className="absolute top-1.5 right-1.5 flex gap-0.5">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6"
+                    className="h-5 w-5"
                     onClick={() => openAlertDialog(market.market_id)}
                     title="Configure alerts"
                   >
                     <Bell 
-                      className={`h-3 w-3 ${hasAlert ? 'fill-blue-400 text-blue-400' : 'text-muted-foreground'}`}
+                      className={`h-2.5 w-2.5 ${hasAlert ? 'fill-blue-400 text-blue-400' : 'text-muted-foreground'}`}
                     />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6"
+                    className="h-5 w-5"
                     onClick={() => toggleFavorite(market.market_id)}
                     title="Add to favorites"
                   >
                     <Star 
-                      className={`h-3 w-3 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
+                      className={`h-2.5 w-2.5 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
                     />
                   </Button>
                 </div>
-                <div className="flex items-start justify-between mb-2 pr-12">
+                <div className="flex items-start justify-between mb-1.5 pr-10">
                   <div>
-                    <h3 className="font-semibold text-sm">{symbol}</h3>
-                    <p className="text-lg font-bold text-foreground">
+                    <h3 className="font-semibold text-xs">{symbol}</h3>
+                    <p className="text-sm font-bold text-foreground">
                       {formatCurrency(parseFloat(market.mark_price))}
                     </p>
                   </div>
                   <Badge 
                     variant={isPriceUp ? "default" : "destructive"}
-                    className="flex items-center gap-0.5 text-[9px] h-4 px-1.5"
+                    className="flex items-center gap-0.5 text-[8px] h-3.5 px-1"
                   >
-                    {isPriceUp ? <TrendingUp className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5" />}
+                    {isPriceUp ? <TrendingUp className="h-2 w-2" /> : <TrendingDown className="h-2 w-2" />}
                     {formatPercentage(priceChange)}
                   </Badge>
                 </div>
 
-                <div className="space-y-0.5 text-[10px]">
+                <div className="space-y-0.5 text-[9px]">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Index:</span>
                     <span className="font-medium">{formatCurrency(parseFloat(market.index_price))}</span>
@@ -876,14 +876,15 @@ export function MarketStats() {
                   </div>
                   
                   <div className="flex justify-between">
+                    <span className="text-muted-foreground">Open Interest:</span>
                     <span className="font-medium">{formatCurrencySmart(parseFloat(market.open_interest))}</span>
                   </div>
                   
-                  <div className="flex justify-between items-center pt-1.5 mt-1.5 border-t border-border/30">
+                  <div className="flex justify-between items-center pt-1 mt-1 border-t border-border/30">
                     <span className="text-muted-foreground">Funding Rate:</span>
                     <Badge 
                       variant={isFundingPositive ? "default" : "secondary"}
-                      className="text-[9px] h-4 px-1.5"
+                      className="text-[8px] h-3.5 px-1"
                     >
                       {fundingRate >= 0 ? '+' : ''}{fundingRate.toFixed(4)}%
                     </Badge>

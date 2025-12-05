@@ -61,13 +61,13 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <LineChartIcon className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
-          <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
+      <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+        <div className="flex items-center gap-1.5 mb-3">
+          <LineChartIcon className="w-3.5 h-3.5 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <h3 className="text-xs font-semibold text-foreground">Account Value Chart</h3>
         </div>
-        <p className="text-muted-foreground text-center py-8">No historical data available yet</p>
-        <p className="text-xs text-muted-foreground text-center">Data will be collected as you use the dashboard</p>
+        <p className="text-muted-foreground text-center py-4 text-[10px]">No historical data available yet</p>
+        <p className="text-[9px] text-muted-foreground text-center">Data will be collected as you use the dashboard</p>
       </Card>
     );
   }
@@ -87,17 +87,17 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="bg-card border border-border rounded-xl p-4 shadow-lg">
-          <p className="text-xs text-muted-foreground mb-2">
+        <div className="bg-card border border-border rounded-lg p-2.5 shadow-lg">
+          <p className="text-[9px] text-muted-foreground mb-1.5">
             {new Date(data.timestamp).toLocaleString()}
           </p>
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-[10px] font-semibold text-foreground">
             Account Value: {formatCurrencySmart(data.accountValue)}
           </p>
-          <p className={`text-sm font-semibold ${data.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+          <p className={`text-[10px] font-semibold ${data.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
             PnL: {formatCurrencySmart(data.pnl)}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[9px] text-muted-foreground">
             Collateral: {formatCurrencySmart(data.collateral)}
           </p>
         </div>
@@ -107,45 +107,45 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
   };
 
   return (
-    <Card className="p-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
+    <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 gap-2">
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <LineChartIcon className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
-            <h3 className="text-lg font-semibold text-foreground">Account Value Chart</h3>
+          <div className="flex items-center gap-2 mb-1">
+            <LineChartIcon className="w-3.5 h-3.5 text-primary" fill="currentColor" fillOpacity={0.2} />
+            <h3 className="text-xs font-semibold text-foreground">Account Value Chart</h3>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClearHistory}
-              className="h-8 px-2 text-muted-foreground hover:text-destructive"
+              className="h-5 w-5 p-0 text-muted-foreground hover:text-destructive"
               title="Clear history"
             >
-              <Trash2 className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
+              <Trash2 className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
             </Button>
           </div>
-          <div className="flex items-center gap-2">
-            <span className={`flex items-center gap-1 text-sm font-semibold ${chartMetrics.isPositive ? 'text-profit' : 'text-loss'}`}>
+          <div className="flex items-center gap-1.5">
+            <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${chartMetrics.isPositive ? 'text-profit' : 'text-loss'}`}>
               {chartMetrics.isPositive ? (
-                <TrendingUp className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
+                <TrendingUp className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
               ) : (
-                <TrendingDown className="w-4 h-4" fill="currentColor" fillOpacity={0.2} />
+                <TrendingDown className="w-3 h-3" fill="currentColor" fillOpacity={0.2} />
               )}
               {formatCurrencySmart(Math.abs(chartMetrics.change))}
             </span>
-            <span className={`text-sm ${chartMetrics.isPositive ? 'text-profit' : 'text-loss'}`}>
+            <span className={`text-[10px] ${chartMetrics.isPositive ? 'text-profit' : 'text-loss'}`}>
               ({chartMetrics.isPositive ? '+' : ''}{chartMetrics.changePercent.toFixed(2)}%)
             </span>
           </div>
         </div>
 
-        <div className="flex gap-1 bg-secondary/50 p-1 rounded-lg">
+        <div className="flex gap-0.5 bg-secondary/50 p-0.5 rounded-md">
           {(['24h', '1W', '1M', 'All'] as TimeRange[]).map((range) => (
             <Button
               key={range}
               variant={timeRange === range ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setTimeRange(range)}
-              className="text-xs px-3"
+              className="text-[9px] px-2 h-5"
             >
               {range}
             </Button>
@@ -153,7 +153,7 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
         </div>
       </div>
 
-      <div className="w-full h-[300px]">
+      <div className="w-full h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={filteredData}
@@ -179,14 +179,14 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
               dataKey="timestamp"
               tickFormatter={formatXAxis}
               stroke="hsl(var(--muted-foreground))"
-              style={{ fontSize: '11px' }}
+              style={{ fontSize: '9px' }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
               tickFormatter={(value) => `$${value.toFixed(0)}`}
               stroke="hsl(var(--muted-foreground))"
-              style={{ fontSize: '11px' }}
+              style={{ fontSize: '9px' }}
               tickLine={false}
               axisLine={false}
             />
@@ -199,7 +199,7 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
               strokeWidth={2}
               fill="url(#gradientAccountValue)"
               dot={false}
-              activeDot={{ r: 4, fill: "hsl(var(--primary))", strokeWidth: 0 }}
+              activeDot={{ r: 3, fill: "hsl(var(--primary))", strokeWidth: 0 }}
             />
             <Area
               type="monotone"
@@ -214,13 +214,13 @@ export const PnlChart = ({ data, onClearHistory }: PnlChartProps) => {
         </ResponsiveContainer>
       </div>
 
-      <div className="flex items-center justify-center gap-6 mt-4 text-xs text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-0.5 bg-primary rounded-full"></div>
+      <div className="flex items-center justify-center gap-4 mt-2 text-[9px] text-muted-foreground">
+        <div className="flex items-center gap-1.5">
+          <div className="w-3 h-0.5 bg-primary rounded-full"></div>
           <span>Account Value</span>
         </div>
-        <div className="flex items-center gap-2">
-          <div className={`w-4 h-0.5 ${chartMetrics.isPositive ? 'bg-profit' : 'bg-loss'} rounded-full`} style={{ borderTop: '2px dashed' }}></div>
+        <div className="flex items-center gap-1.5">
+          <div className={`w-3 h-0.5 ${chartMetrics.isPositive ? 'bg-profit' : 'bg-loss'} rounded-full`} style={{ borderTop: '2px dashed' }}></div>
           <span>PnL</span>
         </div>
       </div>

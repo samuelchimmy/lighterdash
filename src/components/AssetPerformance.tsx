@@ -58,65 +58,65 @@ export function AssetPerformance({ trades, accountId }: AssetPerformanceProps) {
 
   if (assetStats.length === 0) {
     return (
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <PieChart className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
-          <h3 className="text-lg font-semibold text-foreground">Performance by Asset</h3>
+      <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+        <div className="flex items-center gap-1.5 mb-3">
+          <PieChart className="w-3.5 h-3.5 text-primary" fill="currentColor" fillOpacity={0.2} />
+          <h3 className="text-xs font-semibold text-foreground">Performance by Asset</h3>
         </div>
-        <p className="text-muted-foreground text-center py-8">No trading data available</p>
+        <p className="text-muted-foreground text-center py-4 text-[10px]">No trading data available</p>
       </Card>
     );
   }
 
   return (
-    <Card className="p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <PieChart className="w-5 h-5 text-primary" fill="currentColor" fillOpacity={0.2} />
-        <h3 className="text-lg font-semibold text-foreground">Performance by Asset</h3>
+    <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+      <div className="flex items-center gap-1.5 mb-3">
+        <PieChart className="w-3.5 h-3.5 text-primary" fill="currentColor" fillOpacity={0.2} />
+        <h3 className="text-xs font-semibold text-foreground">Performance by Asset</h3>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-2">
         {assetStats.map((stat, index) => {
           const winRate = (stat.wins / stat.trades) * 100;
           const isProfitable = stat.totalPnl >= 0;
 
           return (
-            <div key={index} className="p-4 border border-border/50 rounded-lg bg-secondary/30 space-y-3 hover:bg-secondary/50 transition-colors">
+            <div key={index} className="p-2.5 border border-border/50 rounded-lg bg-secondary/30 space-y-2 hover:bg-secondary/50 transition-colors">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg text-foreground">{stat.symbol}</span>
-                  <Badge variant={isProfitable ? 'default' : 'destructive'}>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold text-sm text-foreground">{stat.symbol}</span>
+                  <Badge variant={isProfitable ? 'default' : 'destructive'} className="text-[8px] h-4 px-1.5">
                     {stat.trades} trades
                   </Badge>
                 </div>
-                <span className={`text-xl font-bold ${isProfitable ? 'text-profit' : 'text-loss'}`}>
+                <span className={`text-sm font-bold ${isProfitable ? 'text-profit' : 'text-loss'}`}>
                   {isProfitable ? '+' : ''}{formatCurrency(stat.totalPnl)}
                 </span>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-[10px]">
                   <span className="text-muted-foreground">Win Rate</span>
                   <span className="font-semibold text-foreground">{formatPercentage(winRate)}</span>
                 </div>
-                <Progress value={winRate} className="h-2" />
+                <Progress value={winRate} className="h-1.5" />
               </div>
 
-              <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="grid grid-cols-3 gap-2 text-[10px]">
                 <div>
-                  <p className="text-xs text-muted-foreground">Wins</p>
+                  <p className="text-[9px] text-muted-foreground">Wins</p>
                   <p className="font-semibold text-profit">{stat.wins}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Losses</p>
+                  <p className="text-[9px] text-muted-foreground">Losses</p>
                   <p className="font-semibold text-loss">{stat.trades - stat.wins}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Volume</p>
+                  <p className="text-[9px] text-muted-foreground">Volume</p>
                   <p className="font-semibold text-foreground">{formatCurrency(stat.totalVolume)}</p>
                 </div>
               </div>
 
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-[9px] text-muted-foreground">
                 <span>Fees Paid</span>
                 <span className="font-medium text-foreground">{formatCurrency(Math.abs(stat.totalFees))}</span>
               </div>

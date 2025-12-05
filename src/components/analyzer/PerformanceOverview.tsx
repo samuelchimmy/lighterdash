@@ -206,19 +206,21 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                     tickFormatter={(v) => `$${v.toLocaleString()}`}
                   />
                   <Tooltip
+                    cursor={{ fill: 'hsl(var(--muted) / 0.15)' }}
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card) / 0.85)',
+                      backgroundColor: 'hsl(var(--card) / 0.9)',
                       backdropFilter: 'blur(8px)',
                       border: '1px solid hsl(var(--border) / 0.5)',
-                      borderRadius: '12px',
-                      color: 'hsl(var(--foreground))',
+                      borderRadius: '10px',
+                      padding: '8px 12px',
                       boxShadow: '0 4px 12px hsl(var(--background) / 0.3)'
                     }}
+                    labelStyle={{ color: 'hsl(var(--foreground))', fontSize: '11px', marginBottom: '2px' }}
                     formatter={(value: number) => [
-                      <span key="val" style={{ color: value >= 0 ? 'hsl(142 76% 36%)' : 'hsl(0 84% 60%)', fontWeight: 600 }}>
+                      <span key="val" style={{ color: value >= 0 ? 'hsl(142 76% 36%)' : 'hsl(0 84% 60%)', fontWeight: 600, fontSize: '12px' }}>
                         ${value.toFixed(2)}
                       </span>,
-                      'PnL'
+                      <span key="label" style={{ color: 'hsl(var(--foreground))', fontSize: '10px' }}>PnL</span>
                     ]}
                   />
                   <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
@@ -263,19 +265,21 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                     tickFormatter={(v) => `$${v.toLocaleString()}`}
                   />
                   <Tooltip
+                    cursor={{ fill: 'hsl(var(--muted) / 0.15)' }}
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card) / 0.85)',
+                      backgroundColor: 'hsl(var(--card) / 0.9)',
                       backdropFilter: 'blur(8px)',
                       border: '1px solid hsl(var(--border) / 0.5)',
-                      borderRadius: '12px',
-                      color: 'hsl(var(--foreground))',
+                      borderRadius: '10px',
+                      padding: '8px 12px',
                       boxShadow: '0 4px 12px hsl(var(--background) / 0.3)'
                     }}
+                    labelStyle={{ color: 'hsl(var(--foreground))', fontSize: '11px', marginBottom: '2px' }}
                     formatter={(value: number) => [
-                      <span key="val" style={{ color: value >= 0 ? 'hsl(142 76% 36%)' : 'hsl(0 84% 60%)', fontWeight: 600 }}>
+                      <span key="val" style={{ color: value >= 0 ? 'hsl(142 76% 36%)' : 'hsl(0 84% 60%)', fontWeight: 600, fontSize: '12px' }}>
                         ${value.toFixed(2)}
                       </span>,
-                      'PnL'
+                      <span key="label" style={{ color: 'hsl(var(--foreground))', fontSize: '10px' }}>PnL</span>
                     ]}
                   />
                   <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />

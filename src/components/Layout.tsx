@@ -61,16 +61,16 @@ export function Layout({ children, showNav = true, headerContent }: LayoutProps)
               <ThemeToggle />
               
               {/* Desktop Navigation - Always visible */}
-              <div className="hidden md:flex items-center gap-1">
+              <div className="hidden md:flex items-center gap-1 lg:gap-2">
                 {navItems.map((item) => (
                   <Button
                     key={item.path}
                     onClick={() => navigate(item.path)}
                     variant={location.pathname === item.path ? 'default' : 'ghost'}
                     size="sm"
-                    className="gap-1 h-7 px-2 text-[10px]"
+                    className="gap-1 h-7 px-2 text-[10px] lg:h-8 lg:px-3 lg:text-xs"
                   >
-                    <item.icon className="w-3 h-3" />
+                    <item.icon className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
                     <span>{item.label}</span>
                   </Button>
                 ))}

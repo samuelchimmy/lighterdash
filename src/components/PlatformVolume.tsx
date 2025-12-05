@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { lighterApi, formatCurrencySmart, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
-import { BarChart3, TrendingUp } from "lucide-react";
+import { BarChart3, TrendingUp, Activity, DollarSign, Layers } from "lucide-react";
 
 export function PlatformVolume() {
   const [markets, setMarkets] = useState<Record<number, MarketStatsType>>({});
@@ -28,7 +28,6 @@ export function PlatformVolume() {
           if (norm) updates.push(norm);
         };
 
-        // Handle market_stats as an object with market IDs as keys
         if (data.market_stats || data.marketStats) {
           const stats = data.market_stats ?? data.marketStats;
           if (typeof stats === 'object' && !Array.isArray(stats)) {
@@ -63,25 +62,14 @@ export function PlatformVolume() {
   const volumeStats = useMemo(() => {
     const marketList = Object.values(markets);
     
-    console.log("📊 PlatformVolume calculating stats from markets:", Object.keys(markets), "total:", marketList.length);
-    
-    // Calculate 24h total volume
     const total24h = marketList.reduce((sum, m) => 
       sum + (m.daily_quote_token_volume || 0), 0
     );
-
-    // Calculate 7d total volume (approximation: daily * 7)
     const total7d = total24h * 7;
-
-    // Calculate 30d total volume (approximation: daily * 30)
     const total30d = total24h * 30;
-
-    // Calculate total open interest across all markets
     const totalOpenInterest = marketList.reduce((sum, m) => 
       sum + parseFloat(m.open_interest || '0'), 0
     );
-
-    // Count total markets
     const totalMarkets = marketList.length;
 
     return {
@@ -95,19 +83,19 @@ export function PlatformVolume() {
 
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
+      <Card className="bg-card border-border/50 shadow-sm">
+        <CardHeader className="py-3 px-4">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <BarChart3 className="h-3.5 w-3.5 text-primary" />
             Platform Volume
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-8 w-32" />
+        <CardContent className="px-4 pb-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="space-y-1.5">
+                <Skeleton className="h-3 w-16" />
+                <Skeleton className="h-6 w-24" />
               </div>
             ))}
           </div>
@@ -117,68 +105,77 @@ export function PlatformVolume() {
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      <CardHeader className="py-3 px-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <BarChart3 className="h-3.5 w-3.5 text-primary" />
             Platform Volume
           </CardTitle>
-          <Badge variant="default" className="flex items-center gap-1">
-            <TrendingUp className="h-3 w-3" />
+          <Badge variant="default" className="flex items-center gap-1 text-[10px] h-5">
+            <TrendingUp className="h-2.5 w-2.5" />
             Live
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {/* 24h Volume */}
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">24h Volume</p>
-            <p className="text-xl font-bold text-foreground">
+      <CardContent className="px-4 pb-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <DollarSign className="h-3 w-3 text-primary" />
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">24h Volume</p>
+            </div>
+            <p className="text-base font-bold text-foreground">
               {formatCurrencySmart(volumeStats.total24h)}
             </p>
           </div>
 
-          {/* 7d Volume */}
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">7d Volume</p>
-            <p className="text-xl font-bold text-foreground">
+          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <Activity className="h-3 w-3 text-primary" />
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">7d Volume</p>
+            </div>
+            <p className="text-base font-bold text-foreground">
               {formatCurrencySmart(volumeStats.total7d)}
             </p>
-            <p className="text-xs text-muted-foreground italic">Est.</p>
+            <p className="text-[9px] text-muted-foreground italic">Est.</p>
           </div>
 
-          {/* 30d Volume */}
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">30d Volume</p>
-            <p className="text-xl font-bold text-foreground">
+          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <BarChart3 className="h-3 w-3 text-primary" />
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">30d Volume</p>
+            </div>
+            <p className="text-base font-bold text-foreground">
               {formatCurrencySmart(volumeStats.total30d)}
             </p>
-            <p className="text-xs text-muted-foreground italic">Est.</p>
+            <p className="text-[9px] text-muted-foreground italic">Est.</p>
           </div>
 
-          {/* Total Open Interest */}
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Open Interest</p>
-            <p className="text-xl font-bold text-foreground">
+          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <Layers className="h-3 w-3 text-primary" />
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Open Interest</p>
+            </div>
+            <p className="text-base font-bold text-foreground">
               {formatCurrencySmart(volumeStats.totalOpenInterest)}
             </p>
           </div>
 
-          {/* Active Markets */}
-          <div className="space-y-1">
-            <p className="text-xs text-muted-foreground">Active Markets</p>
-            <p className="text-xl font-bold text-foreground">
+          <div className="p-3 rounded-lg bg-secondary/30 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1">
+              <TrendingUp className="h-3 w-3 text-primary" />
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Active Markets</p>
+            </div>
+            <p className="text-base font-bold text-foreground">
               {volumeStats.totalMarkets}
             </p>
           </div>
         </div>
 
-        <div className="mt-4 p-3 rounded-lg bg-secondary/30 border border-border/50">
-          <p className="text-xs text-muted-foreground">
-            <span className="font-semibold">Note:</span> 7-day and 30-day volumes are estimated based on the current 24-hour volume. 
-            All data is streamed live from Lighter's WebSocket API.
+        <div className="mt-3 p-2.5 rounded-lg bg-secondary/20 border border-border/30">
+          <p className="text-[10px] text-muted-foreground">
+            <span className="font-semibold">Note:</span> 7d and 30d volumes are estimated from 24h data. All data streams live from Lighter API.
           </p>
         </div>
       </CardContent>

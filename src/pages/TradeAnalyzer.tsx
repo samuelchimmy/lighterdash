@@ -11,20 +11,20 @@ const TradeAnalyzer = () => {
   const { trades, analysis, isLoading, error, fileName, handleFileUpload, clearData } = useTradeAnalysis();
 
   return (
-    <Layout showNav={false}>
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto space-y-8">
+    <Layout>
+      <div className="container mx-auto px-4 py-6">
+        <div className="max-w-6xl mx-auto space-y-5">
           {/* Hero Section */}
-          <section className="text-center mb-8">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="p-2 rounded-xl bg-primary/10">
-                <LineChart className="w-6 h-6 text-primary" />
+          <section className="text-center mb-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <div className="p-1.5 rounded-lg bg-primary/10">
+                <LineChart className="w-4 h-4 text-primary" />
               </div>
-              <h1 className="text-2xl md:text-3xl font-semibold text-foreground">
+              <h1 className="text-base font-semibold text-foreground">
                 AI Trader Insights
               </h1>
             </div>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-[10px] text-muted-foreground max-w-xl mx-auto">
               Upload your trade history CSV to unlock comprehensive analytics, behavioral insights, 
               and AI-powered recommendations to improve your trading performance.
             </p>
@@ -43,17 +43,17 @@ const TradeAnalyzer = () => {
           {analysis && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-6 bg-muted/50 p-1 rounded-xl">
-                  <TabsTrigger value="overview" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                    <BarChart3 className="w-4 h-4" />
+                <TabsList className="grid w-full grid-cols-3 mb-4 bg-muted/50 p-0.5 rounded-lg h-8">
+                  <TabsTrigger value="overview" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                    <BarChart3 className="w-3 h-3" />
                     <span className="hidden sm:inline">Performance</span>
                   </TabsTrigger>
-                  <TabsTrigger value="habits" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                    <Activity className="w-4 h-4" />
+                  <TabsTrigger value="habits" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                    <Activity className="w-3 h-3" />
                     <span className="hidden sm:inline">Trading Habits</span>
                   </TabsTrigger>
-                  <TabsTrigger value="markets" className="gap-2 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                    <LineChart className="w-4 h-4" />
+                  <TabsTrigger value="markets" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                    <LineChart className="w-3 h-3" />
                     <span className="hidden sm:inline">Markets</span>
                   </TabsTrigger>
                 </TabsList>
@@ -85,22 +85,22 @@ const TradeAnalyzer = () => {
 
           {/* Empty State */}
           {!analysis && !isLoading && !error && (
-            <div className="text-center py-16 animate-in fade-in duration-500">
-              <div className="p-4 rounded-2xl bg-primary/10 w-fit mx-auto mb-4">
-                <Upload className="w-12 h-12 text-primary" />
+            <div className="text-center py-10 animate-in fade-in duration-500">
+              <div className="p-3 rounded-xl bg-primary/10 w-fit mx-auto mb-3">
+                <Upload className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">No Data Yet</h3>
-              <p className="text-muted-foreground max-w-md mx-auto">
+              <h3 className="text-sm font-semibold text-foreground mb-1">No Data Yet</h3>
+              <p className="text-[10px] text-muted-foreground max-w-sm mx-auto">
                 Upload your trade history CSV to see comprehensive analytics and AI-powered insights 
                 about your trading performance.
               </p>
-              <div className="mt-6 p-4 bg-muted/50 border border-border/50 rounded-xl max-w-md mx-auto">
-                <p className="text-sm text-muted-foreground">
+              <div className="mt-4 p-3 bg-muted/50 border border-border/50 rounded-lg max-w-sm mx-auto">
+                <p className="text-[10px] text-muted-foreground">
                   <strong className="text-foreground">Expected CSV columns:</strong><br />
                   Date, Market, Side, Size, Price, Closed PnL, Fee, Role, Type
                 </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  <strong className="text-foreground">Tip:</strong> Click "Aggregate" on Lighter before exporting your trade history for better results.
+                <p className="text-[9px] text-muted-foreground mt-1.5">
+                  <strong className="text-foreground">Tip:</strong> Click "Aggregate" on Lighter before exporting.
                 </p>
               </div>
             </div>

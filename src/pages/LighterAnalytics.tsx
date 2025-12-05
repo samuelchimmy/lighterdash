@@ -7,7 +7,7 @@ import { BarChart3, Activity } from "lucide-react";
 
 const LighterAnalytics = () => {
   return (
-    <Layout showNav={false}>
+    <Layout>
       <div className="container mx-auto px-4 py-6">
         <div className="space-y-5 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {/* Page Header */}

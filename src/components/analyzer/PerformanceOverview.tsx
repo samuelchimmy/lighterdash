@@ -207,13 +207,19 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
+                      backgroundColor: 'hsl(var(--card) / 0.85)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid hsl(var(--border) / 0.5)',
                       borderRadius: '12px',
                       color: 'hsl(var(--foreground))',
-                      boxShadow: 'var(--shadow-card-hover)'
+                      boxShadow: '0 4px 12px hsl(var(--background) / 0.3)'
                     }}
-                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'PnL']}
+                    formatter={(value: number) => [
+                      <span key="val" style={{ color: value >= 0 ? 'hsl(142 76% 36%)' : 'hsl(0 84% 60%)', fontWeight: 600 }}>
+                        ${value.toFixed(2)}
+                      </span>,
+                      'PnL'
+                    ]}
                   />
                   <ReferenceLine y={0} stroke="hsl(var(--muted-foreground))" strokeDasharray="3 3" />
                   <Line 
@@ -258,14 +264,15 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: 'hsl(var(--card))',
-                      border: '1px solid hsl(var(--border))',
+                      backgroundColor: 'hsl(var(--card) / 0.85)',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid hsl(var(--border) / 0.5)',
                       borderRadius: '12px',
                       color: 'hsl(var(--foreground))',
-                      boxShadow: 'var(--shadow-card-hover)'
+                      boxShadow: '0 4px 12px hsl(var(--background) / 0.3)'
                     }}
                     formatter={(value: number) => [
-                      <span style={{ color: value >= 0 ? 'hsl(var(--profit))' : 'hsl(var(--loss))' }}>
+                      <span key="val" style={{ color: value >= 0 ? 'hsl(142 76% 36%)' : 'hsl(0 84% 60%)', fontWeight: 600 }}>
                         ${value.toFixed(2)}
                       </span>,
                       'PnL'

@@ -23,20 +23,20 @@ export function ActiveAlertsPanel({
   const alertEntries = Object.entries(alerts);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Bell className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+    <Card className="border-border/30 bg-secondary/10">
+      <CardHeader className="py-2 px-3">
+        <CardTitle className="flex items-center gap-1.5 text-xs">
+          <Bell className="h-3 w-3 text-primary" />
           Active Alerts
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-3 pb-3">
         {alertEntries.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-4 text-[10px] text-muted-foreground">
             No alerts configured yet. Click the bell icon on any market to set up alerts.
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-2">
             {alertEntries.map(([marketIdStr, alert]) => {
               const marketId = parseInt(marketIdStr);
               const symbol = getMarketSymbol(marketId);
@@ -48,45 +48,45 @@ export function ActiveAlertsPanel({
               return (
                 <div
                   key={marketId}
-                  className="p-4 rounded-lg border bg-card/50 space-y-3"
+                  className="p-2 rounded-lg border border-border/30 bg-secondary/20 space-y-1.5"
                 >
                   <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-lg">{symbol}</h3>
-                    <div className="flex gap-1">
+                    <h3 className="font-semibold text-xs">{symbol}</h3>
+                    <div className="flex gap-0.5">
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-5 w-5"
                         onClick={() => onEdit(marketId)}
                       >
-                        <Edit className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
+                        <Edit className="h-2.5 w-2.5" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-5 w-5"
                         onClick={() => onDelete(marketId)}
                       >
-                        <Trash2 className="h-4 w-4" fill="currentColor" fillOpacity={0.2} />
+                        <Trash2 className="h-2.5 w-2.5" />
                       </Button>
                     </div>
                   </div>
 
                   {!hasAnyAlert && (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-[9px] text-muted-foreground">
                       No alerts enabled for this market
                     </p>
                   )}
 
                   {/* Price Alert */}
                   {alert.priceThreshold?.enabled && (
-                    <div className="flex items-center justify-between py-2 border-t">
+                    <div className="flex items-center justify-between py-1 border-t border-border/30">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="default" className="text-xs">
+                        <div className="flex items-center gap-1">
+                          <Badge variant="default" className="text-[8px] h-3.5 px-1">
                             Price
                           </Badge>
-                          <span className="text-sm">
+                          <span className="text-[9px]">
                             {alert.priceThreshold.above &&
                               `Above $${alert.priceThreshold.above.toLocaleString()}`}
                             {alert.priceThreshold.above && alert.priceThreshold.below && " · "}
@@ -100,19 +100,20 @@ export function ActiveAlertsPanel({
                         onCheckedChange={(enabled) =>
                           onToggleAlert(marketId, "priceThreshold", enabled)
                         }
+                        className="scale-75"
                       />
                     </div>
                   )}
 
                   {/* Volume Alert */}
                   {alert.volumeSpike?.enabled && (
-                    <div className="flex items-center justify-between py-2 border-t">
+                    <div className="flex items-center justify-between py-1 border-t border-border/30">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="text-xs">
+                        <div className="flex items-center gap-1">
+                          <Badge variant="secondary" className="text-[8px] h-3.5 px-1">
                             Volume
                           </Badge>
-                          <span className="text-sm">
+                          <span className="text-[9px]">
                             Spike ≥ {alert.volumeSpike.percentageIncrease}%
                           </span>
                         </div>
@@ -122,19 +123,20 @@ export function ActiveAlertsPanel({
                         onCheckedChange={(enabled) =>
                           onToggleAlert(marketId, "volumeSpike", enabled)
                         }
+                        className="scale-75"
                       />
                     </div>
                   )}
 
                   {/* Funding Rate Alert */}
                   {alert.fundingRate?.enabled && (
-                    <div className="flex items-center justify-between py-2 border-t">
+                    <div className="flex items-center justify-between py-1 border-t border-border/30">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-xs">
+                        <div className="flex items-center gap-1">
+                          <Badge variant="outline" className="text-[8px] h-3.5 px-1">
                             Funding
                           </Badge>
-                          <span className="text-sm">
+                          <span className="text-[9px]">
                             {alert.fundingRate.above && `Above ${alert.fundingRate.above}%`}
                             {alert.fundingRate.above && alert.fundingRate.below && " · "}
                             {alert.fundingRate.below && `Below ${alert.fundingRate.below}%`}
@@ -146,6 +148,7 @@ export function ActiveAlertsPanel({
                         onCheckedChange={(enabled) =>
                           onToggleAlert(marketId, "fundingRate", enabled)
                         }
+                        className="scale-75"
                       />
                     </div>
                   )}

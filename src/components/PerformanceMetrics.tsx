@@ -83,111 +83,108 @@ export const PerformanceMetrics = ({ trades, positions }: PerformanceMetricsProp
 
   if (!trades || trades.length === 0) {
     return (
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <TrophyIcon className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Performance Metrics</h3>
+      <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+        <div className="flex items-center gap-1.5 mb-3">
+          <TrophyIcon className="w-3.5 h-3.5 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Performance Metrics</h3>
         </div>
-        <p className="text-muted-foreground text-center py-8">No trading history available</p>
+        <p className="text-muted-foreground text-center py-4 text-[10px]">No trading history available</p>
       </Card>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <ChartBarIcon className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Performance Overview</h3>
+    <div className="space-y-3">
+      <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+        <div className="flex items-center gap-1.5 mb-3">
+          <ChartBarIcon className="w-3.5 h-3.5 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Performance Overview</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-1.5 rounded-lg bg-primary/10">
-                <ArrowTrendingUpIcon className="w-4 h-4 text-primary" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+          <div className="bg-secondary/30 rounded-lg p-2.5 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <div className="p-1 rounded-md bg-primary/10">
+                <ArrowTrendingUpIcon className="w-3 h-3 text-primary" />
               </div>
-              <p className="text-xs font-medium text-muted-foreground">Total Realized PnL</p>
+              <p className="text-[9px] font-medium text-muted-foreground">Total Realized PnL</p>
             </div>
-            <p className={`text-2xl font-bold ${metrics.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
+            <p className={`text-base font-bold ${metrics.totalPnL >= 0 ? 'text-profit' : 'text-loss'}`}>
               {formatCurrencySmart(animatedTotalPnL)}
             </p>
           </div>
 
-          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-primary/10">
-                  <AcademicCapIcon className="w-4 h-4 text-primary" />
+          <div className="bg-secondary/30 rounded-lg p-2.5 border border-border/30">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <div className="p-1 rounded-md bg-primary/10">
+                  <AcademicCapIcon className="w-3 h-3 text-primary" />
                 </div>
-                <p className="text-xs font-medium text-muted-foreground">Win Rate</p>
+                <p className="text-[9px] font-medium text-muted-foreground">Win Rate</p>
               </div>
               {metrics.winRate >= 70 && (
-                <Badge className="text-xs bg-profit/10 text-profit border-0">Excellent</Badge>
-              )}
-              {metrics.winRate >= 50 && metrics.winRate < 70 && (
-                <Badge variant="secondary" className="text-xs">Good</Badge>
+                <Badge className="text-[8px] h-3.5 px-1 bg-profit/10 text-profit border-0">Excellent</Badge>
               )}
             </div>
-            <p className="text-2xl font-bold text-foreground">
+            <p className="text-base font-bold text-foreground">
               {animatedWinRate.toFixed(1)}%
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-[9px] text-muted-foreground mt-0.5">
               {metrics.winningTrades} / {metrics.totalTrades} winning
             </p>
           </div>
 
-          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-1.5 rounded-lg bg-primary/10">
-                <TrophyIcon className="w-4 h-4 text-primary" />
+          <div className="bg-secondary/30 rounded-lg p-2.5 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <div className="p-1 rounded-md bg-primary/10">
+                <TrophyIcon className="w-3 h-3 text-primary" />
               </div>
-              <p className="text-xs font-medium text-muted-foreground">Best Trade Size</p>
+              <p className="text-[9px] font-medium text-muted-foreground">Best Trade Size</p>
             </div>
-            <p className="text-2xl font-bold text-foreground">
+            <p className="text-base font-bold text-foreground">
               {formatCurrencySmart(animatedBestTradeSize)}
             </p>
           </div>
 
-          <div className="bg-secondary/30 rounded-xl p-4 border border-border/30">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="p-1.5 rounded-lg bg-primary/10">
-                <BoltIcon className="w-4 h-4 text-primary" />
+          <div className="bg-secondary/30 rounded-lg p-2.5 border border-border/30">
+            <div className="flex items-center gap-1.5 mb-1.5">
+              <div className="p-1 rounded-md bg-primary/10">
+                <BoltIcon className="w-3 h-3 text-primary" />
               </div>
-              <p className="text-xs font-medium text-muted-foreground">Total Trades</p>
+              <p className="text-[9px] font-medium text-muted-foreground">Total Trades</p>
             </div>
-            <p className="text-2xl font-bold text-foreground">{trades.length}</p>
+            <p className="text-base font-bold text-foreground">{trades.length}</p>
           </div>
         </div>
       </Card>
 
       {metrics.performanceByAsset.length > 0 && (
-        <Card className="p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <TrophyIcon className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-semibold text-foreground">Performance by Market</h3>
+        <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+          <div className="flex items-center gap-1.5 mb-3">
+            <TrophyIcon className="w-3.5 h-3.5 text-primary" />
+            <h3 className="text-xs font-semibold text-foreground">Performance by Market</h3>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {metrics.performanceByAsset.slice(0, 5).map((asset) => {
               const position = positions.find(p => p.market_id === asset.market_id);
               return (
-                <div key={asset.market_id} className="bg-secondary/20 rounded-xl p-4 border border-border/30 hover:bg-secondary/30 transition-colors">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-foreground">
+                <div key={asset.market_id} className="bg-secondary/20 rounded-lg p-2.5 border border-border/30 hover:bg-secondary/30 transition-colors">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-medium text-foreground text-[10px]">
                         {position?.symbol || `Market ${asset.market_id}`}
                       </span>
-                      <Badge variant="outline" className="text-xs">
+                      <Badge variant="outline" className="text-[8px] h-3.5 px-1">
                         {asset.count} trades
                       </Badge>
                     </div>
                     <Badge 
                       variant={asset.pnl >= 0 ? 'default' : 'destructive'}
-                      className="font-bold"
+                      className="font-bold text-[9px] h-4 px-1.5"
                     >
                       {formatCurrencySmart(asset.pnl)}
                     </Badge>
                   </div>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <div className="flex items-center justify-between text-[9px] text-muted-foreground">
                     <span>Fees: {formatCurrencySmart(asset.fees)}</span>
                   </div>
                 </div>

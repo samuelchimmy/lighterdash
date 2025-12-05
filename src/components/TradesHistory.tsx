@@ -18,12 +18,12 @@ interface TradesHistoryProps {
 export const TradesHistory = ({ trades }: TradesHistoryProps) => {
   if (!trades || trades.length === 0) {
     return (
-      <Card className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <ArrowsRightLeftIcon className="w-5 h-5 text-primary" />
-          <h3 className="text-lg font-semibold text-foreground">Recent Trades</h3>
+      <Card className="p-3 bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
+        <div className="flex items-center gap-1.5 mb-3">
+          <ArrowsRightLeftIcon className="w-3.5 h-3.5 text-primary" />
+          <h3 className="text-xs font-semibold text-foreground">Recent Trades</h3>
         </div>
-        <p className="text-muted-foreground text-center py-8">No trades found</p>
+        <p className="text-muted-foreground text-center py-4 text-[10px]">No trades found</p>
       </Card>
     );
   }
@@ -32,17 +32,17 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
   const recentTrades = trades.slice(0, 20);
 
   return (
-    <Card className="p-6 overflow-hidden">
+    <Card className="p-3 overflow-hidden bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/50">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="border-border/50 hover:bg-transparent">
-              <TableHead className="text-muted-foreground font-medium">Date</TableHead>
-              <TableHead className="text-muted-foreground font-medium">Type</TableHead>
-              <TableHead className="text-muted-foreground font-medium">Size</TableHead>
-              <TableHead className="text-muted-foreground font-medium">Price</TableHead>
-              <TableHead className="text-muted-foreground font-medium">USD Amount</TableHead>
-              <TableHead className="text-muted-foreground font-medium text-right">Fee</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-[10px] py-2">Date</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-[10px] py-2">Type</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-[10px] py-2">Size</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-[10px] py-2">Price</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-[10px] py-2">USD Amount</TableHead>
+              <TableHead className="text-muted-foreground font-medium text-[10px] py-2 text-right">Fee</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -54,23 +54,23 @@ export const TradesHistory = ({ trades }: TradesHistoryProps) => {
               
               return (
                 <TableRow key={trade.trade_id} className="border-border/30 hover:bg-secondary/50 transition-colors">
-                  <TableCell className="text-foreground">
+                  <TableCell className="text-foreground text-[10px] py-2">
                     {new Date(trade.timestamp).toLocaleDateString()} {new Date(trade.timestamp).toLocaleTimeString()}
                   </TableCell>
-                  <TableCell>
-                    <span className={`flex items-center gap-1.5 font-medium ${isBuy ? 'text-profit' : 'text-loss'}`}>
+                  <TableCell className="py-2">
+                    <span className={`flex items-center gap-1 font-medium text-[10px] ${isBuy ? 'text-profit' : 'text-loss'}`}>
                       {isBuy ? (
-                        <ArrowTrendingUpIcon className="w-4 h-4" />
+                        <ArrowTrendingUpIcon className="w-3 h-3" />
                       ) : (
-                        <ArrowTrendingDownIcon className="w-4 h-4" />
+                        <ArrowTrendingDownIcon className="w-3 h-3" />
                       )}
                       {isBuy ? 'BUY' : 'SELL'}
                     </span>
                   </TableCell>
-                  <TableCell className="text-foreground font-mono">{formatNumber(Math.abs(size), 4)}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(trade.price || '0'))}</TableCell>
-                  <TableCell className="text-foreground">{formatCurrencySmart(parseFloat(trade.usd_amount || '0'))}</TableCell>
-                  <TableCell className="text-right text-muted-foreground">
+                  <TableCell className="text-foreground font-mono text-[10px] py-2">{formatNumber(Math.abs(size), 4)}</TableCell>
+                  <TableCell className="text-foreground text-[10px] py-2">{formatCurrencySmart(parseFloat(trade.price || '0'))}</TableCell>
+                  <TableCell className="text-foreground text-[10px] py-2">{formatCurrencySmart(parseFloat(trade.usd_amount || '0'))}</TableCell>
+                  <TableCell className="text-right text-muted-foreground text-[10px] py-2">
                     {formatCurrencySmart(fee)}
                   </TableCell>
                 </TableRow>

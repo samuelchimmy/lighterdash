@@ -36,15 +36,15 @@ export function TradingHabitsAnalysis({
   const filteredDailyPatterns = dailyPatterns.filter(d => d.trades > 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Side Analysis */}
-      <Card>
-        <CardHeader className="pb-3">
+      <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg">
+        <CardHeader className="pb-2 px-3 pt-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <TrendingUp className="w-4 h-4 text-profit" />
-                <TrendingDown className="w-4 h-4 text-loss" />
+            <CardTitle className="text-xs flex items-center gap-2">
+              <div className="flex items-center gap-0.5">
+                <TrendingUp className="w-3 h-3 text-profit" />
+                <TrendingDown className="w-3 h-3 text-loss" />
               </div>
               Long vs Short Analysis
             </CardTitle>
@@ -63,39 +63,39 @@ export function TradingHabitsAnalysis({
             />
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-3 pb-3">
           <Table>
             <TableHeader>
               <TableRow className="border-border/50">
-                <TableHead className="text-muted-foreground font-medium">Side</TableHead>
-                <TableHead className="text-right text-muted-foreground font-medium">PnL</TableHead>
-                <TableHead className="text-right text-muted-foreground font-medium">Win Rate</TableHead>
-                <TableHead className="text-right text-muted-foreground font-medium">Profit Factor</TableHead>
-                <TableHead className="text-right text-muted-foreground font-medium">Trades</TableHead>
+                <TableHead className="text-muted-foreground font-medium text-[10px]">Side</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">PnL</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Win Rate</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Profit Factor</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Trades</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow className="border-border/30 hover:bg-secondary/50">
-                <TableCell>
-                  <Badge variant="outline" className="bg-profit/10 text-profit border-profit/30">Long</Badge>
+                <TableCell className="py-2">
+                  <Badge variant="outline" className="bg-profit/10 text-profit border-profit/30 text-[9px]">Long</Badge>
                 </TableCell>
-                <TableCell className={`text-right font-medium ${sideAnalysis.long.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                <TableCell className={`text-right font-medium text-[10px] ${sideAnalysis.long.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                   {formatCurrency(sideAnalysis.long.pnl)}
                 </TableCell>
-                <TableCell className="text-right text-foreground">{sideAnalysis.long.winRate.toFixed(1)}%</TableCell>
-                <TableCell className="text-right text-foreground">{formatNumber(sideAnalysis.long.profitFactor)}</TableCell>
-                <TableCell className="text-right text-foreground">{sideAnalysis.long.trades}</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{sideAnalysis.long.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{formatNumber(sideAnalysis.long.profitFactor)}</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{sideAnalysis.long.trades}</TableCell>
               </TableRow>
               <TableRow className="border-border/30 hover:bg-secondary/50">
-                <TableCell>
-                  <Badge variant="outline" className="bg-loss/10 text-loss border-loss/30">Short</Badge>
+                <TableCell className="py-2">
+                  <Badge variant="outline" className="bg-loss/10 text-loss border-loss/30 text-[9px]">Short</Badge>
                 </TableCell>
-                <TableCell className={`text-right font-medium ${sideAnalysis.short.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                <TableCell className={`text-right font-medium text-[10px] ${sideAnalysis.short.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
                   {formatCurrency(sideAnalysis.short.pnl)}
                 </TableCell>
-                <TableCell className="text-right text-foreground">{sideAnalysis.short.winRate.toFixed(1)}%</TableCell>
-                <TableCell className="text-right text-foreground">{formatNumber(sideAnalysis.short.profitFactor)}</TableCell>
-                <TableCell className="text-right text-foreground">{sideAnalysis.short.trades}</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{sideAnalysis.short.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{formatNumber(sideAnalysis.short.profitFactor)}</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{sideAnalysis.short.trades}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -103,12 +103,12 @@ export function TradingHabitsAnalysis({
       </Card>
 
       {/* Role & Type Analysis */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Maker vs Taker */}
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="bg-gradient-to-br from-card via-card to-muted/20 border-border/50 shadow-lg">
+          <CardHeader className="pb-2 px-3 pt-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Maker vs Taker</CardTitle>
+              <CardTitle className="text-xs">Maker vs Taker</CardTitle>
               <AITooltip
                 metricType="maker_taker"
                 data={{
@@ -119,46 +119,46 @@ export function TradingHabitsAnalysis({
                   taker_win_rate: roleAnalysis.taker.winRate,
                   taker_trades: roleAnalysis.taker.trades
                 }}
-              />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow className="border-border/50">
-                  <TableHead className="text-muted-foreground font-medium">Role</TableHead>
-                  <TableHead className="text-right text-muted-foreground font-medium">PnL</TableHead>
-                  <TableHead className="text-right text-muted-foreground font-medium">Win Rate</TableHead>
-                  <TableHead className="text-right text-muted-foreground font-medium">Trades</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow className="border-border/30 hover:bg-secondary/50">
-                  <TableCell><Badge variant="secondary">Maker</Badge></TableCell>
-                  <TableCell className={`text-right font-medium ${roleAnalysis.maker.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {formatCurrency(roleAnalysis.maker.pnl)}
-                  </TableCell>
-                  <TableCell className="text-right text-foreground">{roleAnalysis.maker.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right text-foreground">{roleAnalysis.maker.trades}</TableCell>
-                </TableRow>
-                <TableRow className="border-border/30 hover:bg-secondary/50">
-                  <TableCell><Badge variant="secondary">Taker</Badge></TableCell>
-                  <TableCell className={`text-right font-medium ${roleAnalysis.taker.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {formatCurrency(roleAnalysis.taker.pnl)}
-                  </TableCell>
-                  <TableCell className="text-right text-foreground">{roleAnalysis.taker.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right text-foreground">{roleAnalysis.taker.trades}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="px-3 pb-3">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border/50">
+                <TableHead className="text-muted-foreground font-medium text-[10px]">Role</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">PnL</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Win Rate</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Trades</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow className="border-border/30 hover:bg-secondary/50">
+                <TableCell className="py-2"><Badge variant="secondary" className="text-[9px]">Maker</Badge></TableCell>
+                <TableCell className={`text-right font-medium text-[10px] ${roleAnalysis.maker.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                  {formatCurrency(roleAnalysis.maker.pnl)}
+                </TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{roleAnalysis.maker.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{roleAnalysis.maker.trades}</TableCell>
+              </TableRow>
+              <TableRow className="border-border/30 hover:bg-secondary/50">
+                <TableCell className="py-2"><Badge variant="secondary" className="text-[9px]">Taker</Badge></TableCell>
+                <TableCell className={`text-right font-medium text-[10px] ${roleAnalysis.taker.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                  {formatCurrency(roleAnalysis.taker.pnl)}
+                </TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{roleAnalysis.taker.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{roleAnalysis.taker.trades}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-        {/* Limit vs Market */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Limit vs Market Orders</CardTitle>
+      {/* Limit vs Market */}
+      <Card className="bg-gradient-to-br from-card via-card to-muted/20 border-border/50 shadow-lg">
+        <CardHeader className="pb-2 px-3 pt-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-xs">Limit vs Market Orders</CardTitle>
               <AITooltip
                 metricType="limit_market"
                 data={{
@@ -169,52 +169,52 @@ export function TradingHabitsAnalysis({
                   market_win_rate: typeAnalysis.market.winRate,
                   market_trades: typeAnalysis.market.trades
                 }}
-              />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow className="border-border/50">
-                  <TableHead className="text-muted-foreground font-medium">Type</TableHead>
-                  <TableHead className="text-right text-muted-foreground font-medium">PnL</TableHead>
-                  <TableHead className="text-right text-muted-foreground font-medium">Win Rate</TableHead>
-                  <TableHead className="text-right text-muted-foreground font-medium">Trades</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow className="border-border/30 hover:bg-secondary/50">
-                  <TableCell><Badge variant="outline">Limit</Badge></TableCell>
-                  <TableCell className={`text-right font-medium ${typeAnalysis.limit.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {formatCurrency(typeAnalysis.limit.pnl)}
-                  </TableCell>
-                  <TableCell className="text-right text-foreground">{typeAnalysis.limit.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right text-foreground">{typeAnalysis.limit.trades}</TableCell>
-                </TableRow>
-                <TableRow className="border-border/30 hover:bg-secondary/50">
-                  <TableCell><Badge variant="outline">Market</Badge></TableCell>
-                  <TableCell className={`text-right font-medium ${typeAnalysis.market.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
-                    {formatCurrency(typeAnalysis.market.pnl)}
-                  </TableCell>
-                  <TableCell className="text-right text-foreground">{typeAnalysis.market.winRate.toFixed(1)}%</TableCell>
-                  <TableCell className="text-right text-foreground">{typeAnalysis.market.trades}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="px-3 pb-3">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-border/50">
+                <TableHead className="text-muted-foreground font-medium text-[10px]">Type</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">PnL</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Win Rate</TableHead>
+                <TableHead className="text-right text-muted-foreground font-medium text-[10px]">Trades</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow className="border-border/30 hover:bg-secondary/50">
+                <TableCell className="py-2"><Badge variant="outline" className="text-[9px]">Limit</Badge></TableCell>
+                <TableCell className={`text-right font-medium text-[10px] ${typeAnalysis.limit.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                  {formatCurrency(typeAnalysis.limit.pnl)}
+                </TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{typeAnalysis.limit.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{typeAnalysis.limit.trades}</TableCell>
+              </TableRow>
+              <TableRow className="border-border/30 hover:bg-secondary/50">
+                <TableCell className="py-2"><Badge variant="outline" className="text-[9px]">Market</Badge></TableCell>
+                <TableCell className={`text-right font-medium text-[10px] ${typeAnalysis.market.pnl >= 0 ? 'text-profit' : 'text-loss'}`}>
+                  {formatCurrency(typeAnalysis.market.pnl)}
+                </TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{typeAnalysis.market.winRate.toFixed(1)}%</TableCell>
+                <TableCell className="text-right text-foreground text-[10px]">{typeAnalysis.market.trades}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
 
-      {/* Time Patterns */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Hourly Performance */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Clock className="w-4 h-4 text-primary" />
-                Performance by Hour
-              </CardTitle>
+    {/* Time Patterns */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* Hourly Performance */}
+      <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg">
+        <CardHeader className="pb-2 px-3 pt-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-xs flex items-center gap-1.5">
+              <Clock className="w-3 h-3 text-primary" />
+              Performance by Hour
+            </CardTitle>
               <AITooltip
                 metricType="time_pattern"
                 data={{
@@ -226,11 +226,11 @@ export function TradingHabitsAnalysis({
                     trades: h.trades
                   }))
                 }}
-              />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64">
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="px-3 pb-3">
+          <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={filteredHourlyPatterns}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
@@ -273,11 +273,11 @@ export function TradingHabitsAnalysis({
         </Card>
 
         {/* Daily Performance */}
-        <Card>
-          <CardHeader className="pb-3">
+        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg">
+          <CardHeader className="pb-2 px-3 pt-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-primary" />
+              <CardTitle className="text-xs flex items-center gap-1.5">
+                <Calendar className="w-3 h-3 text-primary" />
                 Performance by Day of Week
               </CardTitle>
               <AITooltip
@@ -291,11 +291,11 @@ export function TradingHabitsAnalysis({
                     trades: d.trades
                   }))
                 }}
-              />
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64">
+            />
+          </div>
+        </CardHeader>
+        <CardContent className="px-3 pb-3">
+          <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={filteredDailyPatterns}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />

@@ -7,6 +7,8 @@ import { DonationModal } from '@/components/DonationModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Layout } from '@/components/Layout';
 import { FeatureAnnouncement } from '@/components/FeatureAnnouncement';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, LightBulbIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from 'react-router-dom';
 
@@ -50,7 +52,6 @@ const Index = () => {
 
   return (
     <Layout 
-      showNav={!scannedAddress}
       headerContent={
         scannedAddress ? (
           <ConnectionStatus status={connectionStatus} lastUpdate={lastUpdate} />
@@ -59,167 +60,172 @@ const Index = () => {
     >
       <DonationModal />
       <FeatureAnnouncement />
-      <div className="container mx-auto px-4 py-8" role="main">
+      <div className="container mx-auto px-4 py-6" role="main">
         {isScanning ? (
           <ScanningLoader />
         ) : !scannedAddress ? (
-          <div className="max-w-4xl mx-auto">
-            <section className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <h2 className="text-3xl md:text-4xl font-medium text-foreground mb-4">
+          <div className="max-w-4xl mx-auto space-y-5">
+            {/* Hero Section */}
+            <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <h2 className="text-lg md:text-xl font-semibold text-foreground mb-2">
                 Track Your Lighter Trading Performance
               </h2>
-              <p className="text-base md:text-lg font-medium text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-xs text-muted-foreground max-w-xl mx-auto">
                 Community-built analytics dashboard for Lighter. View real-time trading statistics,
                 track your performance, and analyze your trading data.
               </p>
             </section>
 
-            <section className="mb-12" aria-label="Wallet address input">
+            {/* Wallet Input */}
+            <section aria-label="Wallet address input">
               <WalletInput onScan={handleScan} isLoading={isScanning} />
             </section>
 
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in" aria-label="Key features">
-              <article className="group bg-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base md:text-lg font-medium text-foreground mb-2 flex items-center gap-2">
-                  <WalletIcon className="w-5 h-5 text-primary" aria-hidden="true" />
-                  Wallet Tracker
-                </h3>
-                <p className="text-muted-foreground text-sm font-medium">
-                  Track any Lighter wallet&apos;s positions, trades, PnL, and performance metrics in real-time.
-                </p>
-              </article>
+            {/* Feature Cards */}
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '50ms' }} aria-label="Key features">
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <CardHeader className="py-3 px-4">
+                  <CardTitle className="flex items-center gap-2 text-xs">
+                    <WalletIcon className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                    Wallet Tracker
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-3">
+                  <p className="text-[10px] text-muted-foreground">
+                    Track any Lighter wallet's positions, trades, PnL, and performance metrics in real-time.
+                  </p>
+                </CardContent>
+              </Card>
 
-              <article className="group bg-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base md:text-lg font-medium text-foreground mb-2 flex items-center gap-2">
-                  <ChartBarIcon className="w-5 h-5 text-primary" aria-hidden="true" />
-                  Market Analytics
-                </h3>
-                <p className="text-muted-foreground text-sm font-medium">
-                  View live order books, recent trades, funding rates, and comprehensive market statistics.
-                </p>
-              </article>
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <CardHeader className="py-3 px-4">
+                  <CardTitle className="flex items-center gap-2 text-xs">
+                    <ChartBarIcon className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                    Market Analytics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-3">
+                  <p className="text-[10px] text-muted-foreground">
+                    View live order books, recent trades, funding rates, and comprehensive market statistics.
+                  </p>
+                </CardContent>
+              </Card>
 
-              <article className="group bg-card border border-border/50 rounded-xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
-                <h3 className="text-base md:text-lg font-medium text-foreground mb-2 flex items-center gap-2">
-                  <SignalIcon className="w-5 h-5 text-primary" aria-hidden="true" />
-                  Real-Time Updates
-                </h3>
-                <p className="text-muted-foreground text-sm font-medium">
-                  WebSocket-powered live data streams for instant market and account updates.
-                </p>
-              </article>
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <CardHeader className="py-3 px-4">
+                  <CardTitle className="flex items-center gap-2 text-xs">
+                    <SignalIcon className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                    Real-Time Updates
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-3">
+                  <p className="text-[10px] text-muted-foreground">
+                    WebSocket-powered live data streams for instant market and account updates.
+                  </p>
+                </CardContent>
+              </Card>
             </section>
 
-            {/* AI Trader Insights Feature Highlight */}
-            <section className="mb-12 animate-fade-in" style={{ animationDelay: '0.15s' }} aria-label="AI Trader Insights">
-              <article className="group bg-gradient-to-br from-primary/5 via-purple-500/5 to-primary/10 border border-primary/20 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1">
-                <div className="flex flex-col md:flex-row gap-6 items-start">
-                  <div className="flex-1">
-                <h3 className="text-xl md:text-2xl font-medium text-foreground mb-4 flex items-center gap-3">
-                      <LightBulbIcon className="w-6 h-6 text-primary" aria-hidden="true" />
-                      AI Trader Insights
-                      <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full font-medium">NEW</span>
-                    </h3>
-                    <p className="text-muted-foreground text-sm font-medium mb-4">
-                      Unlock the power of artificial intelligence to analyze your trading patterns and get personalized recommendations. 
-                      Our AI engine processes your trade history to identify winning strategies, detect harmful patterns, and suggest improvements.
-                    </p>
-                    <ul className="space-y-2 text-muted-foreground">
-                      <li className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                        <span className="text-sm font-medium">Upload your trade history CSV and get instant AI-powered analysis</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                        <span className="text-sm font-medium">Identify your best and worst trading hours, days, and market conditions</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                        <span className="text-sm font-medium">Get personalized tips to improve win rate and reduce losses</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                        <span className="text-sm font-medium">Detect overtrading, revenge trading, and other harmful patterns</span>
-                      </li>
-                    </ul>
+            {/* AI Trader Insights Feature */}
+            <section className="animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '100ms' }} aria-label="AI Trader Insights">
+              <Card className="bg-gradient-to-br from-primary/5 via-purple-500/5 to-primary/10 border-primary/20 shadow-sm hover:shadow-md transition-all duration-300">
+                <CardContent className="p-4">
+                  <div className="flex flex-col md:flex-row gap-4 items-start">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <LightBulbIcon className="w-4 h-4 text-primary" aria-hidden="true" />
+                        <h3 className="text-sm font-semibold text-foreground">AI Trader Insights</h3>
+                        <Badge variant="default" className="text-[8px] h-4 px-1.5">NEW</Badge>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mb-3">
+                        Unlock the power of AI to analyze your trading patterns and get personalized recommendations.
+                      </p>
+                      <ul className="space-y-1.5 text-muted-foreground">
+                        <li className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                          <span className="text-[10px]">Upload your trade history CSV and get instant AI-powered analysis</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                          <span className="text-[10px]">Identify your best and worst trading hours, days, and market conditions</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                          <span className="text-[10px]">Get personalized tips to improve win rate and reduce losses</span>
+                        </li>
+                      </ul>
+                    </div>
+                    <a 
+                      href="/trade-analyzer" 
+                      className="shrink-0 inline-flex items-center gap-1 bg-primary hover:bg-primary/90 text-primary-foreground px-3 py-1.5 rounded-lg text-[10px] font-medium transition-colors"
+                    >
+                      <LightBulbIcon className="w-3 h-3" />
+                      Try AI Insights
+                    </a>
                   </div>
-                  <a 
-                    href="/trade-analyzer" 
-                    className="shrink-0 inline-flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  >
-                    <LightBulbIcon className="w-4 h-4" />
-                    Try AI Insights
-                  </a>
-                </div>
-              </article>
+                </CardContent>
+              </Card>
             </section>
 
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in" style={{ animationDelay: '0.2s' }} aria-label="Detailed features">
-              <article className="group bg-card border border-border/50 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1">
-                <h3 className="text-xl md:text-2xl font-medium text-foreground mb-6 flex items-center gap-3">
-                  <ChartBarIcon className="w-6 h-6 text-primary" aria-hidden="true" />
-                  Wallet Analytics
-                </h3>
-                <ul className="space-y-4 text-muted-foreground">
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Track total PnL, unrealized and realized gains across all positions</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Monitor portfolio value, leverage, and margin usage in real-time</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">View detailed position breakdowns by asset with entry prices and liquidation levels</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Analyze complete trade history with fees, duration, and profitability metrics</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Compare multiple wallets side-by-side to analyze performance differences</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Export trading data and performance reports for external analysis</span>
-                  </li>
-                </ul>
-              </article>
+            {/* Detailed Features Grid */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '150ms' }} aria-label="Detailed features">
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <CardHeader className="py-3 px-4">
+                  <CardTitle className="flex items-center gap-2 text-xs">
+                    <ChartBarIcon className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                    Wallet Analytics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-3">
+                  <ul className="space-y-1.5 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">Track total PnL, unrealized and realized gains across all positions</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">Monitor portfolio value, leverage, and margin usage in real-time</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">View detailed position breakdowns by asset with entry prices</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">Compare multiple wallets side-by-side to analyze performance</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
 
-              <article className="group bg-card border border-border/50 rounded-2xl p-8 shadow-card hover:shadow-card-hover transition-all duration-500 hover:-translate-y-1">
-                <h3 className="text-xl md:text-2xl font-medium text-foreground mb-6 flex items-center gap-3">
-                  <CpuChipIcon className="w-6 h-6 text-primary" aria-hidden="true" />
-                  Advanced Features
-                </h3>
-                <ul className="space-y-4 text-muted-foreground">
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">AI-powered pattern recognition to identify winning and losing trade setups</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Win/loss streak analysis with performance breakdown by time and market</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Trading journal with custom notes and tags for every trade</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Liquidation risk monitoring with real-time alerts and position health tracking</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Live market data including order book depth, recent trades, and funding rates</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <span className="text-sm font-medium leading-relaxed">Performance metrics by asset, time, and trading strategy with visual charts</span>
-                  </li>
-                </ul>
-              </article>
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <CardHeader className="py-3 px-4">
+                  <CardTitle className="flex items-center gap-2 text-xs">
+                    <CpuChipIcon className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                    Advanced Features
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-3">
+                  <ul className="space-y-1.5 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">AI-powered pattern recognition for winning and losing setups</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">Win/loss streak analysis with performance breakdown</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">Trading journal with custom notes and tags for every trade</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 flex-shrink-0" />
+                      <span className="text-[10px]">Liquidation risk monitoring with real-time alerts</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
             </section>
           </div>
         ) : (
@@ -230,12 +236,12 @@ const Index = () => {
                 localStorage.removeItem('lighterdash-wallet');
                 setSearchParams({});
               }}
-              className="mb-6 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors group"
+              className="mb-4 flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors group"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
+                width="14" 
+                height="14" 
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
@@ -247,7 +253,7 @@ const Index = () => {
                 <path d="m12 19-7-7 7-7"/>
                 <path d="M19 12H5"/>
               </svg>
-              <span className="text-sm font-medium">Scan different wallet</span>
+              <span className="text-xs font-medium">Scan different wallet</span>
             </button>
             <Dashboard 
               walletAddress={scannedAddress}

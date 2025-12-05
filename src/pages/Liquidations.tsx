@@ -232,7 +232,7 @@ const Liquidations = () => {
   const totalEvents = filteredLiquidations.length;
 
   return (
-    <Layout showNav={false}>
+    <Layout>
       <div className="container mx-auto px-4 py-6 space-y-5">
         {/* Page Header */}
         <div className="flex items-center justify-between flex-wrap gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500">

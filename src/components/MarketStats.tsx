@@ -407,20 +407,20 @@ export function MarketStats() {
 
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-primary" fill="currentColor" fillOpacity={0.2} />
+      <Card className="bg-card border-border/50 shadow-sm">
+        <CardHeader className="py-3 px-4">
+          <CardTitle className="flex items-center gap-2 text-sm">
+            <Activity className="h-3.5 w-3.5 text-primary" />
             Market Overview
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <CardContent className="px-4 pb-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="space-y-2">
-                <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-8 w-32" />
-                <Skeleton className="h-4 w-full" />
+              <div key={i} className="space-y-1.5">
+                <Skeleton className="h-3 w-16" />
+                <Skeleton className="h-5 w-24" />
+                <Skeleton className="h-3 w-full" />
               </div>
             ))}
           </div>
@@ -495,26 +495,26 @@ export function MarketStats() {
       />
       
       <Collapsible defaultOpen={false}>
-      <Card>
-        <CardHeader>
+      <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <CardHeader className="py-3 px-4">
           <CollapsibleTrigger className="w-full group">
             <div className="flex items-center justify-between hover:opacity-80 transition-opacity">
               <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                <CardTitle>All Markets</CardTitle>
+                <Activity className="h-3.5 w-3.5 text-primary" />
+                <CardTitle className="text-sm">All Markets</CardTitle>
               </div>
-              <ChevronDown className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+              <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
             </div>
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent>
-          <CardContent className="space-y-6">
+          <CardContent className="px-4 pb-4 space-y-4">
         {/* Sound Settings Dialog */}
         <div className="flex justify-end">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
-                <Settings className="h-4 w-4" />
+              <Button variant="outline" size="sm" className="gap-1.5 h-7 text-xs">
+                <Settings className="h-3 w-3" />
                 Alert Settings
               </Button>
             </DialogTrigger>
@@ -693,30 +693,30 @@ export function MarketStats() {
 
         {/* Watchlist Summary */}
         {watchlistMetrics.count > 0 && (
-          <div className="p-4 rounded-lg border bg-gradient-to-r from-primary/10 to-primary/5">
-            <div className="flex items-center gap-2 mb-3">
-              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-              <h3 className="text-sm font-semibold">Watchlist Summary</h3>
+          <div className="p-3 rounded-lg border border-border/50 bg-gradient-to-r from-primary/10 to-primary/5">
+            <div className="flex items-center gap-1.5 mb-2">
+              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+              <h3 className="text-xs font-semibold">Watchlist Summary</h3>
             </div>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Markets</p>
-                <p className="text-2xl font-bold">{watchlistMetrics.count}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Markets</p>
+                <p className="text-lg font-bold">{watchlistMetrics.count}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-1">24h Volume</p>
-                <p className="text-2xl font-bold">{formatCurrencySmart(watchlistMetrics.totalVolume)}</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">24h Volume</p>
+                <p className="text-lg font-bold">{formatCurrencySmart(watchlistMetrics.totalVolume)}</p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Avg Change</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Avg Change</p>
                 <div className="flex items-center gap-1">
-                  <p className={`text-2xl font-bold ${watchlistMetrics.avgChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-lg font-bold ${watchlistMetrics.avgChange >= 0 ? 'text-profit' : 'text-loss'}`}>
                     {formatPercentage(watchlistMetrics.avgChange)}
                   </p>
                   {watchlistMetrics.avgChange >= 0 ? (
-                    <TrendingUp className="h-5 w-5 text-green-500" />
+                    <TrendingUp className="h-3.5 w-3.5 text-profit" />
                   ) : (
-                    <TrendingDown className="h-5 w-5 text-red-500" />
+                    <TrendingDown className="h-3.5 w-3.5 text-loss" />
                   )}
                 </div>
               </div>
@@ -725,17 +725,17 @@ export function MarketStats() {
         )}
 
         {/* Top Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Top Open Interest */}
-          <div className="p-4 rounded-lg border bg-card/50">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Open Interest (24h)</h3>
-            <div className="space-y-2">
+          <div className="p-3 rounded-lg border border-border/30 bg-secondary/20">
+            <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Top Open Interest (24h)</h3>
+            <div className="space-y-1.5">
               {topOpenInterest.map((market) => {
                 const symbol = resolveMarketSymbol(market.market_id);
                 return (
                   <div key={market.market_id} className="flex items-center justify-between">
-                    <span className="font-medium">{symbol}</span>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-xs font-medium">{symbol}</span>
+                    <span className="text-[10px] text-muted-foreground">
                       {formatCurrencySmart(parseFloat(market.open_interest))}
                     </span>
                   </div>
@@ -745,17 +745,17 @@ export function MarketStats() {
           </div>
 
           {/* Top Gainers */}
-          <div className="p-4 rounded-lg border bg-card/50">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Gainers (24h)</h3>
-            <div className="space-y-2">
+          <div className="p-3 rounded-lg border border-border/30 bg-secondary/20">
+            <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Top Gainers (24h)</h3>
+            <div className="space-y-1.5">
               {topGainers.map((market) => {
                 const symbol = resolveMarketSymbol(market.market_id);
                 const change = market.daily_price_change ?? 0;
                 return (
                   <div key={market.market_id} className="flex items-center justify-between">
-                    <span className="font-medium">{symbol}</span>
-                    <Badge variant="default" className="flex items-center gap-1">
-                      <TrendingUp className="h-3 w-3" />
+                    <span className="text-xs font-medium">{symbol}</span>
+                    <Badge variant="default" className="flex items-center gap-0.5 text-[9px] h-4 px-1.5">
+                      <TrendingUp className="h-2.5 w-2.5" />
                       {formatPercentage(change)}
                     </Badge>
                   </div>
@@ -765,17 +765,17 @@ export function MarketStats() {
           </div>
 
           {/* Top Losers */}
-          <div className="p-4 rounded-lg border bg-card/50">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3">Top Losers (24h)</h3>
-            <div className="space-y-2">
+          <div className="p-3 rounded-lg border border-border/30 bg-secondary/20">
+            <h3 className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Top Losers (24h)</h3>
+            <div className="space-y-1.5">
               {topLosers.map((market) => {
                 const symbol = resolveMarketSymbol(market.market_id);
                 const change = market.daily_price_change ?? 0;
                 return (
                   <div key={market.market_id} className="flex items-center justify-between">
-                    <span className="font-medium">{symbol}</span>
-                    <Badge variant="destructive" className="flex items-center gap-1">
-                      <TrendingDown className="h-3 w-3" />
+                    <span className="text-xs font-medium">{symbol}</span>
+                    <Badge variant="destructive" className="flex items-center gap-0.5 text-[9px] h-4 px-1.5">
+                      <TrendingDown className="h-2.5 w-2.5" />
                       {formatPercentage(change)}
                     </Badge>
                   </div>
@@ -787,29 +787,29 @@ export function MarketStats() {
 
         {/* All Markets Grid */}
         <div>
-          <div className="flex flex-col sm:flex-row gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row gap-2 mb-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
               <Input
                 placeholder="Search trading pairs..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9"
+                className="pl-8 h-8 text-xs"
               />
             </div>
             <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-              <SelectTrigger className="w-full sm:w-[200px] bg-card border-border">
+              <SelectTrigger className="w-full sm:w-[160px] h-8 text-xs bg-card border-border">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent className="bg-card border-border z-50">
-                <SelectItem value="priceChange">Price Change</SelectItem>
-                <SelectItem value="volume">24h Volume</SelectItem>
-                <SelectItem value="openInterest">Open Interest</SelectItem>
-                <SelectItem value="fundingRate">Funding Rate</SelectItem>
+                <SelectItem value="priceChange" className="text-xs">Price Change</SelectItem>
+                <SelectItem value="volume" className="text-xs">24h Volume</SelectItem>
+                <SelectItem value="openInterest" className="text-xs">Open Interest</SelectItem>
+                <SelectItem value="fundingRate" className="text-xs">Funding Rate</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {marketList.map((market) => {
             const symbol = resolveMarketSymbol(market.market_id);
             const priceChange = market.daily_price_change ?? 0;
@@ -822,49 +822,49 @@ export function MarketStats() {
             return (
               <div 
                 key={market.market_id}
-                className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors relative"
+                className="p-3 rounded-lg border border-border/30 bg-secondary/20 hover:bg-secondary/30 transition-colors relative"
               >
-                <div className="absolute top-2 right-2 flex gap-1">
+                <div className="absolute top-2 right-2 flex gap-0.5">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
+                    className="h-6 w-6"
                     onClick={() => openAlertDialog(market.market_id)}
                     title="Configure alerts"
                   >
                     <Bell 
-                      className={`h-4 w-4 ${hasAlert ? 'fill-blue-400 text-blue-400' : 'text-muted-foreground'}`}
+                      className={`h-3 w-3 ${hasAlert ? 'fill-blue-400 text-blue-400' : 'text-muted-foreground'}`}
                     />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8"
+                    className="h-6 w-6"
                     onClick={() => toggleFavorite(market.market_id)}
                     title="Add to favorites"
                   >
                     <Star 
-                      className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
+                      className={`h-3 w-3 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
                     />
                   </Button>
                 </div>
-                <div className="flex items-start justify-between mb-3 pr-16">
+                <div className="flex items-start justify-between mb-2 pr-12">
                   <div>
-                    <h3 className="font-semibold text-lg">{symbol}</h3>
-                    <p className="text-2xl font-bold text-foreground">
+                    <h3 className="font-semibold text-sm">{symbol}</h3>
+                    <p className="text-lg font-bold text-foreground">
                       {formatCurrency(parseFloat(market.mark_price))}
                     </p>
                   </div>
                   <Badge 
                     variant={isPriceUp ? "default" : "destructive"}
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-0.5 text-[9px] h-4 px-1.5"
                   >
-                    {isPriceUp ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {isPriceUp ? <TrendingUp className="h-2.5 w-2.5" /> : <TrendingDown className="h-2.5 w-2.5" />}
                     {formatPercentage(priceChange)}
                   </Badge>
                 </div>
 
-                <div className="space-y-1 text-sm">
+                <div className="space-y-0.5 text-[10px]">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Index:</span>
                     <span className="font-medium">{formatCurrency(parseFloat(market.index_price))}</span>
@@ -876,15 +876,14 @@ export function MarketStats() {
                   </div>
                   
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Open Interest:</span>
                     <span className="font-medium">{formatCurrencySmart(parseFloat(market.open_interest))}</span>
                   </div>
                   
-                  <div className="flex justify-between items-center pt-2 border-t">
+                  <div className="flex justify-between items-center pt-1.5 mt-1.5 border-t border-border/30">
                     <span className="text-muted-foreground">Funding Rate:</span>
                     <Badge 
                       variant={isFundingPositive ? "default" : "secondary"}
-                      className="text-xs"
+                      className="text-[9px] h-4 px-1.5"
                     >
                       {fundingRate >= 0 ? '+' : ''}{fundingRate.toFixed(4)}%
                     </Badge>

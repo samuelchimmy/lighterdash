@@ -101,19 +101,19 @@ export function AITooltip({ metricType, data, className }: AITooltipProps) {
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-2xl w-[90vw] bg-gradient-to-br from-card via-card to-primary/5 border-primary/20 shadow-2xl p-0 gap-0 overflow-hidden">
+        <DialogContent className="max-w-2xl w-[90vw] bg-gradient-to-br from-card via-card to-primary/5 border-primary/20 shadow-2xl p-0 gap-0 overflow-hidden rounded-2xl">
           {/* Animated background glow */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 animate-pulse" />
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 animate-pulse" style={{ animationDelay: '1s' }} />
           
-          <DialogHeader className="p-5 pb-4 border-b border-border/50 relative">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-primary/10 animate-in zoom-in duration-300">
-                <LightBulbIcon className="w-5 h-5 text-primary" />
+          <DialogHeader className="p-4 pb-3 border-b border-border/50 relative rounded-t-2xl">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-xl bg-primary/10 animate-in zoom-in duration-300">
+                <LightBulbIcon className="w-4 h-4 text-primary" />
               </div>
               <div className="animate-in slide-in-from-left-4 duration-300">
-                <DialogTitle className="font-semibold text-foreground text-base">AI Analysis</DialogTitle>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Powered by AI insights</p>
+                <DialogTitle className="font-semibold text-foreground text-xs">AI Analysis</DialogTitle>
+                <p className="text-[9px] text-muted-foreground mt-0.5">Powered by AI insights</p>
               </div>
             </div>
           </DialogHeader>
@@ -121,49 +121,49 @@ export function AITooltip({ metricType, data, className }: AITooltipProps) {
           {/* Content */}
           <div className="relative">
             {isLoading ? (
-              <div className="flex flex-col items-center justify-center py-12 gap-4">
+              <div className="flex flex-col items-center justify-center py-10 gap-3">
                 <div className="relative">
-                  <div className="w-14 h-14 rounded-full bg-primary/10 animate-ping absolute inset-0" />
-                  <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center relative">
-                    <Loader2 className="w-7 h-7 animate-spin text-primary" />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 animate-ping absolute inset-0" />
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center relative">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
                   </div>
                 </div>
                 <div className="text-center animate-in fade-in duration-500">
-                  <p className="text-sm font-medium text-foreground">Analyzing your data...</p>
-                  <p className="text-[11px] text-muted-foreground mt-1">This may take a few seconds</p>
+                  <p className="text-xs font-medium text-foreground">Analyzing your data...</p>
+                  <p className="text-[9px] text-muted-foreground mt-1">This may take a few seconds</p>
                 </div>
               </div>
             ) : error ? (
-              <div className="py-10 text-center px-5 animate-in fade-in zoom-in duration-300">
-                <div className="w-12 h-12 rounded-full bg-destructive/10 mx-auto mb-3 flex items-center justify-center">
-                  <X className="w-5 h-5 text-destructive" />
+              <div className="py-8 text-center px-4 animate-in fade-in zoom-in duration-300">
+                <div className="w-10 h-10 rounded-full bg-destructive/10 mx-auto mb-2 flex items-center justify-center">
+                  <X className="w-4 h-4 text-destructive" />
                 </div>
-                <p className="text-sm text-destructive font-medium mb-3">Failed to generate insight</p>
+                <p className="text-xs text-destructive font-medium mb-2">Failed to generate insight</p>
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => refetch()} 
-                  className="text-xs hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all duration-300"
+                  className="text-[10px] h-7 hover:bg-primary/10 hover:text-primary hover:border-primary/50 transition-all duration-300"
                 >
                   Try again
                 </Button>
               </div>
             ) : (
               <div className="animate-in fade-in duration-500">
-                <ScrollArea className="h-[350px]">
-                  <div className="p-5">
-                    <div className="bg-background/60 backdrop-blur-sm rounded-xl p-4 border border-border/30">
+                <ScrollArea className="h-[300px]">
+                  <div className="p-4">
+                    <div className="bg-background/60 backdrop-blur-sm rounded-xl p-3 border border-border/30">
                       {insight && formatInsightText(insight)}
                     </div>
                   </div>
                 </ScrollArea>
-                <div className="flex items-center justify-between px-5 py-3 border-t border-border/30 bg-muted/30">
-                  <span className="text-[10px] text-muted-foreground/70">AI-generated • Results may vary</span>
+                <div className="flex items-center justify-between px-4 py-2.5 border-t border-border/30 bg-muted/30 rounded-b-2xl">
+                  <span className="text-[9px] text-muted-foreground/70">AI-generated • Results may vary</span>
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     onClick={() => refetch()}
-                    className="text-[11px] h-7 px-3 hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-105"
+                    className="text-[10px] h-6 px-2 hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-105"
                   >
                     Regenerate
                   </Button>

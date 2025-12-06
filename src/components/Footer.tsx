@@ -17,7 +17,7 @@ export function Footer() {
         <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1">
           Built with <HeartIcon className="w-4 h-4 text-primary" /> by{' '}
           <a
-            href="https://x.com/MetisCharter"
+            href="https://www.0xnotes.lol/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-primary/80 transition-colors font-medium ml-1"

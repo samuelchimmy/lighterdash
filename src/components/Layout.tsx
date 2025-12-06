@@ -6,7 +6,8 @@ import {
   ChartBarIcon,
   ScaleIcon,
   ChartPieIcon,
-  Bars3Icon
+  Bars3Icon,
+  InformationCircleIcon
 } from '@heroicons/react/24/solid';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Footer } from '@/components/Footer';
@@ -31,6 +32,7 @@ const navItems = [
   { label: 'Calculator', path: '/calculator', icon: ChartBarIcon },
   { label: 'Compare Wallets', path: '/community', icon: ScaleIcon },
   { label: 'Analytics', path: '/analytics', icon: ChartPieIcon },
+  { label: 'About', path: '/about', icon: InformationCircleIcon },
 ];
 
 export function Layout({ children, showNav = true, headerContent }: LayoutProps) {

@@ -4,6 +4,7 @@ import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
 import { ScanningLoader } from '@/components/ScanningLoader';
 import { DonationModal } from '@/components/DonationModal';
+import { ReferralPromoModal } from '@/components/ReferralPromoModal';
 import { RealtimeLiquidationMonitor } from '@/components/RealtimeLiquidationMonitor';
 import { Layout } from '@/components/Layout';
 import { FeatureAnnouncement } from '@/components/FeatureAnnouncement';
@@ -58,6 +59,7 @@ const Index = () => {
         ) : null
       }
     >
+      <ReferralPromoModal />
       <DonationModal />
       <FeatureAnnouncement />
       <div className="container mx-auto px-4 py-6 max-w-6xl" role="main">

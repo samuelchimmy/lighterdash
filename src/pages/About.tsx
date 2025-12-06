@@ -135,7 +135,7 @@ export default function About() {
                   variant="outline"
                   size="sm"
                   className="gap-1.5 text-xs h-8"
-                  onClick={() => window.open("https://app.lighter.xyz", "_blank")}
+                  onClick={() => window.open("https://app.lighter.xyz/?referral=LIGHTERDASH", "_blank")}
                 >
                   <span>Visit Lighter</span>
                   <ArrowTopRightOnSquareIcon className="w-3 h-3" />

@@ -10,6 +10,7 @@ import CommunityHub from "./pages/CommunityHub";
 import FuturesCalculator from "./pages/FuturesCalculator";
 import Liquidations from "./pages/Liquidations";
 import TradeAnalyzer from "./pages/TradeAnalyzer";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/community" element={<CommunityHub />} />
             <Route path="/liquidations" element={<Liquidations />} />
             <Route path="/trade-analyzer" element={<TradeAnalyzer />} />
+            <Route path="/about" element={<About />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -69,6 +69,9 @@ const Index = () => {
           <div className="max-w-4xl mx-auto space-y-5 lg:space-y-6">
             {/* Hero Section */}
             <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2 lg:mb-3 tracking-tight">
+                LighterDash
+              </h1>
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3">
                 Track Your Lighter Trading Performance
               </h2>

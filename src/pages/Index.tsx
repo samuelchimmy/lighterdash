@@ -116,7 +116,7 @@ const Index = () => {
 
             {/* Hero Section */}
             <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2 lg:mb-3 tracking-tight">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 lg:mb-3 tracking-tight animate-text-shimmer">
                 LighterDash
               </h1>
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3">

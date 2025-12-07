@@ -4,11 +4,16 @@ import { Button } from "@/components/ui/button";
 
 const REFERRAL_LINK = "https://app.lighter.xyz/?referral=LIGHTERDASH";
 
-export const ReferralPromoModal = () => {
+interface ReferralPromoModalProps {
+  onClose?: () => void;
+}
+
+export const ReferralPromoModal = ({ onClose }: ReferralPromoModalProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
   const handleClose = () => {
     setIsVisible(false);
+    onClose?.();
   };
 
   const handleClick = () => {

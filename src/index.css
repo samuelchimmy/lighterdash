@@ -188,6 +188,50 @@
   background-size: 1000px 100%;
 }
 
+/* Parallax floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.parallax-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+.parallax-orb-sm {
+  filter: blur(40px);
+}
+
+.parallax-layer-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.parallax-layer-medium {
+  animation: float 6s ease-in-out infinite;
+}
+
+.parallax-layer-fast {
+  animation: float 4s ease-in-out infinite;
+}
+
 @layer utilities {
   .text-profit {
     @apply text-[hsl(var(--profit))];

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
@@ -14,6 +14,16 @@ import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, LightBulbIcon } from
 import { useSearchParams } from 'react-router-dom';
 
 const Index = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const [searchParams, setSearchParams] = useSearchParams();
   const [scannedAddress, setScannedAddress] = useState<string | null>(() => {
     const urlAddress = searchParams.get('wallet');
@@ -66,7 +76,44 @@ const Index = () => {
         {isScanning ? (
           <ScanningLoader />
         ) : !scannedAddress ? (
-          <div className="max-w-4xl mx-auto space-y-5 lg:space-y-6">
+          <div ref={containerRef} className="max-w-4xl mx-auto space-y-5 lg:space-y-6 relative">
+            {/* Parallax Background Orbs */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+              {/* Slow layer - far away orbs */}
+              <div 
+                className="parallax-orb parallax-layer-slow w-72 h-72 bg-primary/10 -top-20 -left-32"
+                style={{ transform: `translateY(${scrollY * 0.05}px)` }}
+              />
+              <div 
+                className="parallax-orb parallax-layer-slow w-96 h-96 bg-purple-500/8 -top-10 -right-40"
+                style={{ transform: `translateY(${scrollY * 0.08}px)` }}
+              />
+              <div 
+                className="parallax-orb parallax-layer-slow w-64 h-64 bg-primary/6 bottom-40 -left-20"
+                style={{ transform: `translateY(${scrollY * 0.06}px)` }}
+              />
+              
+              {/* Medium layer - mid depth orbs */}
+              <div 
+                className="parallax-orb parallax-orb-sm parallax-layer-medium w-48 h-48 bg-purple-400/12 top-32 left-1/4"
+                style={{ transform: `translateY(${scrollY * 0.15}px)` }}
+              />
+              <div 
+                className="parallax-orb parallax-orb-sm parallax-layer-medium w-40 h-40 bg-primary/10 top-60 right-1/4"
+                style={{ transform: `translateY(${scrollY * 0.18}px)` }}
+              />
+              
+              {/* Fast layer - close orbs */}
+              <div 
+                className="parallax-orb parallax-orb-sm parallax-layer-fast w-32 h-32 bg-purple-300/15 bottom-20 right-10"
+                style={{ transform: `translateY(${scrollY * 0.25}px)` }}
+              />
+              <div 
+                className="parallax-orb parallax-orb-sm parallax-layer-fast w-24 h-24 bg-primary/12 top-1/2 left-10"
+                style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+              />
+            </div>
+
             {/* Hero Section */}
             <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2 lg:mb-3 tracking-tight">

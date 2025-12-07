@@ -188,74 +188,119 @@
   background-size: 1000px 100%;
 }
 
-/* Parallax floating animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes float-slow {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* Text shimmer animation */
-@keyframes text-shimmer {
+/* Letter zoom animation */
+@keyframes letter-zoom {
   0% {
-    background-position: -200% center;
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
   }
   100% {
-    background-position: 200% center;
+    transform: scale(1);
   }
 }
 
-.animate-text-shimmer {
-  background: linear-gradient(
-    90deg,
-    hsl(var(--primary)) 0%,
-    hsl(280 65% 60%) 25%,
-    hsl(300 70% 65%) 50%,
-    hsl(280 65% 60%) 75%,
-    hsl(var(--primary)) 100%
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: text-shimmer 3s linear infinite;
+.animate-letter-zoom {
+  display: inline-block;
+  animation: letter-zoom 0.4s ease-in-out forwards;
 }
 
-.parallax-orb {
+/* Animated chart background */
+@keyframes chart-line-1 {
+  0%, 100% {
+    d: path("M0,80 Q50,60 100,70 T200,50 T300,65 T400,45");
+  }
+  50% {
+    d: path("M0,70 Q50,80 100,55 T200,70 T300,40 T400,60");
+  }
+}
+
+@keyframes chart-line-2 {
+  0%, 100% {
+    d: path("M0,120 Q50,100 100,110 T200,90 T300,105 T400,85");
+  }
+  50% {
+    d: path("M0,110 Q50,120 100,95 T200,115 T300,80 T400,100");
+  }
+}
+
+@keyframes chart-line-3 {
+  0%, 100% {
+    d: path("M0,160 Q50,140 100,150 T200,130 T300,145 T400,125");
+  }
+  50% {
+    d: path("M0,150 Q50,165 100,135 T200,155 T300,120 T400,140");
+  }
+}
+
+@keyframes chart-bar {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.6);
+  }
+}
+
+@keyframes chart-candle {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scaleY(1.2);
+  }
+}
+
+.chart-bg-container {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
-  will-change: transform;
-  transition: transform 0.1s ease-out;
+  z-index: -10;
 }
 
-.parallax-orb-sm {
-  filter: blur(40px);
+.chart-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
-.parallax-layer-slow {
-  animation: float-slow 8s ease-in-out infinite;
+.chart-line-1 {
+  stroke: hsl(var(--primary) / 0.15);
+  animation: chart-line-1 8s ease-in-out infinite;
 }
 
-.parallax-layer-medium {
-  animation: float 6s ease-in-out infinite;
+.chart-line-2 {
+  stroke: hsl(var(--primary) / 0.1);
+  animation: chart-line-2 10s ease-in-out infinite;
+  animation-delay: -2s;
 }
 
-.parallax-layer-fast {
-  animation: float 4s ease-in-out infinite;
+.chart-line-3 {
+  stroke: hsl(var(--primary) / 0.08);
+  animation: chart-line-3 12s ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+.chart-bar {
+  fill: hsl(var(--primary) / 0.08);
+  transform-origin: bottom;
+  animation: chart-bar 4s ease-in-out infinite;
+}
+
+.chart-candle {
+  animation: chart-candle 3s ease-in-out infinite;
+}
+
+.chart-candle-green {
+  fill: hsl(var(--profit) / 0.12);
+}
+
+.chart-candle-red {
+  fill: hsl(var(--loss) / 0.12);
 }
 
 @layer utilities {

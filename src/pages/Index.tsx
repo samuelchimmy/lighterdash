@@ -13,17 +13,77 @@ import { Badge } from '@/components/ui/badge';
 import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, LightBulbIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from 'react-router-dom';
 
+const TITLE_TEXT = "LighterDash";
+
+// Animated Chart Background Component
+const AnimatedChartBackground = () => (
+  <div className="chart-bg-container" aria-hidden="true">
+    <svg className="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+      {/* Animated chart lines */}
+      <path className="chart-line chart-line-1" d="M0,80 Q50,60 100,70 T200,50 T300,65 T400,45" />
+      <path className="chart-line chart-line-2" d="M0,120 Q50,100 100,110 T200,90 T300,105 T400,85" />
+      <path className="chart-line chart-line-3" d="M0,160 Q50,140 100,150 T200,130 T300,145 T400,125" />
+      
+      {/* Animated candlesticks */}
+      <rect className="chart-candle chart-candle-green" x="30" y="60" width="8" height="40" rx="1" style={{ animationDelay: '0s' }} />
+      <rect className="chart-candle chart-candle-red" x="50" y="70" width="8" height="30" rx="1" style={{ animationDelay: '0.5s' }} />
+      <rect className="chart-candle chart-candle-green" x="70" y="50" width="8" height="50" rx="1" style={{ animationDelay: '1s' }} />
+      <rect className="chart-candle chart-candle-green" x="90" y="55" width="8" height="35" rx="1" style={{ animationDelay: '1.5s' }} />
+      <rect className="chart-candle chart-candle-red" x="110" y="65" width="8" height="25" rx="1" style={{ animationDelay: '2s' }} />
+      
+      <rect className="chart-candle chart-candle-green" x="150" y="45" width="8" height="45" rx="1" style={{ animationDelay: '0.3s' }} />
+      <rect className="chart-candle chart-candle-red" x="170" y="60" width="8" height="35" rx="1" style={{ animationDelay: '0.8s' }} />
+      <rect className="chart-candle chart-candle-green" x="190" y="40" width="8" height="55" rx="1" style={{ animationDelay: '1.3s' }} />
+      <rect className="chart-candle chart-candle-red" x="210" y="55" width="8" height="30" rx="1" style={{ animationDelay: '1.8s' }} />
+      
+      <rect className="chart-candle chart-candle-green" x="250" y="35" width="8" height="50" rx="1" style={{ animationDelay: '0.2s' }} />
+      <rect className="chart-candle chart-candle-green" x="270" y="30" width="8" height="60" rx="1" style={{ animationDelay: '0.7s' }} />
+      <rect className="chart-candle chart-candle-red" x="290" y="45" width="8" height="40" rx="1" style={{ animationDelay: '1.2s' }} />
+      <rect className="chart-candle chart-candle-green" x="310" y="25" width="8" height="55" rx="1" style={{ animationDelay: '1.7s' }} />
+      <rect className="chart-candle chart-candle-red" x="330" y="40" width="8" height="35" rx="1" style={{ animationDelay: '2.2s' }} />
+      <rect className="chart-candle chart-candle-green" x="350" y="20" width="8" height="65" rx="1" style={{ animationDelay: '2.5s' }} />
+      <rect className="chart-candle chart-candle-green" x="370" y="15" width="8" height="70" rx="1" style={{ animationDelay: '2.8s' }} />
+      
+      {/* Grid lines */}
+      <line x1="0" y1="50" x2="400" y2="50" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
+      <line x1="0" y1="100" x2="400" y2="100" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
+      <line x1="0" y1="150" x2="400" y2="150" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
+    </svg>
+  </div>
+);
+
+// Animated Letter Component
+const AnimatedLetter = ({ letter, index, shouldAnimate }: { letter: string; index: number; shouldAnimate: boolean }) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  
+  useEffect(() => {
+    if (shouldAnimate) {
+      const timeout = setTimeout(() => {
+        setIsAnimating(true);
+      }, index * 120); // Stagger each letter by 120ms
+      
+      return () => clearTimeout(timeout);
+    }
+  }, [shouldAnimate, index]);
+  
+  return (
+    <span 
+      className={`inline-block text-primary ${isAnimating ? 'animate-letter-zoom' : ''}`}
+      style={{ animationDelay: `${index * 0.12}s` }}
+    >
+      {letter}
+    </span>
+  );
+};
+
 const Index = () => {
-  const [scrollY, setScrollY] = useState(0);
+  const [titleAnimationStarted, setTitleAnimationStarted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const handleReferralClose = () => {
+    setTitleAnimationStarted(true);
+  };
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [scannedAddress, setScannedAddress] = useState<string | null>(() => {
     const urlAddress = searchParams.get('wallet');
@@ -69,7 +129,7 @@ const Index = () => {
         ) : null
       }
     >
-      <ReferralPromoModal />
+      <ReferralPromoModal onClose={handleReferralClose} />
       <DonationModal />
       <FeatureAnnouncement />
       <div className="container mx-auto px-4 py-6 max-w-6xl" role="main">
@@ -77,47 +137,20 @@ const Index = () => {
           <ScanningLoader />
         ) : !scannedAddress ? (
           <div ref={containerRef} className="max-w-4xl mx-auto space-y-5 lg:space-y-6 relative">
-            {/* Parallax Background Orbs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
-              {/* Slow layer - far away orbs */}
-              <div 
-                className="parallax-orb parallax-layer-slow w-72 h-72 bg-primary/10 -top-20 -left-32"
-                style={{ transform: `translateY(${scrollY * 0.05}px)` }}
-              />
-              <div 
-                className="parallax-orb parallax-layer-slow w-96 h-96 bg-purple-500/8 -top-10 -right-40"
-                style={{ transform: `translateY(${scrollY * 0.08}px)` }}
-              />
-              <div 
-                className="parallax-orb parallax-layer-slow w-64 h-64 bg-primary/6 bottom-40 -left-20"
-                style={{ transform: `translateY(${scrollY * 0.06}px)` }}
-              />
-              
-              {/* Medium layer - mid depth orbs */}
-              <div 
-                className="parallax-orb parallax-orb-sm parallax-layer-medium w-48 h-48 bg-purple-400/12 top-32 left-1/4"
-                style={{ transform: `translateY(${scrollY * 0.15}px)` }}
-              />
-              <div 
-                className="parallax-orb parallax-orb-sm parallax-layer-medium w-40 h-40 bg-primary/10 top-60 right-1/4"
-                style={{ transform: `translateY(${scrollY * 0.18}px)` }}
-              />
-              
-              {/* Fast layer - close orbs */}
-              <div 
-                className="parallax-orb parallax-orb-sm parallax-layer-fast w-32 h-32 bg-purple-300/15 bottom-20 right-10"
-                style={{ transform: `translateY(${scrollY * 0.25}px)` }}
-              />
-              <div 
-                className="parallax-orb parallax-orb-sm parallax-layer-fast w-24 h-24 bg-primary/12 top-1/2 left-10"
-                style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-              />
-            </div>
+            {/* Animated Chart Background */}
+            <AnimatedChartBackground />
 
             {/* Hero Section */}
             <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 lg:mb-3 tracking-tight animate-text-shimmer">
-                LighterDash
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 lg:mb-3 tracking-tight">
+                {TITLE_TEXT.split('').map((letter, index) => (
+                  <AnimatedLetter 
+                    key={index} 
+                    letter={letter} 
+                    index={index} 
+                    shouldAnimate={titleAnimationStarted} 
+                  />
+                ))}
               </h1>
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3">
                 Track Your Lighter Trading Performance

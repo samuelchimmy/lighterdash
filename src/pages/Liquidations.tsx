@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3, ShieldAlert } from 'lucide-react';
+import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3, ShieldAlert, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { lighterApi } from '@/lib/lighter-api';
 import { formatCurrency, formatNumber } from '@/lib/lighter-api';
@@ -43,6 +43,7 @@ const Liquidations = () => {
   const [filterSymbol, setFilterSymbol] = useState<string>('all');
   const [searchWallet, setSearchWallet] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState<'none' | 'asc' | 'desc'>('none');
 
   // Fetch historical liquidations from database
   useEffect(() => {
@@ -200,12 +201,19 @@ const Liquidations = () => {
     };
   }, []);
 
-  const filteredLiquidations = liquidations.filter(liq => {
-    if (filterType !== 'all' && liq.event_type !== filterType) return false;
-    if (filterSymbol !== 'all' && liq.symbol !== filterSymbol) return false;
-    if (searchWallet && !liq.wallet_address.toLowerCase().includes(searchWallet.toLowerCase())) return false;
-    return true;
-  });
+  const filteredLiquidations = liquidations
+    .filter(liq => {
+      if (filterType !== 'all' && liq.event_type !== filterType) return false;
+      if (filterSymbol !== 'all' && liq.symbol !== filterSymbol) return false;
+      if (searchWallet && !liq.wallet_address.toLowerCase().includes(searchWallet.toLowerCase())) return false;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortOrder === 'none') return 0;
+      const amountA = Number(a.usdc_amount);
+      const amountB = Number(b.usdc_amount);
+      return sortOrder === 'desc' ? amountB - amountA : amountA - amountB;
+    });
 
   const uniqueSymbols = Array.from(new Set(liquidations.map(l => l.symbol).filter(Boolean)));
 
@@ -257,7 +265,8 @@ const Liquidations = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '50ms' }}>
-          <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+          <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+            <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
             <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Total Events</CardTitle>
               <Activity className="h-3.5 w-3.5 text-primary" />
@@ -268,7 +277,8 @@ const Liquidations = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-card via-card to-destructive/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+          <Card className="bg-gradient-to-br from-card via-card to-destructive/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+            <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
             <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Total Volume</CardTitle>
               <TrendingDown className="h-3.5 w-3.5 text-destructive" />
@@ -279,7 +289,8 @@ const Liquidations = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-card via-card to-amber-500/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+          <Card className="bg-gradient-to-br from-card via-card to-amber-500/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+            <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
             <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Avg. Liquidation</CardTitle>
               <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
@@ -340,7 +351,8 @@ const Liquidations = () => {
         )}
 
         {/* Liquidation Heatmap */}
-        <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '150ms' }}>
+        <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden" style={{ animationDelay: '150ms' }}>
+          <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
           <CardHeader className="py-3 px-4">
             <CardTitle className="flex items-center gap-2 text-sm">
               <BarChart3 className="h-3.5 w-3.5 text-primary" />
@@ -472,7 +484,17 @@ const Liquidations = () => {
                       <TableHead className="text-[10px]">Type</TableHead>
                       <TableHead className="text-right text-[10px]">Price</TableHead>
                       <TableHead className="text-right text-[10px]">Size</TableHead>
-                      <TableHead className="text-right text-[10px]">USD Amount</TableHead>
+                      <TableHead className="text-right text-[10px]">
+                        <button 
+                          onClick={() => setSortOrder(prev => prev === 'none' ? 'desc' : prev === 'desc' ? 'asc' : 'none')}
+                          className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+                        >
+                          USD Amount
+                          {sortOrder === 'none' && <ArrowUpDown className="h-3 w-3" />}
+                          {sortOrder === 'desc' && <ArrowDown className="h-3 w-3 text-primary" />}
+                          {sortOrder === 'asc' && <ArrowUp className="h-3 w-3 text-primary" />}
+                        </button>
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

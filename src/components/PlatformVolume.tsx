@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CardWatermark } from "@/components/ui/card-watermark";
 import { lighterApi, formatCurrencySmart, normalizeMarketStats } from "@/lib/lighter-api";
 import { MarketStats as MarketStatsType } from "@/types/lighter";
 import { BarChart3, TrendingUp, Activity, DollarSign, Layers } from "lucide-react";
@@ -105,8 +106,9 @@ export function PlatformVolume() {
   }
 
   return (
-    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500">
-      <CardHeader className="py-3 px-4">
+    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
+      <CardWatermark />
+      <CardHeader className="py-3 px-4 relative">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-sm">
             <BarChart3 className="h-3.5 w-3.5 text-primary" />

@@ -3,6 +3,7 @@ import { OrderBookDepth } from "@/components/OrderBookDepth";
 import { LiveTradeFeed } from "@/components/LiveTradeFeed";
 import { PlatformVolume } from "@/components/PlatformVolume";
 import { Layout } from "@/components/Layout";
+import { CardWatermark } from "@/components/ui/card-watermark";
 import { BarChart3, Activity } from "lucide-react";
 
 const LighterAnalytics = () => {
@@ -26,14 +27,15 @@ const LighterAnalytics = () => {
           </div>
 
           {/* Info Card */}
-          <div className="bg-gradient-to-br from-card via-card to-primary/5 border border-border/50 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300">
-            <div className="flex items-center gap-2 mb-1.5">
+          <div className="bg-gradient-to-br from-card via-card to-primary/5 border border-border/50 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+            <CardWatermark />
+            <div className="flex items-center gap-2 mb-1.5 relative">
               <BarChart3 className="w-4 h-4 text-primary" />
               <h3 className="text-sm font-semibold text-foreground">
                 About Analytics
               </h3>
             </div>
-            <p className="text-muted-foreground text-xs leading-relaxed">
+            <p className="text-muted-foreground text-xs leading-relaxed relative">
               Track real-time market data across all Lighter perpetual markets. View live order books, 
               recent trades, funding rates, and comprehensive market statistics.
             </p>

@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { CardWatermark } from "@/components/ui/card-watermark";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Plus, Trash2, TrendingUp, TrendingDown, Users } from "lucide-react";
@@ -127,14 +128,15 @@ export function MultiWalletComparison() {
 
   return (
     <div className="space-y-4">
-      <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
-        <CardHeader className="pb-3">
+      <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
+        <CardWatermark />
+        <CardHeader className="pb-3 relative">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <Users className="w-4 h-4 text-primary" />
             Multi-Wallet Comparison
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
+        <CardContent className="space-y-3 relative">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
             <Input
               placeholder="Comparison name"
@@ -159,10 +161,11 @@ export function MultiWalletComparison() {
       {comparisons.map((comp, idx) => (
         <Card 
           key={comp.id} 
-          className="bg-card border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2"
+          className="bg-card border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 relative overflow-hidden"
           style={{ animationDelay: `${idx * 50}ms` }}
         >
-          <CardHeader className="flex flex-row items-center justify-between py-3 px-4">
+          <CardWatermark />
+          <CardHeader className="flex flex-row items-center justify-between py-3 px-4 relative">
             <CardTitle className="text-sm font-medium">{comp.name}</CardTitle>
             <div className="flex gap-1.5">
               <Button

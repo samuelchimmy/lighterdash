@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CardWatermark } from '@/components/ui/card-watermark';
 import { AlertTriangle, Download, Filter, TrendingDown, Activity, BarChart3, ShieldAlert, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { lighterApi } from '@/lib/lighter-api';
@@ -266,36 +267,36 @@ const Liquidations = () => {
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '50ms' }}>
           <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-            <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
-            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+            <CardWatermark />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4 relative">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Total Events</CardTitle>
               <Activity className="h-3.5 w-3.5 text-primary" />
             </CardHeader>
-            <CardContent className="pb-3 px-4">
+            <CardContent className="pb-3 px-4 relative">
               <div className="text-xl font-bold text-foreground">{totalEvents}</div>
               <p className="text-[10px] text-muted-foreground">Last 100 liquidations</p>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-card via-card to-destructive/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-            <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
-            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+            <CardWatermark />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4 relative">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Total Volume</CardTitle>
               <TrendingDown className="h-3.5 w-3.5 text-destructive" />
             </CardHeader>
-            <CardContent className="pb-3 px-4">
+            <CardContent className="pb-3 px-4 relative">
               <div className="text-xl font-bold text-foreground">{formatCurrency(totalVolume)}</div>
               <p className="text-[10px] text-muted-foreground">Liquidated value</p>
             </CardContent>
           </Card>
 
           <Card className="bg-gradient-to-br from-card via-card to-amber-500/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-            <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
-            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
+            <CardWatermark />
+            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4 relative">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Avg. Liquidation</CardTitle>
               <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
             </CardHeader>
-            <CardContent className="pb-3 px-4">
+            <CardContent className="pb-3 px-4 relative">
               <div className="text-xl font-bold text-foreground">
                 {totalEvents > 0 ? formatCurrency(totalVolume / totalEvents) : '$0'}
               </div>
@@ -306,8 +307,9 @@ const Liquidations = () => {
 
         {/* Platform-Wide Live Feed */}
         {platformLiquidations.length > 0 && (
-          <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '100ms' }}>
-            <CardHeader className="py-3 px-4">
+          <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden" style={{ animationDelay: '100ms' }}>
+            <CardWatermark />
+            <CardHeader className="py-3 px-4 relative">
               <CardTitle className="flex items-center gap-2 text-sm">
                 <Activity className="h-3.5 w-3.5 text-profit animate-pulse" />
                 Live Platform Feed
@@ -352,8 +354,8 @@ const Liquidations = () => {
 
         {/* Liquidation Heatmap */}
         <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden" style={{ animationDelay: '150ms' }}>
-          <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider select-none pointer-events-none">LighterDash</span>
-          <CardHeader className="py-3 px-4">
+          <CardWatermark />
+          <CardHeader className="py-3 px-4 relative">
             <CardTitle className="flex items-center gap-2 text-sm">
               <BarChart3 className="h-3.5 w-3.5 text-primary" />
               Liquidation Heatmap
@@ -417,8 +419,9 @@ const Liquidations = () => {
         </Card>
 
         {/* Liquidation History Table */}
-        <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '200ms' }}>
-          <CardHeader className="py-3 px-4">
+        <Card className="bg-card border-border/50 shadow-sm animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden" style={{ animationDelay: '200ms' }}>
+          <CardWatermark />
+          <CardHeader className="py-3 px-4 relative">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
                 <CardTitle className="text-sm">Liquidation History</CardTitle>

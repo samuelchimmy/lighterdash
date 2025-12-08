@@ -3,6 +3,7 @@ import { Calculator } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
+import { CardWatermark } from "@/components/ui/card-watermark";
 import { AssetSelector, MARKETS, type Market } from "@/components/calculators/AssetSelector";
 import { PnLCalculator } from "@/components/calculators/PnLCalculator";
 import { LiquidationCalculator } from "@/components/calculators/LiquidationCalculator";
@@ -39,8 +40,9 @@ export default function FuturesCalculator() {
           />
         </div>
 
-        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '100ms' }}>
-          <CardContent className="p-4">
+        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden" style={{ animationDelay: '100ms' }}>
+          <CardWatermark />
+          <CardContent className="p-4 relative">
             <Tabs defaultValue="pnl" className="w-full">
               <TabsList className="w-full justify-start mb-4 bg-secondary/30 border border-border/50 p-0.5 rounded-lg h-auto flex-wrap">
                 <TabsTrigger 

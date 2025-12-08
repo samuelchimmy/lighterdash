@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { CardWatermark } from "@/components/ui/card-watermark";
 import { lighterApi, formatCurrency, formatNumber } from "@/lib/lighter-api";
 import { getMarketEntries } from "@/lib/markets";
 import { BookOpen } from "lucide-react";
@@ -63,8 +64,9 @@ export function OrderBookDepth() {
   const maxSize = Math.max(maxAskSize, maxBidSize);
 
   return (
-    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500">
-      <CardHeader className="py-3 px-4">
+    <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden">
+      <CardWatermark />
+      <CardHeader className="py-3 px-4 relative">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-sm">
             <BookOpen className="h-3.5 w-3.5 text-primary" />

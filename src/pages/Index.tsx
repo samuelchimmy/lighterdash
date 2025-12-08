@@ -15,10 +15,10 @@ import { useSearchParams } from 'react-router-dom';
 
 const TITLE_TEXT = "LighterDash";
 
-// Animated Chart Background Component
+// Animated Chart Background Component - for Hero section only
 const AnimatedChartBackground = () => (
-  <div className="chart-bg-container" aria-hidden="true">
-    <svg className="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+  <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+    <svg className="w-full h-full opacity-30" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
       {/* Animated chart lines */}
       <path className="chart-line chart-line-1" d="M0,80 Q50,60 100,70 T200,50 T300,65 T400,45" />
       <path className="chart-line chart-line-2" d="M0,120 Q50,100 100,110 T200,90 T300,105 T400,85" />
@@ -49,6 +49,15 @@ const AnimatedChartBackground = () => (
       <line x1="0" y1="100" x2="400" y2="100" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
       <line x1="0" y1="150" x2="400" y2="150" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
     </svg>
+  </div>
+);
+
+// Card Watermark Component
+const CardWatermark = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none select-none" aria-hidden="true">
+    <span className="absolute bottom-2 right-3 text-[10px] font-semibold text-primary/[0.07] tracking-wider">
+      LighterDash
+    </span>
   </div>
 );
 
@@ -137,11 +146,10 @@ const Index = () => {
           <ScanningLoader />
         ) : !scannedAddress ? (
           <div ref={containerRef} className="max-w-4xl mx-auto space-y-5 lg:space-y-6 relative">
-            {/* Animated Chart Background */}
-            <AnimatedChartBackground />
-
-            {/* Hero Section */}
-            <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500">
+            {/* Hero Section with Animated Chart Background */}
+            <section className="text-center animate-in fade-in slide-in-from-bottom-2 duration-500 relative overflow-hidden rounded-2xl py-8 px-4">
+              {/* Animated Chart Background - contained in Hero only */}
+              <AnimatedChartBackground />
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 lg:mb-3 tracking-tight">
                 {TITLE_TEXT.split('').map((letter, index) => (
                   <AnimatedLetter 

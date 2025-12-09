@@ -49,9 +49,8 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
     <div className="space-y-4">
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500 relative overflow-hidden" style={{ animationDelay: '0ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: '0ms' }}>
+          <CardContent className="p-3">
             <div className="flex items-center gap-2 mb-2">
               <div className={`p-1.5 rounded-lg transition-colors duration-300 ${kpis.netPnL >= 0 ? 'bg-profit/10' : 'bg-loss/10'}`}>
                 {kpis.netPnL >= 0 ? (
@@ -68,9 +67,8 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-card via-card to-muted/30 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500 relative overflow-hidden" style={{ animationDelay: '50ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card via-card to-muted/30 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: '50ms' }}>
+          <CardContent className="p-3">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-1.5 rounded-lg bg-muted">
                 <Receipt className="w-3.5 h-3.5 text-muted-foreground" />
@@ -83,9 +81,8 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500 relative overflow-hidden" style={{ animationDelay: '100ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: '100ms' }}>
+          <CardContent className="p-3">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-1.5 rounded-lg bg-primary/10">
                 <Target className="w-3.5 h-3.5 text-primary" />
@@ -101,9 +98,8 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500 relative overflow-hidden" style={{ animationDelay: '150ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500" style={{ animationDelay: '150ms' }}>
+          <CardContent className="p-3">
             <div className="flex items-center gap-2 mb-2">
               <div className={`p-1.5 rounded-lg transition-colors duration-300 ${kpis.profitFactor >= 1 ? 'bg-profit/10' : 'bg-loss/10'}`}>
                 <Award className={`w-3.5 h-3.5 transition-colors duration-300 ${kpis.profitFactor >= 1 ? 'text-profit' : 'text-loss'}`} />
@@ -119,30 +115,26 @@ export function PerformanceOverview({ kpis, cumulativePnL, periodPnL }: Performa
 
       {/* Secondary KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <Card className="bg-gradient-to-br from-card to-profit/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400 relative overflow-hidden" style={{ animationDelay: '200ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card to-profit/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400" style={{ animationDelay: '200ms' }}>
+          <CardContent className="p-3">
             <span className="text-[10px] text-muted-foreground">Gross Profit</span>
             <p className="text-sm font-semibold text-profit">{formatCurrency(kpis.grossProfit)}</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-card to-loss/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400 relative overflow-hidden" style={{ animationDelay: '250ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card to-loss/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400" style={{ animationDelay: '250ms' }}>
+          <CardContent className="p-3">
             <span className="text-[10px] text-muted-foreground">Gross Loss</span>
             <p className="text-sm font-semibold text-loss">-{formatCurrency(kpis.grossLoss)}</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-card to-profit/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400 relative overflow-hidden" style={{ animationDelay: '300ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card to-profit/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400" style={{ animationDelay: '300ms' }}>
+          <CardContent className="p-3">
             <span className="text-[10px] text-muted-foreground">Avg Winner</span>
             <p className="text-sm font-semibold text-profit">{formatCurrency(kpis.avgWinningTrade)}</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-card to-loss/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400 relative overflow-hidden" style={{ animationDelay: '350ms' }}>
-          <CardWatermark />
-          <CardContent className="p-3 relative">
+        <Card className="bg-gradient-to-br from-card to-loss/5 border-border/50 shadow-md hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-2 duration-400" style={{ animationDelay: '350ms' }}>
+          <CardContent className="p-3">
             <span className="text-[10px] text-muted-foreground">Avg Loser</span>
             <p className="text-sm font-semibold text-loss">-{formatCurrency(kpis.avgLosingTrade)}</p>
           </CardContent>

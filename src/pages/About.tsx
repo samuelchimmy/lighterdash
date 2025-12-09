@@ -1,7 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CardWatermark } from "@/components/ui/card-watermark";
 import { 
   Squares2X2Icon, 
   ChartBarIcon, 
@@ -75,9 +74,8 @@ export default function About() {
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 md:mb-16">
           {stats.map((stat, index) => (
-            <Card key={index} className="text-center p-4 bg-card/50 border-border/50 relative overflow-hidden">
-              <CardWatermark />
-              <CardContent className="p-0 relative">
+            <Card key={index} className="text-center p-4 bg-card/50 border-border/50">
+              <CardContent className="p-0">
                 <div className="text-2xl md:text-3xl font-bold text-primary mb-1">
                   {stat.value}
                 </div>
@@ -97,9 +95,8 @@ export default function About() {
           
           <div className="grid md:grid-cols-2 gap-4">
             {features.map((feature, index) => (
-              <Card key={index} className="p-5 bg-card/50 border-border/50 hover:border-primary/30 transition-colors relative overflow-hidden">
-                <CardWatermark />
-                <CardContent className="p-0 flex gap-4 relative">
+              <Card key={index} className="p-5 bg-card/50 border-border/50 hover:border-primary/30 transition-colors">
+                <CardContent className="p-0 flex gap-4">
                   <div className="p-2.5 rounded-lg bg-primary/10 h-fit shrink-0">
                     <feature.icon className="w-5 h-5 text-primary" />
                   </div>
@@ -118,9 +115,8 @@ export default function About() {
         </div>
 
         {/* About Lighter Section */}
-        <Card className="p-6 md:p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 mb-12 md:mb-16 relative overflow-hidden">
-          <CardWatermark />
-          <CardContent className="p-0 relative">
+        <Card className="p-6 md:p-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 mb-12 md:mb-16">
+          <CardContent className="p-0">
             <div className="flex items-start gap-4">
               <div className="p-3 rounded-xl bg-primary/10 shrink-0">
                 <Squares2X2Icon className="w-6 h-6 text-primary" />

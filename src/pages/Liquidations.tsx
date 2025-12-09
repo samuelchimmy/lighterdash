@@ -266,9 +266,8 @@ const Liquidations = () => {
 
         {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '50ms' }}>
-          <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-            <CardWatermark />
-            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4 relative">
+          <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Total Events</CardTitle>
               <Activity className="h-3.5 w-3.5 text-primary" />
             </CardHeader>
@@ -278,25 +277,23 @@ const Liquidations = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-card via-card to-destructive/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-            <CardWatermark />
-            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4 relative">
+          <Card className="bg-gradient-to-br from-card via-card to-destructive/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Total Volume</CardTitle>
               <TrendingDown className="h-3.5 w-3.5 text-destructive" />
             </CardHeader>
-            <CardContent className="pb-3 px-4 relative">
+            <CardContent className="pb-3 px-4">
               <div className="text-xl font-bold text-foreground">{formatCurrency(totalVolume)}</div>
               <p className="text-[10px] text-muted-foreground">Liquidated value</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-card via-card to-amber-500/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden">
-            <CardWatermark />
-            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4 relative">
+          <Card className="bg-gradient-to-br from-card via-card to-amber-500/5 border-border/50 shadow-sm hover:shadow-md transition-all duration-300">
+            <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-4">
               <CardTitle className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Avg. Liquidation</CardTitle>
               <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
             </CardHeader>
-            <CardContent className="pb-3 px-4 relative">
+            <CardContent className="pb-3 px-4">
               <div className="text-xl font-bold text-foreground">
                 {totalEvents > 0 ? formatCurrency(totalVolume / totalEvents) : '$0'}
               </div>

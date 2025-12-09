@@ -121,16 +121,46 @@ export const lighterApi = {
 
   async getAccountSnapshot(accountIndex: number): Promise<AccountSnapshot> {
     try {
-      const response = await axios.get<AccountSnapshot>(
+      const response = await axios.get(
         `${BASE_URL}/api/v1/account`,
         {
-          params: { by: 'index', index: accountIndex }
+          params: { by: 'index', value: accountIndex }
         }
       );
-      return response.data;
+      
+      // API returns { code: 200, accounts: [...] }
+      const data = response.data;
+      const account = data.accounts?.[0];
+      
+      if (!account) {
+        console.error('No account data returned');
+        return {
+          account_index: accountIndex,
+          positions: {},
+          trades: {},
+          collateral: '0',
+          portfolio_value: '0'
+        };
+      }
+      
+      // Map the API response to our expected format
+      return {
+        account_index: account.account_index || account.index,
+        positions: account.positions || {},
+        trades: account.trades || {},
+        collateral: account.collateral || '0',
+        portfolio_value: account.total_asset_value || account.cross_asset_value || '0',
+        stats: {
+          collateral: account.collateral || '0',
+          portfolio_value: account.total_asset_value || account.cross_asset_value || '0',
+          leverage: '0',
+          available_balance: account.available_balance || '0',
+          margin_usage: '0',
+          buying_power: '0',
+        }
+      };
     } catch (error) {
       console.error('Error fetching account snapshot:', error);
-      // Return empty snapshot on error
       return {
         account_index: accountIndex,
         positions: {},

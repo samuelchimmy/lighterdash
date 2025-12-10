@@ -1,14 +1,35 @@
-import { LineChart, Upload, BarChart3, Activity } from 'lucide-react';
+import { LineChart, Upload, BarChart3, Activity, FileDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Layout } from '@/components/Layout';
+import { Button } from '@/components/ui/button';
 import { CSVUploader } from '@/components/analyzer/CSVUploader';
 import { PerformanceOverview } from '@/components/analyzer/PerformanceOverview';
 import { TradingHabitsAnalysis } from '@/components/analyzer/TradingHabitsAnalysis';
 import { MarketBreakdown } from '@/components/analyzer/MarketBreakdown';
 import { useTradeAnalysis } from '@/hooks/use-trade-analysis';
+import { exportTradeAnalysisToPDF } from '@/lib/trade-analysis-pdf';
+import { useToast } from '@/hooks/use-toast';
 
 const TradeAnalyzer = () => {
   const { trades, analysis, isLoading, error, fileName, handleFileUpload, clearData } = useTradeAnalysis();
+  const { toast } = useToast();
+
+  const handleExportPDF = () => {
+    if (!analysis) return;
+    try {
+      exportTradeAnalysisToPDF(analysis, fileName || undefined);
+      toast({
+        title: 'PDF Exported',
+        description: 'Your analysis report has been downloaded.',
+      });
+    } catch (err) {
+      toast({
+        title: 'Export Failed',
+        description: 'Failed to generate PDF report.',
+        variant: 'destructive',
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -43,20 +64,31 @@ const TradeAnalyzer = () => {
           {analysis && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 mb-4 bg-muted/50 p-0.5 rounded-lg h-8">
-                  <TabsTrigger value="overview" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                    <BarChart3 className="w-3 h-3" />
-                    <span className="hidden sm:inline">Performance</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="habits" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                    <Activity className="w-3 h-3" />
-                    <span className="hidden sm:inline">Trading Habits</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="markets" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
-                    <LineChart className="w-3 h-3" />
-                    <span className="hidden sm:inline">Markets</span>
-                  </TabsTrigger>
-                </TabsList>
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <TabsList className="grid grid-cols-3 bg-muted/50 p-0.5 rounded-lg h-8">
+                    <TabsTrigger value="overview" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                      <BarChart3 className="w-3 h-3" />
+                      <span className="hidden sm:inline">Performance</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="habits" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                      <Activity className="w-3 h-3" />
+                      <span className="hidden sm:inline">Trading Habits</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="markets" className="gap-1 rounded-md text-[10px] h-7 data-[state=active]:bg-card data-[state=active]:shadow-sm">
+                      <LineChart className="w-3 h-3" />
+                      <span className="hidden sm:inline">Markets</span>
+                    </TabsTrigger>
+                  </TabsList>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportPDF}
+                    className="h-8 gap-1.5 text-[10px]"
+                  >
+                    <FileDown className="w-3 h-3" />
+                    Export PDF
+                  </Button>
+                </div>
 
                 <TabsContent value="overview">
                   <PerformanceOverview

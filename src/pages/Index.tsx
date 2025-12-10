@@ -44,6 +44,10 @@ const AnimatedChartBackground = () => (
       <rect className="chart-candle chart-candle-green" x="350" y="90" width="8" height="65" rx="1" style={{ animationDelay: '2.5s' }} />
       <rect className="chart-candle chart-candle-green" x="370" y="85" width="8" height="70" rx="1" style={{ animationDelay: '2.8s' }} />
       
+      {/* Baseline floor under candlesticks */}
+      <line x1="20" y1="175" x2="390" y2="175" stroke="hsl(var(--primary) / 0.3)" strokeWidth="1.5" />
+      <line x1="20" y1="175" x2="390" y2="175" stroke="hsl(var(--primary) / 0.15)" strokeWidth="3" />
+      
       {/* Grid lines */}
       <line x1="0" y1="50" x2="400" y2="50" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
       <line x1="0" y1="100" x2="400" y2="100" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />

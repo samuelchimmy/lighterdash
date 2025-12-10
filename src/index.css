@@ -245,11 +245,11 @@
 
 @keyframes chart-candle {
   0%, 100% {
-    opacity: 0.15;
+    opacity: 0.35;
     transform: scaleY(1);
   }
   50% {
-    opacity: 0.25;
+    opacity: 0.55;
     transform: scaleY(1.2);
   }
 }
@@ -264,29 +264,29 @@
 
 .chart-line {
   fill: none;
-  stroke-width: 2;
+  stroke-width: 2.5;
   stroke-linecap: round;
 }
 
 .chart-line-1 {
-  stroke: hsl(var(--primary) / 0.15);
+  stroke: hsl(var(--primary) / 0.35);
   animation: chart-line-1 8s ease-in-out infinite;
 }
 
 .chart-line-2 {
-  stroke: hsl(var(--primary) / 0.1);
+  stroke: hsl(var(--primary) / 0.25);
   animation: chart-line-2 10s ease-in-out infinite;
   animation-delay: -2s;
 }
 
 .chart-line-3 {
-  stroke: hsl(var(--primary) / 0.08);
+  stroke: hsl(var(--primary) / 0.18);
   animation: chart-line-3 12s ease-in-out infinite;
   animation-delay: -4s;
 }
 
 .chart-bar {
-  fill: hsl(var(--primary) / 0.08);
+  fill: hsl(var(--primary) / 0.2);
   transform-origin: bottom;
   animation: chart-bar 4s ease-in-out infinite;
 }
@@ -296,11 +296,11 @@
 }
 
 .chart-candle-green {
-  fill: hsl(var(--profit) / 0.12);
+  fill: hsl(var(--profit) / 0.3);
 }
 
 .chart-candle-red {
-  fill: hsl(var(--loss) / 0.12);
+  fill: hsl(var(--loss) / 0.3);
 }
 
 @layer utilities {

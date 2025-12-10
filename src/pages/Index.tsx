@@ -18,7 +18,7 @@ const TITLE_TEXT = "LighterDash";
 // Animated Chart Background Component - for Hero section only
 const AnimatedChartBackground = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-    <svg className="w-full h-full opacity-30" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+    <svg className="w-full h-full opacity-60" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
       {/* Animated chart lines */}
       <path className="chart-line chart-line-1" d="M0,80 Q50,60 100,70 T200,50 T300,65 T400,45" />
       <path className="chart-line chart-line-2" d="M0,120 Q50,100 100,110 T200,90 T300,105 T400,85" />

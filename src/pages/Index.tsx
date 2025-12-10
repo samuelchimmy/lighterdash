@@ -24,25 +24,25 @@ const AnimatedChartBackground = () => (
       <path className="chart-line chart-line-2" d="M0,120 Q50,100 100,110 T200,90 T300,105 T400,85" />
       <path className="chart-line chart-line-3" d="M0,160 Q50,140 100,150 T200,130 T300,145 T400,125" />
       
-      {/* Animated candlesticks */}
-      <rect className="chart-candle chart-candle-green" x="30" y="60" width="8" height="40" rx="1" style={{ animationDelay: '0s' }} />
-      <rect className="chart-candle chart-candle-red" x="50" y="70" width="8" height="30" rx="1" style={{ animationDelay: '0.5s' }} />
-      <rect className="chart-candle chart-candle-green" x="70" y="50" width="8" height="50" rx="1" style={{ animationDelay: '1s' }} />
-      <rect className="chart-candle chart-candle-green" x="90" y="55" width="8" height="35" rx="1" style={{ animationDelay: '1.5s' }} />
-      <rect className="chart-candle chart-candle-red" x="110" y="65" width="8" height="25" rx="1" style={{ animationDelay: '2s' }} />
+      {/* Animated candlesticks - positioned lower */}
+      <rect className="chart-candle chart-candle-green" x="30" y="130" width="8" height="40" rx="1" style={{ animationDelay: '0s' }} />
+      <rect className="chart-candle chart-candle-red" x="50" y="140" width="8" height="30" rx="1" style={{ animationDelay: '0.5s' }} />
+      <rect className="chart-candle chart-candle-green" x="70" y="120" width="8" height="50" rx="1" style={{ animationDelay: '1s' }} />
+      <rect className="chart-candle chart-candle-green" x="90" y="125" width="8" height="35" rx="1" style={{ animationDelay: '1.5s' }} />
+      <rect className="chart-candle chart-candle-red" x="110" y="135" width="8" height="25" rx="1" style={{ animationDelay: '2s' }} />
       
-      <rect className="chart-candle chart-candle-green" x="150" y="45" width="8" height="45" rx="1" style={{ animationDelay: '0.3s' }} />
-      <rect className="chart-candle chart-candle-red" x="170" y="60" width="8" height="35" rx="1" style={{ animationDelay: '0.8s' }} />
-      <rect className="chart-candle chart-candle-green" x="190" y="40" width="8" height="55" rx="1" style={{ animationDelay: '1.3s' }} />
-      <rect className="chart-candle chart-candle-red" x="210" y="55" width="8" height="30" rx="1" style={{ animationDelay: '1.8s' }} />
+      <rect className="chart-candle chart-candle-green" x="150" y="115" width="8" height="45" rx="1" style={{ animationDelay: '0.3s' }} />
+      <rect className="chart-candle chart-candle-red" x="170" y="130" width="8" height="35" rx="1" style={{ animationDelay: '0.8s' }} />
+      <rect className="chart-candle chart-candle-green" x="190" y="110" width="8" height="55" rx="1" style={{ animationDelay: '1.3s' }} />
+      <rect className="chart-candle chart-candle-red" x="210" y="125" width="8" height="30" rx="1" style={{ animationDelay: '1.8s' }} />
       
-      <rect className="chart-candle chart-candle-green" x="250" y="35" width="8" height="50" rx="1" style={{ animationDelay: '0.2s' }} />
-      <rect className="chart-candle chart-candle-green" x="270" y="30" width="8" height="60" rx="1" style={{ animationDelay: '0.7s' }} />
-      <rect className="chart-candle chart-candle-red" x="290" y="45" width="8" height="40" rx="1" style={{ animationDelay: '1.2s' }} />
-      <rect className="chart-candle chart-candle-green" x="310" y="25" width="8" height="55" rx="1" style={{ animationDelay: '1.7s' }} />
-      <rect className="chart-candle chart-candle-red" x="330" y="40" width="8" height="35" rx="1" style={{ animationDelay: '2.2s' }} />
-      <rect className="chart-candle chart-candle-green" x="350" y="20" width="8" height="65" rx="1" style={{ animationDelay: '2.5s' }} />
-      <rect className="chart-candle chart-candle-green" x="370" y="15" width="8" height="70" rx="1" style={{ animationDelay: '2.8s' }} />
+      <rect className="chart-candle chart-candle-green" x="250" y="105" width="8" height="50" rx="1" style={{ animationDelay: '0.2s' }} />
+      <rect className="chart-candle chart-candle-green" x="270" y="100" width="8" height="60" rx="1" style={{ animationDelay: '0.7s' }} />
+      <rect className="chart-candle chart-candle-red" x="290" y="115" width="8" height="40" rx="1" style={{ animationDelay: '1.2s' }} />
+      <rect className="chart-candle chart-candle-green" x="310" y="95" width="8" height="55" rx="1" style={{ animationDelay: '1.7s' }} />
+      <rect className="chart-candle chart-candle-red" x="330" y="110" width="8" height="35" rx="1" style={{ animationDelay: '2.2s' }} />
+      <rect className="chart-candle chart-candle-green" x="350" y="90" width="8" height="65" rx="1" style={{ animationDelay: '2.5s' }} />
+      <rect className="chart-candle chart-candle-green" x="370" y="85" width="8" height="70" rx="1" style={{ animationDelay: '2.8s' }} />
       
       {/* Grid lines */}
       <line x1="0" y1="50" x2="400" y2="50" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />

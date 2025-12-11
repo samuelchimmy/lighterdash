@@ -31,9 +31,8 @@ const AnimatedChartBackground = () => {
         <line x1="0" y1="50" x2="400" y2="50" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
         <line x1="0" y1="100" x2="400" y2="100" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
         
-        {/* Baseline floor - subtle gradient effect */}
-        <line x1="10" y1={baseline} x2="390" y2={baseline} stroke="hsl(var(--primary) / 0.08)" strokeWidth="4" />
-        <line x1="10" y1={baseline} x2="390" y2={baseline} stroke="hsl(var(--primary) / 0.15)" strokeWidth="1" />
+        {/* Baseline floor - nearly invisible */}
+        <line x1="10" y1={baseline} x2="390" y2={baseline} stroke="hsl(var(--primary) / 0.02)" strokeWidth="1" />
         
         {/* Animated candlesticks - all bottoms aligned to baseline */}
         <rect className="chart-candle chart-candle-green" x="30" y={baseline - 40} width="8" height="40" rx="1" style={{ animationDelay: '0s' }} />

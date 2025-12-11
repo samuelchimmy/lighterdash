@@ -16,45 +16,48 @@ import { useSearchParams } from 'react-router-dom';
 const TITLE_TEXT = "LighterDash";
 
 // Animated Chart Background Component - for Hero section only
-const AnimatedChartBackground = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-    <svg className="w-full h-full opacity-60" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
-      {/* Animated chart lines */}
-      <path className="chart-line chart-line-1" d="M0,80 Q50,60 100,70 T200,50 T300,65 T400,45" />
-      <path className="chart-line chart-line-2" d="M0,120 Q50,100 100,110 T200,90 T300,105 T400,85" />
-      <path className="chart-line chart-line-3" d="M0,160 Q50,140 100,150 T200,130 T300,145 T400,125" />
-      
-      {/* Animated candlesticks - positioned lower */}
-      <rect className="chart-candle chart-candle-green" x="30" y="130" width="8" height="40" rx="1" style={{ animationDelay: '0s' }} />
-      <rect className="chart-candle chart-candle-red" x="50" y="140" width="8" height="30" rx="1" style={{ animationDelay: '0.5s' }} />
-      <rect className="chart-candle chart-candle-green" x="70" y="120" width="8" height="50" rx="1" style={{ animationDelay: '1s' }} />
-      <rect className="chart-candle chart-candle-green" x="90" y="125" width="8" height="35" rx="1" style={{ animationDelay: '1.5s' }} />
-      <rect className="chart-candle chart-candle-red" x="110" y="135" width="8" height="25" rx="1" style={{ animationDelay: '2s' }} />
-      
-      <rect className="chart-candle chart-candle-green" x="150" y="115" width="8" height="45" rx="1" style={{ animationDelay: '0.3s' }} />
-      <rect className="chart-candle chart-candle-red" x="170" y="130" width="8" height="35" rx="1" style={{ animationDelay: '0.8s' }} />
-      <rect className="chart-candle chart-candle-green" x="190" y="110" width="8" height="55" rx="1" style={{ animationDelay: '1.3s' }} />
-      <rect className="chart-candle chart-candle-red" x="210" y="125" width="8" height="30" rx="1" style={{ animationDelay: '1.8s' }} />
-      
-      <rect className="chart-candle chart-candle-green" x="250" y="105" width="8" height="50" rx="1" style={{ animationDelay: '0.2s' }} />
-      <rect className="chart-candle chart-candle-green" x="270" y="100" width="8" height="60" rx="1" style={{ animationDelay: '0.7s' }} />
-      <rect className="chart-candle chart-candle-red" x="290" y="115" width="8" height="40" rx="1" style={{ animationDelay: '1.2s' }} />
-      <rect className="chart-candle chart-candle-green" x="310" y="95" width="8" height="55" rx="1" style={{ animationDelay: '1.7s' }} />
-      <rect className="chart-candle chart-candle-red" x="330" y="110" width="8" height="35" rx="1" style={{ animationDelay: '2.2s' }} />
-      <rect className="chart-candle chart-candle-green" x="350" y="90" width="8" height="65" rx="1" style={{ animationDelay: '2.5s' }} />
-      <rect className="chart-candle chart-candle-green" x="370" y="85" width="8" height="70" rx="1" style={{ animationDelay: '2.8s' }} />
-      
-      {/* Baseline floor under candlesticks */}
-      <line x1="20" y1="175" x2="390" y2="175" stroke="hsl(var(--primary) / 0.3)" strokeWidth="1.5" />
-      <line x1="20" y1="175" x2="390" y2="175" stroke="hsl(var(--primary) / 0.15)" strokeWidth="3" />
-      
-      {/* Grid lines */}
-      <line x1="0" y1="50" x2="400" y2="50" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
-      <line x1="0" y1="100" x2="400" y2="100" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
-      <line x1="0" y1="150" x2="400" y2="150" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
-    </svg>
-  </div>
-);
+const AnimatedChartBackground = () => {
+  const baseline = 160;
+  
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      <svg className="w-full h-full opacity-60" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+        {/* Animated chart lines */}
+        <path className="chart-line chart-line-1" d="M0,80 Q50,60 100,70 T200,50 T300,65 T400,45" />
+        <path className="chart-line chart-line-2" d="M0,120 Q50,100 100,110 T200,90 T300,105 T400,85" />
+        <path className="chart-line chart-line-3" d="M0,160 Q50,140 100,150 T200,130 T300,145 T400,125" />
+        
+        {/* Grid lines */}
+        <line x1="0" y1="50" x2="400" y2="50" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
+        <line x1="0" y1="100" x2="400" y2="100" stroke="hsl(var(--primary) / 0.05)" strokeDasharray="4 4" />
+        
+        {/* Baseline floor - subtle gradient effect */}
+        <line x1="10" y1={baseline} x2="390" y2={baseline} stroke="hsl(var(--primary) / 0.08)" strokeWidth="4" />
+        <line x1="10" y1={baseline} x2="390" y2={baseline} stroke="hsl(var(--primary) / 0.15)" strokeWidth="1" />
+        
+        {/* Animated candlesticks - all bottoms aligned to baseline */}
+        <rect className="chart-candle chart-candle-green" x="30" y={baseline - 40} width="8" height="40" rx="1" style={{ animationDelay: '0s' }} />
+        <rect className="chart-candle chart-candle-red" x="50" y={baseline - 30} width="8" height="30" rx="1" style={{ animationDelay: '0.5s' }} />
+        <rect className="chart-candle chart-candle-green" x="70" y={baseline - 50} width="8" height="50" rx="1" style={{ animationDelay: '1s' }} />
+        <rect className="chart-candle chart-candle-green" x="90" y={baseline - 35} width="8" height="35" rx="1" style={{ animationDelay: '1.5s' }} />
+        <rect className="chart-candle chart-candle-red" x="110" y={baseline - 25} width="8" height="25" rx="1" style={{ animationDelay: '2s' }} />
+        
+        <rect className="chart-candle chart-candle-green" x="150" y={baseline - 45} width="8" height="45" rx="1" style={{ animationDelay: '0.3s' }} />
+        <rect className="chart-candle chart-candle-red" x="170" y={baseline - 35} width="8" height="35" rx="1" style={{ animationDelay: '0.8s' }} />
+        <rect className="chart-candle chart-candle-green" x="190" y={baseline - 55} width="8" height="55" rx="1" style={{ animationDelay: '1.3s' }} />
+        <rect className="chart-candle chart-candle-red" x="210" y={baseline - 30} width="8" height="30" rx="1" style={{ animationDelay: '1.8s' }} />
+        
+        <rect className="chart-candle chart-candle-green" x="250" y={baseline - 50} width="8" height="50" rx="1" style={{ animationDelay: '0.2s' }} />
+        <rect className="chart-candle chart-candle-green" x="270" y={baseline - 60} width="8" height="60" rx="1" style={{ animationDelay: '0.7s' }} />
+        <rect className="chart-candle chart-candle-red" x="290" y={baseline - 40} width="8" height="40" rx="1" style={{ animationDelay: '1.2s' }} />
+        <rect className="chart-candle chart-candle-green" x="310" y={baseline - 55} width="8" height="55" rx="1" style={{ animationDelay: '1.7s' }} />
+        <rect className="chart-candle chart-candle-red" x="330" y={baseline - 35} width="8" height="35" rx="1" style={{ animationDelay: '2.2s' }} />
+        <rect className="chart-candle chart-candle-green" x="350" y={baseline - 65} width="8" height="65" rx="1" style={{ animationDelay: '2.5s' }} />
+        <rect className="chart-candle chart-candle-green" x="370" y={baseline - 70} width="8" height="70" rx="1" style={{ animationDelay: '2.8s' }} />
+      </svg>
+    </div>
+  );
+};
 
 // Card Watermark Component
 const CardWatermark = () => (

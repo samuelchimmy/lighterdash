@@ -250,7 +250,7 @@
   }
   50% {
     opacity: 0.55;
-    transform: scaleY(1.2);
+    transform: scaleY(0.7);
   }
 }
 
@@ -293,6 +293,8 @@
 
 .chart-candle {
   animation: chart-candle 3s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: bottom center;
 }
 
 .chart-candle-green {

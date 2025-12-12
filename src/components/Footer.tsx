@@ -1,4 +1,4 @@
-import { ClipboardDocumentIcon, CheckIcon, HeartIcon } from "@heroicons/react/24/solid";
+import { ClipboardDocumentIcon, CheckIcon, HeartIcon, ArrowDownTrayIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
 export function Footer() {
@@ -9,6 +9,15 @@ export function Footer() {
     navigator.clipboard.writeText(donationAddress);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadLogo = () => {
+    const link = document.createElement('a');
+    link.href = '/logo.svg';
+    link.download = 'lighterdash-logo.svg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -46,9 +55,19 @@ export function Footer() {
             </button>
           </div>
         </div>
-        <p className="text-center text-xs text-muted-foreground">
-          Community-built analytics for Lighter • Not affiliated with Lighter
-        </p>
+        <div className="flex items-center justify-center gap-4">
+          <p className="text-center text-xs text-muted-foreground">
+            Community-built Lighter analytics • Not affiliated with Lighter
+          </p>
+          <button
+            onClick={downloadLogo}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+            title="Download LighterDash logo"
+          >
+            <ArrowDownTrayIcon className="w-3.5 h-3.5" />
+            <span>Logo</span>
+          </button>
+        </div>
       </div>
     </footer>
   );

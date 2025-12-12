@@ -165,13 +165,13 @@ const Index = () => {
                     shouldAnimate={titleAnimationStarted} 
                   />
                 ))}
+                <span className="sr-only"> - Lighter Analytics Dashboard</span>
               </h1>
               <h2 className="text-lg md:text-xl lg:text-2xl font-semibold text-foreground mb-2 lg:mb-3">
-                Track Your Lighter Trading Performance
+                Lighter Analytics - Track Your Trading Performance
               </h2>
               <p className="text-xs md:text-sm lg:text-base text-muted-foreground max-w-xl lg:max-w-2xl mx-auto">
-                Community-built analytics dashboard for Lighter. View real-time trading statistics,
-                track your performance, and analyze your trading data.
+                Free Lighter analytics dashboard for tracking wallet performance. Real-time PnL, positions, trades, and market data. The best community-built Lighter analytics tool.
               </p>
             </section>
 

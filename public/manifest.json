@@ -1,7 +1,7 @@
 {
-  "name": "LighterDash",
+  "name": "LighterDash - Lighter Analytics Dashboard",
   "short_name": "LighterDash",
-  "description": "Real-time analytics and insights for Lighter traders",
+  "description": "Free Lighter analytics dashboard for tracking wallet performance. Real-time PnL, positions, trades, and market data.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0118",
@@ -14,13 +14,13 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/logo.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/logo.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"

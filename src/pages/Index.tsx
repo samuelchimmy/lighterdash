@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { WalletInput } from '@/components/WalletInput';
 import { Dashboard } from '@/components/Dashboard';
 import { ConnectionStatus } from '@/components/ConnectionStatus';
@@ -10,7 +11,8 @@ import { Layout } from '@/components/Layout';
 import { FeatureAnnouncement } from '@/components/FeatureAnnouncement';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, LightBulbIcon } from '@heroicons/react/24/solid';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { WalletIcon, ChartBarIcon, SignalIcon, CpuChipIcon, LightBulbIcon, ArrowRightIcon, CalculatorIcon, BoltIcon, UsersIcon } from '@heroicons/react/24/solid';
 import { useSearchParams } from 'react-router-dom';
 
 const TITLE_TEXT = "LighterDash";
@@ -323,6 +325,112 @@ const Index = () => {
                       <span className="text-[10px] lg:text-xs">Liquidation risk monitoring with real-time alerts</span>
                     </li>
                   </ul>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* Internal Links Section */}
+            <section className="animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '200ms' }} aria-label="Explore Lighter analytics tools">
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm">
+                <CardHeader className="py-3 px-4 lg:py-4 lg:px-5">
+                  <CardTitle className="text-xs lg:text-sm">Explore Lighter Analytics Tools</CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-4 lg:px-5 lg:pb-5">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <Link 
+                      to="/analytics" 
+                      className="flex flex-col items-center gap-2 p-3 rounded-lg bg-muted/30 hover:bg-primary/10 border border-border/50 hover:border-primary/30 transition-all group"
+                    >
+                      <ChartBarIcon className="w-5 h-5 text-primary" />
+                      <span className="text-[10px] lg:text-xs font-medium text-center">Lighter Market Analytics</span>
+                      <ArrowRightIcon className="w-3 h-3 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    </Link>
+                    <Link 
+                      to="/calculator" 
+                      className="flex flex-col items-center gap-2 p-3 rounded-lg bg-muted/30 hover:bg-primary/10 border border-border/50 hover:border-primary/30 transition-all group"
+                    >
+                      <CalculatorIcon className="w-5 h-5 text-primary" />
+                      <span className="text-[10px] lg:text-xs font-medium text-center">Futures PnL Calculator</span>
+                      <ArrowRightIcon className="w-3 h-3 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    </Link>
+                    <Link 
+                      to="/liquidations" 
+                      className="flex flex-col items-center gap-2 p-3 rounded-lg bg-muted/30 hover:bg-primary/10 border border-border/50 hover:border-primary/30 transition-all group"
+                    >
+                      <BoltIcon className="w-5 h-5 text-primary" />
+                      <span className="text-[10px] lg:text-xs font-medium text-center">Liquidation Monitor</span>
+                      <ArrowRightIcon className="w-3 h-3 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    </Link>
+                    <Link 
+                      to="/community" 
+                      className="flex flex-col items-center gap-2 p-3 rounded-lg bg-muted/30 hover:bg-primary/10 border border-border/50 hover:border-primary/30 transition-all group"
+                    >
+                      <UsersIcon className="w-5 h-5 text-primary" />
+                      <span className="text-[10px] lg:text-xs font-medium text-center">Community Leaderboard</span>
+                      <ArrowRightIcon className="w-3 h-3 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+
+            {/* FAQ Section for SEO */}
+            <section className="animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ animationDelay: '250ms' }} aria-label="Frequently asked questions about Lighter analytics">
+              <Card className="bg-gradient-to-br from-card via-card to-primary/5 border-border/50 shadow-sm">
+                <CardHeader className="py-3 px-4 lg:py-4 lg:px-5">
+                  <CardTitle className="text-xs lg:text-sm">Frequently Asked Questions</CardTitle>
+                </CardHeader>
+                <CardContent className="px-4 pb-4 lg:px-5 lg:pb-5">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="what-is-lighter-analytics" className="border-border/50">
+                      <AccordionTrigger className="text-[11px] lg:text-xs font-medium hover:no-underline py-3">
+                        What is Lighter analytics?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-[10px] lg:text-xs text-muted-foreground">
+                        Lighter analytics refers to tools and dashboards that help traders track their performance on the Lighter decentralized exchange. LighterDash is the leading community-built Lighter analytics platform, offering real-time PnL tracking, position monitoring, trade history analysis, and comprehensive market data visualization.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="how-to-track-wallet" className="border-border/50">
+                      <AccordionTrigger className="text-[11px] lg:text-xs font-medium hover:no-underline py-3">
+                        How do I track my Lighter wallet?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-[10px] lg:text-xs text-muted-foreground">
+                        To track your Lighter wallet, simply paste your Ethereum wallet address or Lighter account index in the search box above. LighterDash will instantly display your positions, trades, PnL, and other performance metrics in real-time using WebSocket connections to the Lighter exchange.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="is-lighterdash-free" className="border-border/50">
+                      <AccordionTrigger className="text-[11px] lg:text-xs font-medium hover:no-underline py-3">
+                        Is LighterDash free to use?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-[10px] lg:text-xs text-muted-foreground">
+                        Yes, LighterDash is completely free to use. All Lighter analytics features including wallet tracking, market data, liquidation monitoring, and futures calculators are available at no cost. LighterDash is a community-built project supported by donations.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="what-data-can-i-see" className="border-border/50">
+                      <AccordionTrigger className="text-[11px] lg:text-xs font-medium hover:no-underline py-3">
+                        What trading data can I analyze with Lighter analytics?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-[10px] lg:text-xs text-muted-foreground">
+                        LighterDash provides comprehensive Lighter analytics including: real-time PnL (profit and loss), open positions with entry prices and liquidation levels, complete trade history, funding payments, win rate and performance metrics, asset-by-asset breakdown, leverage and margin usage, and historical performance charts.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="real-time-data" className="border-border/50">
+                      <AccordionTrigger className="text-[11px] lg:text-xs font-medium hover:no-underline py-3">
+                        Is the Lighter analytics data real-time?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-[10px] lg:text-xs text-muted-foreground">
+                        Yes, LighterDash uses WebSocket connections to stream live data directly from the Lighter exchange. Your positions, PnL, trades, and market data update in real-time without needing to refresh the page. This ensures you always have the most current Lighter analytics at your fingertips.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="compare-wallets" className="border-border/50">
+                      <AccordionTrigger className="text-[11px] lg:text-xs font-medium hover:no-underline py-3">
+                        Can I compare multiple Lighter wallets?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-[10px] lg:text-xs text-muted-foreground">
+                        Yes, LighterDash supports multi-wallet comparison. You can add multiple wallet addresses and compare their performance side-by-side. This is useful for analyzing different trading strategies, tracking multiple accounts, or comparing your performance against other Lighter traders.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 </CardContent>
               </Card>
             </section>

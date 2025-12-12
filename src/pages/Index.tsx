@@ -83,7 +83,7 @@ const AnimatedLetter = ({ letter, index, shouldAnimate }: { letter: string; inde
   
   return (
     <span 
-      className={`inline-block text-primary ${isAnimating ? 'animate-letter-zoom' : ''}`}
+      className={`inline-block text-foreground ${isAnimating ? 'animate-letter-zoom' : ''}`}
       style={{ animationDelay: `${index * 0.12}s` }}
     >
       {letter}

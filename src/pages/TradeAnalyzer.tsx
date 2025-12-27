@@ -83,16 +83,16 @@ const TradeAnalyzer = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="max-w-6xl mx-auto space-y-5">
           {/* Hero Section */}
-          <section className="text-center mb-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <div className="p-1.5 rounded-lg bg-primary/10">
-                <LineChart className="w-4 h-4 text-primary" />
+          <section className="text-center mb-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <LineChart className="w-6 h-6 text-primary" />
               </div>
-              <h1 className="text-base font-semibold text-foreground">
+              <h1 className="text-2xl font-bold text-foreground">
                 Universal AI Trade Analyzer
               </h1>
             </div>
-            <p className="text-[10px] text-muted-foreground max-w-xl mx-auto">
+            <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
               Upload your trade history from any exchange. We auto-detect Lighter, Nado, and Hyperliquid formats.
               For other exchanges, our AI will help map your columns.
             </p>
@@ -165,16 +165,16 @@ const TradeAnalyzer = () => {
 
           {/* Empty State */}
           {!analysis && !isLoading && !error && (
-            <div className="text-center py-10 animate-in fade-in duration-500">
-              <div className="p-3 rounded-xl bg-primary/10 w-fit mx-auto mb-3">
-                <Upload className="w-8 h-8 text-primary" />
+            <div className="text-center py-12 animate-in fade-in duration-500">
+              <div className="p-4 rounded-xl bg-primary/10 w-fit mx-auto mb-4">
+                <Upload className="w-10 h-10 text-primary" />
               </div>
-              <h3 className="text-sm font-semibold text-foreground mb-1">Upload Any Trade History</h3>
-              <p className="text-[10px] text-muted-foreground max-w-sm mx-auto">
+              <h3 className="text-lg font-semibold text-foreground mb-2">Upload Any Trade History</h3>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
                 We support Lighter, Nado, Hyperliquid, and any other exchange with AI-powered column mapping.
               </p>
-              <div className="mt-4 p-3 bg-muted/50 border border-border/50 rounded-lg max-w-sm mx-auto">
-                <p className="text-[10px] text-muted-foreground">
+              <div className="mt-5 p-4 bg-muted/50 border border-border/50 rounded-lg max-w-md mx-auto">
+                <p className="text-sm text-muted-foreground">
                   <strong className="text-foreground">Supported exchanges:</strong><br />
                   Lighter, Nado, Hyperliquid (auto-detected)<br />
                   + Any CSV with AI-assisted mapping

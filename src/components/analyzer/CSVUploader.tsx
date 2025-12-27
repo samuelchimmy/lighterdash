@@ -114,29 +114,29 @@ export function CSVUploader({
               </Button>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-2">
-              <div className="p-2 rounded-full bg-primary/10">
-                <Upload className="w-5 h-5 text-primary" />
+            <div className="flex flex-col items-center gap-3">
+              <div className="p-3 rounded-full bg-primary/10">
+                <Upload className="w-7 h-7 text-primary" />
               </div>
               <div>
-                <p className="text-xs font-medium text-foreground mb-0.5">
+                <p className="text-base font-medium text-foreground mb-1">
                   {isDragActive ? "Drop your CSV file here" : "Upload Trade History CSV"}
                 </p>
-                <p className="text-[10px] text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Drag & drop or click to select • Any exchange supported
                 </p>
               </div>
-              <div className="flex flex-wrap justify-center gap-1.5 mt-1">
-                <Badge variant="outline" className="text-[9px] px-1.5 py-0 bg-emerald-500/5 text-emerald-500 border-emerald-500/20">
+              <div className="flex flex-wrap justify-center gap-2 mt-2">
+                <Badge variant="outline" className="text-xs px-2 py-0.5 bg-emerald-500/5 text-emerald-500 border-emerald-500/20">
                   Lighter
                 </Badge>
-                <Badge variant="outline" className="text-[9px] px-1.5 py-0 bg-blue-500/5 text-blue-500 border-blue-500/20">
+                <Badge variant="outline" className="text-xs px-2 py-0.5 bg-blue-500/5 text-blue-500 border-blue-500/20">
                   Nado
                 </Badge>
-                <Badge variant="outline" className="text-[9px] px-1.5 py-0 bg-purple-500/5 text-purple-500 border-purple-500/20">
+                <Badge variant="outline" className="text-xs px-2 py-0.5 bg-purple-500/5 text-purple-500 border-purple-500/20">
                   Hyperliquid
                 </Badge>
-                <Badge variant="outline" className="text-[9px] px-1.5 py-0 bg-muted text-muted-foreground border-border">
+                <Badge variant="outline" className="text-xs px-2 py-0.5 bg-muted text-muted-foreground border-border">
                   + Any CSV
                 </Badge>
               </div>

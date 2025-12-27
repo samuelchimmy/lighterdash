@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.get-trade-insight]
 verify_jwt = false
+
+[functions.auto-map-headers]
+verify_jwt = false

@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { LineChart, Upload, BarChart3, Activity, FileDown } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Layout } from '@/components/Layout';
@@ -9,10 +11,55 @@ import { MarketBreakdown } from '@/components/analyzer/MarketBreakdown';
 import { useTradeAnalysis } from '@/hooks/use-trade-analysis';
 import { exportTradeAnalysisToPDF } from '@/lib/trade-analysis-pdf';
 import { useToast } from '@/hooks/use-toast';
+import { CSVTrade } from '@/lib/csv-trade-analyzer';
 
 const TradeAnalyzer = () => {
-  const { trades, analysis, isLoading, error, fileName, handleFileUpload, clearData } = useTradeAnalysis();
+  const { 
+    trades, 
+    analysis, 
+    isLoading, 
+    error, 
+    fileName, 
+    detectedExchange,
+    needsMapping,
+    handleFileUpload, 
+    setTrades,
+    clearData 
+  } = useTradeAnalysis();
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Handle navigation to column mapper when needed
+  useEffect(() => {
+    if (needsMapping) {
+      navigate('/trade-analyzer/map-columns');
+    }
+  }, [needsMapping, navigate]);
+
+  // Load mapped trades from sessionStorage if coming from column mapper
+  useEffect(() => {
+    const mapped = searchParams.get('mapped');
+    if (mapped === 'true') {
+      const storedTrades = sessionStorage.getItem('mappedTrades');
+      if (storedTrades) {
+        try {
+          const parsedTrades = JSON.parse(storedTrades) as CSVTrade[];
+          // Convert date strings back to Date objects
+          const tradesWithDates = parsedTrades.map(trade => ({
+            ...trade,
+            date: new Date(trade.date)
+          }));
+          setTrades(tradesWithDates);
+          sessionStorage.removeItem('mappedTrades');
+          // Clean up URL
+          navigate('/trade-analyzer', { replace: true });
+        } catch (err) {
+          console.error('Failed to load mapped trades:', err);
+        }
+      }
+    }
+  }, [searchParams, setTrades, navigate]);
 
   const handleExportPDF = () => {
     if (!analysis) return;
@@ -42,12 +89,12 @@ const TradeAnalyzer = () => {
                 <LineChart className="w-4 h-4 text-primary" />
               </div>
               <h1 className="text-base font-semibold text-foreground">
-                AI Trader Insights
+                Universal AI Trade Analyzer
               </h1>
             </div>
             <p className="text-[10px] text-muted-foreground max-w-xl mx-auto">
-              Upload your trade history CSV to unlock comprehensive analytics, behavioral insights, 
-              and AI-powered recommendations to improve your trading performance.
+              Upload your trade history from any exchange. We auto-detect Lighter, Nado, and Hyperliquid formats.
+              For other exchanges, our AI will help map your columns.
             </p>
           </section>
 
@@ -58,6 +105,7 @@ const TradeAnalyzer = () => {
             fileName={fileName}
             error={error}
             onClear={clearData}
+            detectedExchange={detectedExchange}
           />
 
           {/* Analysis Results */}
@@ -121,18 +169,15 @@ const TradeAnalyzer = () => {
               <div className="p-3 rounded-xl bg-primary/10 w-fit mx-auto mb-3">
                 <Upload className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-sm font-semibold text-foreground mb-1">No Data Yet</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-1">Upload Any Trade History</h3>
               <p className="text-[10px] text-muted-foreground max-w-sm mx-auto">
-                Upload your trade history CSV to see comprehensive analytics and AI-powered insights 
-                about your trading performance.
+                We support Lighter, Nado, Hyperliquid, and any other exchange with AI-powered column mapping.
               </p>
               <div className="mt-4 p-3 bg-muted/50 border border-border/50 rounded-lg max-w-sm mx-auto">
                 <p className="text-[10px] text-muted-foreground">
-                  <strong className="text-foreground">Expected CSV columns:</strong><br />
-                  Date, Market, Side, Size, Price, Closed PnL, Fee, Role, Type
-                </p>
-                <p className="text-[9px] text-muted-foreground mt-1.5">
-                  <strong className="text-foreground">Tip:</strong> Click "Aggregate" on Lighter before exporting.
+                  <strong className="text-foreground">Supported exchanges:</strong><br />
+                  Lighter, Nado, Hyperliquid (auto-detected)<br />
+                  + Any CSV with AI-assisted mapping
                 </p>
               </div>
             </div>
